@@ -1,5 +1,9 @@
 import React from 'react';
 
 export default function Home() {
-    return <main>Hello World!</main>;
+    return (
+        <main className="p-24">
+            <h1 className="font-bold text-4xl">Hello World!</h1>
+        </main>
+    );
 }
