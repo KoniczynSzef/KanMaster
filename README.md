@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Podzial funkcjonalnosci #
 
-## Getting Started
+**Najważniejsze, kluczowe:**
 
-First, run the development server:
+1. Tworzenie projektów: To główna funkcja aplikacji, która pozwala użytkownikom rozpocząć zarządzanie projektem.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+2. Dodawanie użytkowników do projektu: Współpraca w projekcie to kluczowy element, dlatego zarządzanie uczestnikami jest ważne.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Metodologia Kanban: Implementacja samej metodologii Kanban jest istotna, ponieważ to główne narzędzie zarządzania zadaniami.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**Ważne, potrzebne:**
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+4. Zarządzanie projektami: Opcje zarządzania projektami, takie jak edycja i usuwanie projektów, to kluczowe funkcje.
 
-## Learn More
+5. Przypisywanie zadań: Umożliwia użytkownikom określenie, kto jest odpowiedzialny za wykonanie konkretnego zadania.
 
-To learn more about Next.js, take a look at the following resources:
+6. Powiadomienia: Informowanie użytkowników o zmianach i terminach projektów pomaga utrzymać spójność i terminowość.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+7. Uprawnienia użytkowników: Pozwala na skonfigurowanie różnych ról i poziomów dostępu, co jest ważne w dużych zespołach.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+**Przydatne, choc nie pierwszoplanowe:**
 
-## Deploy on Vercel
+8. Kalendarz projektów: Dodawanie widoku kalendarza może pomóc w lepszym zrozumieniu terminów projektów.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+9. Rejestracja i logowanie: Choć to podstawowa funkcja, jest ważna dla tożsamości użytkownika.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+10. Raporty i statystyki: Pomagają w analizie postępu projektów, ale nie są na początek niezbędne.
+
+**Opcjonalne, dobrze jakby były:**
+
+11. Kategorie projektów: Ułatwiają organizację projektów, ale nie są kluczowe na początek.
+
+12. Integracje z innymi narzędziami: Pomagają w automatyzacji, ale mogą być dodawane w późniejszych etapach.
+
+13. Zadania cykliczne: Przydatne, ale opcjonalne, zwłaszcza w zależności od rodzaju projektów.
+
+**Dodatkowe:**
+
+14. Wyszukiwanie i filtracja: Dodatkowa wygoda, ale nie kluczowa na początek.
+
+15. Personalizacja: Może być dodawana, gdy aplikacja jest bardziej rozwinięta.
+
+16. Historia zmian: Przydatna, ale opcjonalna dla monitorowania historii zmian.
+
+17. Zakładki i ulubione: Opcja dodatkowa, która może być przydatna dla użytkowników.
+
+18. Dostęp mobilny: Ważny, ale może być implementowany w dalszym etapie rozwoju aplikacji.
+
+19. E-mailowe powiadomienia: Dodatkowa forma powiadomień, która może być dodana w późniejszych etapach.
