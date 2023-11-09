@@ -5,8 +5,9 @@ import Notification from './Notification';
 import UserDropdownMenu from './UserDropdownMenu';
 
 interface Props {}
+const email = 'koniczynszef@gmail.com';
 
-const Navbar: FC<Props> = () => {
+const Navbar: FC<Props> = async () => {
     return (
         <header className="py-6 bg-paletteVioletMain dark:bg-darkPaletteVioletMain">
             <nav className="container mx-auto flex items-center justify-between">
@@ -19,7 +20,7 @@ const Navbar: FC<Props> = () => {
                 <ul className="wrapper flex items-center gap-10">
                     <ToggleTheme />
                     <Notification />
-                    <UserDropdownMenu />
+                    <UserDropdownMenu email={email} />
                 </ul>
             </nav>
         </header>

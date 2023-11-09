@@ -8,20 +8,22 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { Button } from '../ui/button';
 
-interface Props {}
+interface Props {
+    email: string;
+}
 
-const UserDropdownMenu: FC<Props> = ({}) => {
+const UserDropdownMenu: FC<Props> = ({ email }) => {
     return (
         <DropdownMenu>
-            <DropdownMenuTrigger>
-                <Avatar>
-                    <AvatarImage src="" />
-                    <AvatarFallback className="bg-paletteDarkerRed dark:bg-darkPaletteDarkerRed hover:opacity-95 transition" />
-                </Avatar>
+            <DropdownMenuTrigger asChild>
+                <Button className="rounded-full px-5 bg-paletteDarkerRed dark:bg-darkPaletteDarkerRed hover:bg-paletteLighterRed dark:hover:bg-darkPaletteLighterRed transition" />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
+                <DropdownMenuLabel className="text-muted-foreground text-xs font-normal">
+                    {email}
+                </DropdownMenuLabel>
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>Profile</DropdownMenuItem>
