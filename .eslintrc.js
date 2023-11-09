@@ -1,4 +1,5 @@
 module.exports = {
+
     "env": {
         "browser": true,
         "es2021": true,
@@ -20,6 +21,7 @@ module.exports = {
             "parserOptions": {
                 "sourceType": "script"
             }
+
         }
     ],
     "parser": "@typescript-eslint/parser",
