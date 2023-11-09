@@ -1,11 +1,9 @@
-import ToggleTheme from '@/components/Navbar/ToggleTheme';
 import React from 'react';
 
 export default function Home() {
     return (
-        <main className="p-24">
-            <h1 className="font-bold text-4xl">Hello World!</h1>
-            <ToggleTheme />
+        <main className="pt-24 container mx-auto">
+            <h1 className="font-bold text-4xl">Sign up for more content! 🔥</h1>
         </main>
     );
 }
