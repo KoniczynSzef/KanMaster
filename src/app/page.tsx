@@ -1,4 +1,4 @@
-import ToggleTheme from '@/components/ToggleTheme';
+import ToggleTheme from '@/components/Navbar/ToggleTheme';
 import React from 'react';
 
 export default function Home() {
