@@ -52,10 +52,10 @@ const UserDropdownMenu: FC<Props> = ({ email }) => {
 
                 <div className="p-3 flex mt-2">
                     {isAuthenticating ? (
-                        <>
+                        <div className="flex items-center gap-4">
                             <Loader2 className="animate-spin" />
                             <h4>Authenticating...</h4>
-                        </>
+                        </div>
                     ) : (
                         <Button
                             variant={'destructive'}
