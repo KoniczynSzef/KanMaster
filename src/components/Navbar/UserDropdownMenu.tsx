@@ -1,4 +1,6 @@
-import React, { FC } from 'react';
+'use client';
+
+import React, { FC, useState } from 'react';
 
 import {
     DropdownMenu,
@@ -9,6 +11,8 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '../ui/button';
+import { logOut } from '@/auth';
+import { Loader2 } from 'lucide-react';
 
 interface Props {
     email: string;
@@ -20,6 +24,15 @@ interface Props {
 }
 
 const UserDropdownMenu: FC<Props> = ({ email }) => {
+    const [isAuthenticating, setIsAuthenticating] = useState(false);
+    const handleSignOut = async () => {
+        setIsAuthenticating(true);
+        await logOut();
+
+        setTimeout(() => {
+            setIsAuthenticating(false);
+        }, 250);
+    };
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -34,7 +47,25 @@ const UserDropdownMenu: FC<Props> = ({ email }) => {
                 <DropdownMenuItem>Profile</DropdownMenuItem>
                 <DropdownMenuItem>Billing</DropdownMenuItem>
                 <DropdownMenuItem>Team</DropdownMenuItem>
-                <DropdownMenuItem>Subscription</DropdownMenuItem>
+
+                <DropdownMenuSeparator />
+
+                <div className="p-3 flex mt-2">
+                    {isAuthenticating ? (
+                        <div className="flex items-center gap-4">
+                            <Loader2 className="animate-spin" />
+                            <h4>Authenticating...</h4>
+                        </div>
+                    ) : (
+                        <Button
+                            variant={'destructive'}
+                            className="ml-auto"
+                            onClick={handleSignOut}
+                        >
+                            Sign out
+                        </Button>
+                    )}
+                </div>
             </DropdownMenuContent>
         </DropdownMenu>
     );

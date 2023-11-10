@@ -1,15 +1,20 @@
 import { options } from '@/auth/options';
-import { log } from 'console';
 import { getServerSession } from 'next-auth';
+import { redirect } from 'next/navigation';
 import React from 'react';
 
 export default async function Home() {
     const session = await getServerSession(options);
-    log(session);
+
+    if (session?.user) {
+        return redirect('/dashboard');
+    }
 
     return (
         <main className="pt-24 container mx-auto">
-            <h1 className="font-bold text-4xl">Sign up for more content! 🔥</h1>
+            <h1 className="font-bold text-4xl">Home page! 🔥</h1>
+
+            <article className="mt-12">sign in pls 🙏</article>
         </main>
     );
 }
