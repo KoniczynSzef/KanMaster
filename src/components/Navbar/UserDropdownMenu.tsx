@@ -12,6 +12,11 @@ import { Button } from '../ui/button';
 
 interface Props {
     email: string;
+    user: {
+        name?: string | null | undefined;
+        email?: string | null | undefined;
+        image?: string | null | undefined;
+    };
 }
 
 const UserDropdownMenu: FC<Props> = ({ email }) => {

@@ -26,8 +26,11 @@ const Navbar: FC<Props> = async () => {
                     <ToggleTheme />
                     {session?.user ? (
                         <>
-                            <Notification />
-                            <UserDropdownMenu email={email} />
+                            <Notification user={session.user} />
+                            <UserDropdownMenu
+                                email={email}
+                                user={session.user}
+                            />
                         </>
                     ) : (
                         <SignIn />
