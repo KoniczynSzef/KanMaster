@@ -3,11 +3,16 @@ import React, { FC } from 'react';
 import ToggleTheme from './ToggleTheme';
 import Notification from './Notification';
 import UserDropdownMenu from './UserDropdownMenu';
+import { getServerSession } from 'next-auth';
+import { options } from '@/auth/options';
+import SignIn from './SignIn';
 
 interface Props {}
 const email = 'koniczynszef@gmail.com';
 
 const Navbar: FC<Props> = async () => {
+    const session = await getServerSession(options);
+
     return (
         <header className="py-6 bg-paletteVioletMain dark:bg-darkPaletteVioletMain">
             <nav className="container mx-auto flex items-center justify-between">
@@ -19,8 +24,14 @@ const Navbar: FC<Props> = async () => {
 
                 <ul className="wrapper flex items-center gap-10">
                     <ToggleTheme />
-                    <Notification />
-                    <UserDropdownMenu email={email} />
+                    {session?.user ? (
+                        <>
+                            <Notification />
+                            <UserDropdownMenu email={email} />
+                        </>
+                    ) : (
+                        <SignIn />
+                    )}
                 </ul>
             </nav>
         </header>
