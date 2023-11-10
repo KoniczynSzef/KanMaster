@@ -2,10 +2,7 @@ import { signIn, signOut } from 'next-auth/react';
 
 export type provider = 'google' | 'github' | 'credentials';
 
-const link =
-    process.env.NODE_ENV === 'development'
-        ? process.env.NEXT_PUBLIC_NEXTAUTH_URL
-        : process.env.NEXTAUTH_URL;
+const link = process.env.NEXT_PUBLIC_NEXTAUTH_URL;
 
 export async function logIn(provider: provider) {
     try {
