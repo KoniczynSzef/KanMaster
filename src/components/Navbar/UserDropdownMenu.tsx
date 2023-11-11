@@ -36,7 +36,7 @@ const UserDropdownMenu: FC<Props> = ({ email }) => {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button className="rounded-full px-5 bg-paletteDarkerRed dark:bg-darkPaletteDarkerRed hover:bg-paletteLighterRed dark:hover:bg-darkPaletteLighterRed transition" />
+                <Button className="rounded-full px-5 bg-gradient-to-r from-paletteLighterRed to-paletteYellow dark:from-paletteDarkerIndigo dark:to-paletteBlue transition" />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
                 <DropdownMenuLabel className="text-muted-foreground text-xs font-normal">

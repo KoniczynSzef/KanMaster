@@ -1,6 +1,6 @@
 'use client';
 
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { Button } from '../ui/button';
 import { logIn } from '@/auth';
 import { toast } from 'sonner';
@@ -8,16 +8,33 @@ import { toast } from 'sonner';
 interface Props {}
 
 const SignIn: FC<Props> = () => {
-    const handleClick = async () => {
+    const [clicked, setClicked] = useState(false);
+
+    const handleSignIn = async () => {
         try {
+            setClicked(true);
             await logIn('github');
-            toast.success('Signed in successfully');
+
+            setTimeout(() => {
+                toast.success('Signed in successfully');
+            }, 150);
         } catch (error) {
-            throw new Error('There was an error signing in');
+            if (error instanceof Error) {
+                toast.error(error.message);
+                throw new Error(error.message);
+            }
+
+            throw new Error('Something went wrong');
         }
     };
 
-    return <Button onClick={handleClick}>Sign in</Button>;
+    return (
+        <div className="flex items-center gap-3">
+            <Button onClick={handleSignIn} disabled={clicked}>
+                {!clicked ? <>Sign in</> : <>Authenticating...</>}
+            </Button>
+        </div>
+    );
 };
 
 export default SignIn;

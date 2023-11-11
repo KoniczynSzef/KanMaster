@@ -2,12 +2,10 @@ import { signIn, signOut } from 'next-auth/react';
 
 export type provider = 'google' | 'github' | 'credentials';
 
-const link = process.env.NEXT_PUBLIC_NEXTAUTH_URL;
-
 export async function logIn(provider: provider) {
     try {
         await signIn(provider, {
-            callbackUrl: `${link}/dashboard`,
+            callbackUrl: `/dashboard`,
         });
     } catch (error) {
         if (error instanceof Error) {
@@ -17,5 +15,5 @@ export async function logIn(provider: provider) {
 }
 
 export async function logOut() {
-    await signOut({ callbackUrl: link });
+    await signOut({ callbackUrl: '/' });
 }
