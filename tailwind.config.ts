@@ -55,6 +55,12 @@ module.exports = {
                 paletteLighterRed: '#FF0054',
                 paletteAmber: '#FF5400',
                 paletteYellow: '#FFBD00',
+                paletteGreen: '#16A34A',
+                paletteBlue: '#2563EB',
+                paletteGrey: '#4B5563',
+                palettePurple: '#270068',
+                paletteBloodyRed: '#991B1B',
+                paletteDarkerIndigo: '#3730A3',
 
                 darkPaletteVioletMain: '#16003D',
                 darkPaletteDarkerRed: '#6B0050',
