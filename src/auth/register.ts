@@ -1,15 +1,10 @@
 'use server';
 
+import { schemaType } from '@/components/Form/Register';
 import { db } from '@/db';
 import { hash } from 'bcrypt';
 
-type userProps = {
-    username: string;
-    email: string;
-    password: string;
-};
-
-export async function register(userProps: userProps) {
+export async function register(userProps: schemaType) {
     const { username, email, password } = userProps;
 
     const exists = await db.user.findUnique({
@@ -17,7 +12,7 @@ export async function register(userProps: userProps) {
     });
 
     if (exists) {
-        throw new Error('User already exists');
+        return null;
     }
 
     const user = await db.user.create({

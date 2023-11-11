@@ -5,7 +5,7 @@ import Github from 'next-auth/providers/github';
 import Credentials from 'next-auth/providers/credentials';
 // import Google from 'next-auth/providers/google';
 
-import { compareSync } from 'bcrypt';
+import { compare } from 'bcrypt';
 
 export const options: AuthOptions = {
     adapter: PrismaAdapter(db),
@@ -15,12 +15,12 @@ export const options: AuthOptions = {
             clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
         }),
         Credentials({
+            id: 'credentials',
             name: 'Credentials',
             credentials: {
                 username: {
                     label: 'Username',
                     type: 'text',
-                    placeholder: 'jsmith',
                 },
                 email: { label: 'Email', type: 'email' },
                 password: { label: 'Password', type: 'password' },
@@ -38,7 +38,7 @@ export const options: AuthOptions = {
                     return null;
                 }
 
-                const valid = compareSync(
+                const valid = await compare(
                     credentials.password,
                     user.hashedPassword ?? ''
                 );
@@ -51,6 +51,9 @@ export const options: AuthOptions = {
             },
         }),
     ],
+    session: {
+        strategy: 'jwt',
+    },
 
     secret: process.env.SECRET,
 };

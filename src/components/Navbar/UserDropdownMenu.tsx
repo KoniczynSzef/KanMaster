@@ -15,7 +15,6 @@ import { logOut } from '@/auth';
 import { Loader2 } from 'lucide-react';
 
 interface Props {
-    email: string;
     user: {
         name?: string | null | undefined;
         email?: string | null | undefined;
@@ -23,7 +22,7 @@ interface Props {
     };
 }
 
-const UserDropdownMenu: FC<Props> = ({ email }) => {
+const UserDropdownMenu: FC<Props> = ({ user }) => {
     const [isAuthenticating, setIsAuthenticating] = useState(false);
     const handleSignOut = async () => {
         setIsAuthenticating(true);
@@ -40,7 +39,7 @@ const UserDropdownMenu: FC<Props> = ({ email }) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent>
                 <DropdownMenuLabel className="text-muted-foreground text-xs font-normal">
-                    {email}
+                    {user.email}
                 </DropdownMenuLabel>
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />

@@ -4,50 +4,60 @@ import React, { FC } from 'react';
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
     FormMessage,
 } from '@/components/ui/form';
 
-import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
-import { register } from '@/auth/register';
 import { toast } from 'sonner';
-import { redirect } from 'next/navigation';
+import { schema, schemaType } from './Register';
+import { handleLogInWithProvider, login } from '@/auth/login';
+import { Separator } from '../ui/separator';
+import { provider } from '@/auth';
 
 interface Props {}
-
-export const schema = z.object({
-    username: z.string().min(3),
-    email: z.string().email(),
-    password: z.string().min(8),
-});
-
-export type schemaType = z.infer<typeof schema>;
 
 const Register: FC<Props> = () => {
     const form = useForm<schemaType>({
         resolver: zodResolver(schema),
         defaultValues: {
-            username: '',
             email: '',
             password: '',
+            username: '',
         },
     });
 
     const onSubmit = async (data: schemaType) => {
         try {
-            await register(data);
-            toast.success('You have been registered successfully', {
+            login(data);
+
+            toast.success('You have been logged in successfully', {
                 description: 'You can benefit from all the features now',
             });
+        } catch (error) {
+            if (error instanceof Error) {
+                toast.error('Something went wrong', {
+                    description: error.message,
+                });
+            } else {
+                toast.error('Something went wrong');
+            }
 
-            redirect('/');
+            throw new Error('Something went wrong');
+        }
+    };
+
+    const handleLogIn = async (provider: provider) => {
+        try {
+            await handleLogInWithProvider(provider);
+            toast.success('You have been logged in successfully', {
+                description: 'You can benefit from all the features now',
+            });
         } catch (error) {
             if (error instanceof Error) {
                 toast.error('Something went wrong', {
@@ -65,30 +75,8 @@ const Register: FC<Props> = () => {
         <Form {...form}>
             <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="max-w-2xl w-full flex flex-col space-y-4 border border-muted-background p-8 rounded"
+                className="max-w-2xl w-full flex flex-col gap-4 border border-muted-background p-8 rounded"
             >
-                <FormField
-                    control={form.control}
-                    name="username"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel className="text-base">
-                                Username
-                            </FormLabel>
-                            <FormControl>
-                                <Input
-                                    type="text"
-                                    placeholder="Type your username..."
-                                    {...field}
-                                />
-                            </FormControl>
-                            <FormDescription>
-                                This will be your public display name
-                            </FormDescription>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
                 <FormField
                     control={form.control}
                     name="email"
@@ -102,9 +90,6 @@ const Register: FC<Props> = () => {
                                     {...field}
                                 />
                             </FormControl>
-                            <FormDescription>
-                                Team Leaders will use this email to invite you
-                            </FormDescription>
                             <FormMessage />
                         </FormItem>
                     )}
@@ -125,16 +110,27 @@ const Register: FC<Props> = () => {
                                     {...field}
                                 />
                             </FormControl>
-                            <FormDescription>
-                                This will be your private password
-                            </FormDescription>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
 
-                <Button type="submit" className="ml-auto text-lg" size={'lg'}>
-                    Register
+                <Separator className="my-4" />
+
+                <Button onClick={() => handleLogIn('google')} type="button">
+                    Sign in with Google
+                </Button>
+                <Button onClick={() => handleLogIn('github')} type="button">
+                    Sign in with GitHub
+                </Button>
+
+                <Button
+                    type="submit"
+                    className="ml-auto text-lg mt-6"
+                    size={'lg'}
+                    onClick={() => onSubmit(form.getValues())}
+                >
+                    Login
                 </Button>
             </form>
         </Form>
