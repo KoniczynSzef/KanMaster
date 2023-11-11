@@ -11,7 +11,6 @@ import {
     FormMessage,
 } from '@/components/ui/form';
 
-import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '../ui/input';
@@ -19,16 +18,9 @@ import { Button } from '../ui/button';
 import { register } from '@/auth/register';
 import { toast } from 'sonner';
 import { redirect } from 'next/navigation';
+import { schema, schemaType } from '@/types/form-schema';
 
 interface Props {}
-
-export const schema = z.object({
-    username: z.string().min(3),
-    email: z.string().email(),
-    password: z.string().min(8),
-});
-
-export type schemaType = z.infer<typeof schema>;
 
 const Register: FC<Props> = () => {
     const form = useForm<schemaType>({
@@ -89,6 +81,7 @@ const Register: FC<Props> = () => {
                         </FormItem>
                     )}
                 />
+
                 <FormField
                     control={form.control}
                     name="email"

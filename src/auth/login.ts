@@ -1,17 +1,12 @@
-import { schemaType } from '@/components/Form/Register';
-
 import { signIn } from 'next-auth/react';
 import { provider } from '.';
+import { signInSchema } from '@/types/form-schema';
 
-export async function login(data: schemaType) {
-    console.log(data);
-
-    setTimeout(async () => {
-        await signIn('credentials', {
-            ...data,
-            callbackUrl: '/dashboard',
-        });
-    }, 1000);
+export async function login(data: signInSchema) {
+    await signIn('credentials', {
+        ...data,
+        callbackUrl: '/dashboard',
+    });
 }
 
 export const handleLogInWithProvider = async (provider: provider) => {
