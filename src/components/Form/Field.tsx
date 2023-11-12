@@ -21,9 +21,10 @@ interface Props {
     >;
     prop: 'password' | 'email';
     type: React.HTMLInputTypeAttribute;
+    customLabel?: string;
 }
 
-const Field: FC<Props> = ({ form, prop, type }) => {
+const Field: FC<Props> = ({ form, prop, type, customLabel }) => {
     return (
         <FormField
             control={form.control}
@@ -31,7 +32,9 @@ const Field: FC<Props> = ({ form, prop, type }) => {
             render={({ field }) => (
                 <FormItem>
                     <FormLabel className="text-base">
-                        {prop.slice(0, 1).toUpperCase() + prop.slice(1)}
+                        {customLabel
+                            ? customLabel
+                            : prop.slice(0, 1).toUpperCase() + prop.slice(1)}
                     </FormLabel>
                     <FormControl>
                         <Input

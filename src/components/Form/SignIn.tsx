@@ -12,6 +12,7 @@ import { Separator } from '../ui/separator';
 import { provider } from '@/auth';
 import Field from './Field';
 import { signInSchema } from '@/types/form-schema';
+import Link from 'next/link';
 
 interface Props {}
 
@@ -35,15 +36,7 @@ const SignIn: FC<Props> = () => {
                 description: 'You can benefit from all the features now',
             });
         } catch (error) {
-            if (error instanceof Error) {
-                toast.error('Something went wrong', {
-                    description: error.message,
-                });
-            } else {
-                toast.error('Something went wrong');
-            }
-
-            throw new Error('Something went wrong');
+            toast.error('There was an error while logging you in');
         }
     };
 
@@ -77,9 +70,17 @@ const SignIn: FC<Props> = () => {
                     <Field form={form} prop={'email'} type="email" />
                     <Field form={form} prop={'password'} type="password" />
 
-                    <Button type="submit" className="ml-auto mt-6">
-                        Sign in
-                    </Button>
+                    <div className="flex justify-between items-center">
+                        <Link
+                            href="/forgot-password"
+                            className="text-muted-foreground hover:text-foreground transition"
+                        >
+                            Forgot password?
+                        </Link>
+                        <Button type="submit" className="ml-auto">
+                            Sign in
+                        </Button>
+                    </div>
                 </form>
             </Form>
 

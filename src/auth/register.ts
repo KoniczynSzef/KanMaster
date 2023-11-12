@@ -1,7 +1,7 @@
 'use server';
 
-import { schemaType } from '@/components/Form/Register';
 import { db } from '@/db';
+import { schemaType } from '@/types/form-schema';
 import { hash } from 'bcrypt';
 
 export async function register(userProps: schemaType) {
