@@ -5,10 +5,9 @@ import Notification from './Notification';
 import UserDropdownMenu from './UserDropdownMenu';
 import { getServerSession } from 'next-auth';
 import { options } from '@/auth/options';
-import SignIn from './SignIn';
+import { Button } from '../ui/button';
 
 interface Props {}
-const email = 'koniczynszef@gmail.com';
 
 const Navbar: FC<Props> = async () => {
     const session = await getServerSession(options);
@@ -27,13 +26,20 @@ const Navbar: FC<Props> = async () => {
                     {session?.user ? (
                         <>
                             <Notification user={session.user} />
-                            <UserDropdownMenu
-                                email={email}
-                                user={session.user}
-                            />
+                            <UserDropdownMenu user={session.user} />
                         </>
                     ) : (
-                        <SignIn />
+                        <>
+                            <Button asChild>
+                                <Link href={'/sign-in'}>Sign in</Link>
+                            </Button>
+                            <Button
+                                asChild
+                                className="bg-paletteBlue hover:bg-blue-500"
+                            >
+                                <Link href={'/register'}>Register</Link>
+                            </Button>
+                        </>
                     )}
                 </ul>
             </nav>
