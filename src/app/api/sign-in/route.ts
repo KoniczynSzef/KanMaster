@@ -1,6 +1,6 @@
 import { db } from '@/db';
 import { signInSchema } from '@/types/form-schema';
-import { compare } from 'bcrypt';
+import { compare } from 'bcryptjs';
 
 export async function POST(req: Request) {
     const body: signInSchema = await req.json();

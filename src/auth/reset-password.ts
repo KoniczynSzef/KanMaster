@@ -2,7 +2,7 @@
 
 import { db } from '@/db';
 import { signInSchema } from '@/types/form-schema';
-import { hash } from 'bcrypt';
+import { hash } from 'bcryptjs';
 
 export async function resetPassword(data: signInSchema) {
     signInSchema.parse(data);

@@ -1,4 +1,7 @@
+import { getServerSession } from 'next-auth';
 import { signIn, signOut } from 'next-auth/react';
+import { options } from './options';
+import { redirect } from 'next/navigation';
 
 export type provider = 'google' | 'github' | 'credentials';
 
@@ -16,4 +19,12 @@ export async function logIn(provider: provider) {
 
 export async function logOut() {
     await signOut({ callbackUrl: '/' });
+}
+
+export async function getSession() {
+    const session = await getServerSession(options);
+
+    if (session) {
+        return redirect('/dashboard');
+    }
 }
