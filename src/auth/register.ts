@@ -2,7 +2,7 @@
 
 import { db } from '@/db';
 import { schemaType } from '@/types/form-schema';
-import { hash } from 'bcrypt';
+import { hash } from 'bcryptjs';
 
 export async function register(userProps: schemaType) {
     const { username, email, password } = userProps;

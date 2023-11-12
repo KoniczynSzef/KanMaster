@@ -5,7 +5,7 @@ import Github from 'next-auth/providers/github';
 import Credentials from 'next-auth/providers/credentials';
 // import Google from 'next-auth/providers/google';
 
-import { compare } from 'bcrypt';
+import { compare } from 'bcryptjs';
 
 export const options: AuthOptions = {
     adapter: PrismaAdapter(db),

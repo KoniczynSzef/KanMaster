@@ -1,3 +1,5 @@
+'use client';
+
 import React, { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { Form } from '../ui/form';
