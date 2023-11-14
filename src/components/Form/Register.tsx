@@ -41,15 +41,7 @@ const Register: FC<Props> = () => {
 
             redirect('/');
         } catch (error) {
-            if (error instanceof Error) {
-                toast.error('Something went wrong', {
-                    description: error.message,
-                });
-            } else {
-                toast.error('Something went wrong');
-            }
-
-            throw new Error('Something went wrong');
+            toast.error('There was an error while registering you');
         }
     };
 
