@@ -1,6 +1,6 @@
 import { SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import React, { FC } from 'react';
-import NavbarItems from './items/NavbarItems';
+import NavbarItems from './NavbarItems';
 import { Session } from 'next-auth';
 
 interface Props {

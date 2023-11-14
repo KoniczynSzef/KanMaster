@@ -6,7 +6,7 @@ import { Button } from '../ui/button';
 import { Sheet, SheetTrigger } from '../ui/sheet';
 import { Menu } from 'lucide-react';
 import NavbarMenu from './mobile/NavbarMenu';
-import NavbarItems from './mobile/items/NavbarItems';
+import NavbarItems from './mobile/NavbarItems';
 
 interface Props {}
 

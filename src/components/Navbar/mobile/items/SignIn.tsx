@@ -1,7 +1,7 @@
 'use client';
 
 import React, { FC, useState } from 'react';
-import { Button } from '../ui/button';
+import { Button } from '../../../ui/button';
 import { logIn } from '@/auth';
 import { toast } from 'sonner';
 

@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
-import ToggleTheme from '../../ToggleTheme';
-import Notification from '../../Notification';
-import UserDropdownMenu from '../../UserDropdownMenu';
+import ToggleTheme from './items/ToggleTheme';
+import Notification from './items/Notification';
+import UserDropdownMenu from './items/UserDropdownMenu';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Session } from 'next-auth';
