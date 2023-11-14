@@ -8,6 +8,8 @@ import Navbar from '@/components/Navbar/Navbar';
 import SessionProvider from '@/providers/SessionProvider';
 import { Toaster } from 'sonner';
 
+import NextTopLoader from 'nextjs-toploader';
+
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -30,6 +32,7 @@ export default function RootLayout({
                         enableSystem
                         disableTransitionOnChange
                     >
+                        <NextTopLoader color="#390099" />
                         <Navbar />
                         {children}
                         <Toaster richColors />

@@ -2,9 +2,6 @@ import Link from 'next/link';
 import React, { FC } from 'react';
 import { getServerSession } from 'next-auth';
 import { options } from '@/auth/options';
-import { Button } from '../ui/button';
-import { Sheet, SheetTrigger } from '../ui/sheet';
-import { Menu } from 'lucide-react';
 import NavbarMenu from './mobile/NavbarMenu';
 import NavbarItems from './mobile/NavbarItems';
 
@@ -23,17 +20,14 @@ const Navbar: FC<Props> = async () => {
                 </Link>
 
                 <div className="md:hidden">
-                    <Sheet>
-                        <SheetTrigger asChild>
-                            <Button size={'icon'}>
-                                <Menu />
-                            </Button>
-                        </SheetTrigger>
-                        <NavbarMenu session={session} />
-                    </Sheet>
+                    <NavbarMenu session={session} />
                 </div>
 
-                <NavbarItems session={session} className="hidden md:flex" />
+                <NavbarItems
+                    session={session}
+                    className="hidden md:flex"
+                    mobile={false}
+                />
             </nav>
         </header>
     );
