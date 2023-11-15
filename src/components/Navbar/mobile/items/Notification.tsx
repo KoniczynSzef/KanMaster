@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Button } from '../ui/button';
+import { Button } from '../../../ui/button';
 import { Bell, BellRing } from 'lucide-react';
 
 interface Props {

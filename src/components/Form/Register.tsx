@@ -19,6 +19,7 @@ import { register } from '@/auth/register';
 import { toast } from 'sonner';
 import { redirect } from 'next/navigation';
 import { schema, schemaType } from '@/types/form-schema';
+import { Separator } from '../ui/separator';
 
 interface Props {}
 
@@ -49,7 +50,7 @@ const Register: FC<Props> = () => {
         <Form {...form}>
             <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="max-w-2xl w-full flex flex-col space-y-4 border border-muted-background p-8 rounded"
+                className="max-w-2xl w-full flex flex-col space-y-8 border border-muted-background p-8 rounded mx-8"
             >
                 <FormField
                     control={form.control}
@@ -118,7 +119,9 @@ const Register: FC<Props> = () => {
                     )}
                 />
 
-                <Button type="submit" className="ml-auto text-lg" size={'lg'}>
+                <Separator className="my-8" />
+
+                <Button type="submit" className="ml-auto" size={'lg'}>
                     Register
                 </Button>
             </form>

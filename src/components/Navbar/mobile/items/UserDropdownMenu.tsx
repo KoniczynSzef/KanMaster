@@ -10,7 +10,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Button } from '../ui/button';
+import { Button } from '../../../ui/button';
 import { logOut } from '@/auth';
 import { Loader2 } from 'lucide-react';
 
@@ -35,7 +35,7 @@ const UserDropdownMenu: FC<Props> = ({ user }) => {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button className="rounded-full px-5 bg-gradient-to-r from-paletteLighterRed to-paletteYellow dark:from-paletteDarkerIndigo dark:to-paletteBlue transition" />
+                <Button className="rounded-full px-5 bg-gradient-to-r from-paletteLighterRed to-paletteYellow hover:rotate-180 transition" />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
                 <DropdownMenuLabel className="text-muted-foreground text-xs font-normal">

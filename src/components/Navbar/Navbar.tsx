@@ -1,11 +1,9 @@
 import Link from 'next/link';
 import React, { FC } from 'react';
-import ToggleTheme from './ToggleTheme';
-import Notification from './Notification';
-import UserDropdownMenu from './UserDropdownMenu';
 import { getServerSession } from 'next-auth';
 import { options } from '@/auth/options';
-import { Button } from '../ui/button';
+import NavbarMenu from './mobile/NavbarMenu';
+import NavbarItems from './mobile/NavbarItems';
 
 interface Props {}
 
@@ -21,27 +19,15 @@ const Navbar: FC<Props> = async () => {
                     </h1>
                 </Link>
 
-                <ul className="wrapper flex items-center gap-10">
-                    <ToggleTheme />
-                    {session?.user ? (
-                        <>
-                            <Notification user={session.user} />
-                            <UserDropdownMenu user={session.user} />
-                        </>
-                    ) : (
-                        <>
-                            <Button asChild>
-                                <Link href={'/sign-in'}>Sign in</Link>
-                            </Button>
-                            <Button
-                                asChild
-                                className="bg-paletteBlue hover:bg-blue-500"
-                            >
-                                <Link href={'/register'}>Register</Link>
-                            </Button>
-                        </>
-                    )}
-                </ul>
+                <div className="md:hidden">
+                    <NavbarMenu session={session} />
+                </div>
+
+                <NavbarItems
+                    session={session}
+                    className="hidden md:flex"
+                    mobile={false}
+                />
             </nav>
         </header>
     );

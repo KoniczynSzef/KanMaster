@@ -36,7 +36,12 @@ const SignIn: FC<Props> = () => {
                 description: 'You can benefit from all the features now',
             });
         } catch (error) {
-            toast.error('There was an error while logging you in');
+            let message = 'There was an error while logging you in!';
+            if (error instanceof Error) {
+                message = error.message;
+            }
+
+            toast.error(message);
         }
     };
 
@@ -60,7 +65,7 @@ const SignIn: FC<Props> = () => {
     };
 
     return (
-        <section className="max-w-2xl w-full flex flex-col gap-4 border border-muted-background p-8 rounded">
+        <section className="max-w-3xl w-full flex flex-col gap-4 border border-muted-background p-8 rounded mx-8">
             <h3 className="text-3xl font-bold">Sign In</h3>
             <Form {...form}>
                 <form

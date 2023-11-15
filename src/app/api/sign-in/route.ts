@@ -12,7 +12,11 @@ export async function POST(req: Request) {
     });
 
     if (!user) {
-        throw new Error('User not found');
+        return new Response(
+            JSON.stringify({
+                error: 'User not found. Please check the provided email.',
+            })
+        );
     }
 
     const isValidPassword = await compare(
@@ -21,7 +25,11 @@ export async function POST(req: Request) {
     );
 
     if (!isValidPassword) {
-        throw new Error('Invalid password');
+        return new Response(
+            JSON.stringify({
+                error: 'Invalid password. Please make sure you entered the correct password.',
+            })
+        );
     }
 
     return new Response(JSON.stringify(user));
