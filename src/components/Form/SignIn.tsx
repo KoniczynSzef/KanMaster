@@ -13,6 +13,7 @@ import { provider } from '@/auth';
 import Field from './Field';
 import { signInSchema } from '@/types/form-schema';
 import Link from 'next/link';
+import { handleError } from '@/auth/error-handlers';
 
 interface Props {}
 
@@ -27,8 +28,6 @@ const SignIn: FC<Props> = () => {
     });
 
     const onSubmit = async (data: signInSchema) => {
-        console.log(data);
-
         try {
             await login(data);
 
@@ -36,11 +35,7 @@ const SignIn: FC<Props> = () => {
                 description: 'You can benefit from all the features now',
             });
         } catch (error) {
-            let message = 'There was an error while logging you in!';
-            if (error instanceof Error) {
-                message = error.message;
-            }
-
+            const message = await handleError(error);
             toast.error(message);
         }
     };
@@ -48,19 +43,13 @@ const SignIn: FC<Props> = () => {
     const handleLogIn = async (provider: provider) => {
         try {
             await handleLogInWithProvider(provider);
+
             toast.success('You have been logged in successfully', {
                 description: 'You can benefit from all the features now',
             });
         } catch (error) {
-            if (error instanceof Error) {
-                toast.error('Something went wrong', {
-                    description: error.message,
-                });
-            } else {
-                toast.error('Something went wrong');
-            }
-
-            throw new Error('Something went wrong');
+            const message = await handleError(error);
+            toast.error(message);
         }
     };
 
@@ -94,7 +83,11 @@ const SignIn: FC<Props> = () => {
             <Button onClick={() => handleLogIn('google')} type="button">
                 Sign in with Google
             </Button>
-            <Button onClick={() => handleLogIn('github')} type="button">
+            <Button
+                onClick={() => handleLogIn('github')}
+                type="button"
+                variant={'outline'}
+            >
                 Sign in with GitHub
             </Button>
         </section>

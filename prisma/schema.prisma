@@ -8,8 +8,8 @@ generator client {
 }
 
 model Account {
-  id                 String  @id @default(cuid()) @map("_id")
-  userId             String
+  id                 String  @id @default(cuid()) @map("_id")  
+  userId             String  
   type               String
   provider           String
   providerAccountId  String
@@ -27,15 +27,15 @@ model Account {
 }
 
 model Session {
-  id           String   @id @default(cuid()) @map("_id")
+  id           String   @id @default(cuid()) @map("_id")  
   sessionToken String   @unique
-  userId       String
+  userId       String  
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model User {
-  id            String    @id @default(cuid()) @map("_id")
+  id            String    @id @default(cuid()) @map("_id")  
   name          String?   @unique
   email         String?   @unique
   hashedPassword String?
@@ -43,6 +43,9 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  
+  projectIDs   String[] 
+  projects     Project[] @relation(fields: [projectIDs], references: [id])
 
 }
 
@@ -52,4 +55,14 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Project {
+  id            String    @id @default(cuid()) @map("_id")  
+  name String
+  description String?
+  teamLeaderId String 
+
+  memberIDs String[] 
+  members User[] @relation(fields: [memberIDs], references: [id])
 }
