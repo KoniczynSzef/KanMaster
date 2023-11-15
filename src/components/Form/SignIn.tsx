@@ -38,19 +38,7 @@ const SignIn: FC<Props> = () => {
         } catch (error) {
             let message = 'There was an error while logging you in!';
             if (error instanceof Error) {
-                if (
-                    error.message ===
-                    'User not found. Please check the provided email.'
-                ) {
-                    message =
-                        'User not found. Please check the provided email.';
-                } else if (
-                    message ===
-                    'Invalid password. Please make sure you entered the correct password.'
-                ) {
-                    message =
-                        'Invalid password. Please make sure you entered the correct password.';
-                }
+                message = error.message;
             }
 
             toast.error(message);
