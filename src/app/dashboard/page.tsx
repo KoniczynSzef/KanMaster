@@ -15,7 +15,6 @@ const page: FC<Props> = async () => {
     }
 
     const projects = await getProjects(session?.user?.email);
-    console.log(projects);
 
     return (
         <div className="p-24">

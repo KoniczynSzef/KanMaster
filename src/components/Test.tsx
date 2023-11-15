@@ -17,7 +17,6 @@ const Test: FC<Props> = ({ email }) => {
                 {
                     name: 'Test Project',
                     description: 'This is a test project',
-                    teamLeaderId: email,
                     memberIDs: [],
                 },
                 email
