@@ -58,10 +58,10 @@ model VerificationToken {
 }
 
 model Project {
-  id String @id @default(cuid()) @map("_id") @db.ObjectId
+  id            String    @id @default(cuid()) @map("_id")  @db.ObjectId
   name String
   description String?
-  teamLeaderId String
+  teamLeaderId String @db.ObjectId
 
   memberIDs String[] @db.ObjectId
   members User[] @relation(fields: [memberIDs], references: [id])
