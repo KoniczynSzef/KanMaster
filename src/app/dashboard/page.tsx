@@ -1,5 +1,4 @@
 import { options } from '@/auth/options';
-import Test from '@/components/Test';
 import { getProjects } from '@/controllers/project-functions';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
@@ -21,7 +20,15 @@ const page: FC<Props> = async () => {
             <h3 className="text-3xl font-bold">Dashboard Page</h3>
             <pre className="mt-6">{JSON.stringify(session.user)}</pre>
 
-            <Test email={session.user?.email} />
+            {projects.map((project) => (
+                <div
+                    key={project.id}
+                    className="mt-6 max-w-sm p-4 rounded border border-muted-foreground"
+                >
+                    <h3 className="text-3xl font-bold">{project.name}</h3>
+                    <p className="text-sm mt-4">{project.description}</p>
+                </div>
+            ))}
         </div>
     );
 };
