@@ -12,9 +12,7 @@ export default async function Home() {
 
     return (
         <main className="pt-24 container mx-auto">
-            <h1 className="font-bold text-4xl">Home page! 🔥</h1>
-
-            <article className="mt-12">sign in pls 🙏</article>
+            <h1 className="font-bold text-4xl">KanMaster</h1>
         </main>
     );
 }
