@@ -1,4 +1,5 @@
 import { options } from '@/auth/options';
+import { getProjects } from '@/controllers/project-functions';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 import React, { FC } from 'react';
@@ -11,6 +12,8 @@ const page: FC<Props> = async () => {
     if (!session) {
         return redirect('/');
     }
+
+    const projects = await getProjects(session?.user?.email);
 
     return (
         <div className="p-24">
