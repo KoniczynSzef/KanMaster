@@ -66,7 +66,17 @@ model Project {
   memberIDs String[] 
   members User[] @relation(fields: [memberIDs], references: [id])
 
+  tasks Task[]
+
   badge ProjectBadge?
+}
+
+model Task {
+  id String @id @default(cuid()) @map("_id")
+  category TaskCategories
+
+  projectId String
+  project Project @relation(fields: [projectId], references: [id])
 }
 
 model ProjectBadge {
@@ -76,6 +86,12 @@ model ProjectBadge {
 
   project Project @relation(fields: [projectId], references: [id])
   projectId String @unique
+}
+
+enum TaskCategories {
+  todo
+  inProgress
+  done
 }
 
 enum BadgeColors {
