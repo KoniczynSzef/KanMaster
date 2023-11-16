@@ -27,7 +27,7 @@ export async function POST(req: Request) {
     if (!isValidPassword) {
         return new Response(
             JSON.stringify({
-                error: 'Invalid password. Please make sure you entered the correct password.',
+                error: 'Invalid password or email. Try again!.',
             })
         );
     }
