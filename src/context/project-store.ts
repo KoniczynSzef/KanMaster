@@ -3,16 +3,20 @@ import { create } from 'zustand';
 
 type ProjectStore = {
     projects: Project[];
-    filterProjects: (searchTerm: string) => void;
+    setProjects: (projects: Project[]) => void;
 };
 
 export const useProjectStore = create<ProjectStore>((set) => ({
     projects: [],
-    filterProjects(searchTerm) {
-        set((state) => ({
-            projects: state.projects.filter((project) =>
-                project.name.toLowerCase().includes(searchTerm.toLowerCase())
-            ),
+    setProjects(projects) {
+        set(() => ({
+            projects,
         }));
     },
 }));
+
+export const filterProjects = (projects: Project[], filter: string) => {
+    return projects.filter((project) =>
+        project.name.toLowerCase().includes(filter.toLowerCase())
+    );
+};
