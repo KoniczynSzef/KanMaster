@@ -65,4 +65,33 @@ model Project {
 
   memberIDs String[] 
   members User[] @relation(fields: [memberIDs], references: [id])
+
+  badge ProjectBadge?
+}
+
+model ProjectBadge {
+  id           String    @id @default(cuid()) @map("_id")  
+  color BadgeColors
+  icon BadgeIcons
+
+  project Project @relation(fields: [projectId], references: [id])
+  projectId String @unique
+}
+
+enum BadgeColors {
+  orange
+  red
+  indigo
+  green
+  blue
+  grey
+}
+
+enum BadgeIcons {
+  calendar
+  tools
+  laptop
+  people
+  heart
+  book
 }
