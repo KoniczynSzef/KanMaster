@@ -6,6 +6,7 @@ import React, { FC, useEffect } from 'react';
 import SearchPanel from './SearchPanel';
 import { UserType, useUserStore } from '@/context/user-store';
 import Skeletons from './Skeletons';
+import NoProjectFound from './NoProjectFound';
 
 interface Props {
     projects: Project[];
@@ -16,7 +17,7 @@ const Projects: FC<Props> = ({ projects, user }) => {
     const { setUser } = useUserStore();
     const {
         setProjects,
-        projects: contextProjects,
+        projects: state,
         hasLoaded,
         setHasLoaded,
     } = useProjectStore();
@@ -40,16 +41,11 @@ const Projects: FC<Props> = ({ projects, user }) => {
 
                 {hasLoaded && (
                     <>
-                        {projects.length > 0 &&
-                            contextProjects.length === 0 && (
-                                <div>
-                                    <h3 className="text-2xl font-bold mt-4">
-                                        No projects found
-                                    </h3>
-                                </div>
-                            )}
+                        {projects.length > 0 && state.length === 0 && (
+                            <NoProjectFound />
+                        )}
 
-                        {contextProjects.map((project) => (
+                        {state.map((project) => (
                             <div
                                 key={project.id}
                                 className="max-w-sm p-4 rounded border border-slate-800"

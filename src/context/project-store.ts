@@ -25,6 +25,6 @@ export const useProjectStore = create<ProjectStore>((set) => ({
 
 export const filterProjects = (projects: Project[], filter: string) => {
     return projects.filter((project) =>
-        project.name.toLowerCase().includes(filter.toLowerCase())
+        project.name.toLowerCase().startsWith(filter.toLowerCase())
     );
 };
