@@ -28,3 +28,7 @@ export const filterProjects = (projects: Project[], filter: string) => {
         project.name.toLowerCase().startsWith(filter.toLowerCase())
     );
 };
+
+export const filterByDeadline = (projects: Project[]) => {
+    return projects.sort((a, b) => a.deadline.getTime() - b.deadline.getTime());
+};

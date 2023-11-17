@@ -21,7 +21,7 @@ const page: FC<Props> = async () => {
     const projects = await getProjects(session?.user?.email);
 
     return (
-        <div className="p-24 container">
+        <div className="container relative mx-auto py-24">
             <Projects projects={projects} user={session.user} />
         </div>
     );
