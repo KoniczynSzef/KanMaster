@@ -3,7 +3,7 @@
 import { useProjectStore } from '@/context/project-store';
 import { Project } from '@prisma/client';
 import React, { FC, useEffect } from 'react';
-import SearchPanel from './SearchPanel';
+import SearchPanel from '../SearchPanel/SearchPanel';
 import { UserType, useUserStore } from '@/context/user-store';
 import Skeletons from './Skeletons';
 import NoProjectFound from './NoProjectFound';
@@ -37,6 +37,10 @@ const Projects: FC<Props> = ({ projects, user }) => {
             <SearchPanel projects={projects} />
 
             <section className="mt-12">
+                {projects.length === 0 && state.length === 0 && (
+                    <NoProjectFound customLabel="Currently you don't have any projects." />
+                )}
+
                 {!hasLoaded && <Skeletons projects={projects} />}
 
                 {hasLoaded && (

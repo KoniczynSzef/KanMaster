@@ -1,5 +1,5 @@
 import { options } from '@/auth/options';
-import Projects from '@/components/Dashboard/Projects';
+import Projects from '@/components/Dashboard/Projects/Projects';
 import { getProjects } from '@/controllers/project-functions';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';

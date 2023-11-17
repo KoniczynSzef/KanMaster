@@ -1,12 +1,17 @@
 'use client';
 
 import React, { FC, useState } from 'react';
-import { Input } from '../ui/input';
-import { Button } from '../ui/button';
+import { Input } from '../../ui/input';
+import { Button } from '../../ui/button';
 import { Menu } from 'lucide-react';
 import { Project } from '@prisma/client';
-import { filterProjects, useProjectStore } from '@/context/project-store';
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import {
+    filterByDeadline,
+    filterProjects,
+    useProjectStore,
+} from '@/context/project-store';
+import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover';
+import Link from 'next/link';
 
 interface Props {
     projects: Project[];
@@ -20,6 +25,10 @@ const SearchPanel: FC<Props> = ({ projects }) => {
         setSearch(e.target.value);
 
         setProjects(filterProjects(projects, e.target.value));
+    };
+
+    const handleFilterByDeadline = () => {
+        setProjects(filterByDeadline(projects));
     };
 
     return (
@@ -38,9 +47,14 @@ const SearchPanel: FC<Props> = ({ projects }) => {
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent className="flex flex-col gap-4 mr-8 lg:mr-8 2xl:mr-2">
-                    <Button className="self-start">New Project</Button>
+                    <Link href={'/dashboard/create'} className="self-start">
+                        <Button className="self-start">New Project</Button>
+                    </Link>
 
-                    <Button variant={'outline'}>
+                    <Button
+                        variant={'outline'}
+                        onClick={handleFilterByDeadline}
+                    >
                         Filter by{' '}
                         <span className="font-bold ml-1">deadline</span>
                     </Button>

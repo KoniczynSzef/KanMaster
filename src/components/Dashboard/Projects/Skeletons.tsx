@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Skeleton } from '../ui/skeleton';
+import { Skeleton } from '../../ui/skeleton';
 import { Project } from '@prisma/client';
 
 interface Props {

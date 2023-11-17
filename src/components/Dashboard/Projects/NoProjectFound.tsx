@@ -5,11 +5,13 @@ import {
     CardDescription,
     CardHeader,
     CardTitle,
-} from '../ui/card';
+} from '../../ui/card';
 
-interface Props {}
+interface Props {
+    customLabel?: string;
+}
 
-const NoProjectFound: FC<Props> = () => {
+const NoProjectFound: FC<Props> = ({ customLabel }) => {
     return (
         <Card>
             <CardHeader>
@@ -19,7 +21,9 @@ const NoProjectFound: FC<Props> = () => {
             </CardHeader>
             <CardContent>
                 <CardDescription>
-                    No projects were found for the given search criteria.
+                    {customLabel
+                        ? customLabel
+                        : 'No projects were found for the given search criteria.'}
                 </CardDescription>
             </CardContent>
         </Card>
