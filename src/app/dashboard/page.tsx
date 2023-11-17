@@ -14,11 +14,15 @@ const page: FC<Props> = async () => {
         return redirect('/');
     }
 
+    if (!session.user) {
+        return redirect('/');
+    }
+
     const projects = await getProjects(session?.user?.email);
 
     return (
         <div className="p-24 container">
-            <Projects projects={projects} />
+            <Projects projects={projects} user={session.user} />
         </div>
     );
 };

@@ -4,16 +4,24 @@ import { useProjectStore } from '@/context/project-store';
 import { Project } from '@prisma/client';
 import React, { FC, useEffect } from 'react';
 import SearchPanel from './SearchPanel';
+import { UserType, useUserStore } from '@/context/user-store';
 
 interface Props {
     projects: Project[];
+    user: UserType | null;
 }
 
-const Projects: FC<Props> = ({ projects }) => {
+const Projects: FC<Props> = ({ projects, user }) => {
+    const { setUser, user: contextUser } = useUserStore();
     const { setProjects, projects: contextProjects } = useProjectStore();
 
     useEffect(() => {
         setProjects(projects);
+        if (user) {
+            setUser(user);
+        }
+
+        console.log(contextUser);
     }, []);
 
     return (
