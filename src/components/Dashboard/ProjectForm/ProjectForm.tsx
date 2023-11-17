@@ -1,5 +1,7 @@
 'use client';
 
+import FormField from '@/components/Dashboard/ProjectForm/FormField';
+import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import {
     type ProjectFormSchema,
@@ -16,9 +18,22 @@ const ProjectForm: FC<Props> = () => {
         mode: 'onChange',
         resolver: zodResolver(Schema),
     });
+    const onSubmit = (data: ProjectFormSchema) => {};
+
     return (
         <Form {...form}>
-            <form action=""></form>
+            <form
+                action=""
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-6 flex flex-col mt-4"
+            >
+                <FormField form={form} prop="title" type="text" />
+                <FormField form={form} prop="description" type="text" />
+            </form>
+
+            <Button type="button" className="ml-auto">
+                Continue
+            </Button>
         </Form>
     );
 };
