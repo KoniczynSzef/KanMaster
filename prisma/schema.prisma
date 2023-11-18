@@ -63,6 +63,8 @@ model Project {
   description String?
   teamLeaderId String 
 
+  deadline DateTime
+
   memberIDs String[] 
   members User[] @relation(fields: [memberIDs], references: [id])
 
