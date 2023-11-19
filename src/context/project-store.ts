@@ -1,9 +1,11 @@
 import { Project } from '@prisma/client';
 import { create } from 'zustand';
 
+export type projectType = Omit<Project, 'id' | 'createdAt' | 'teamLeaderId'>;
+
 type ProjectStore = {
-    projects: Project[];
-    setProjects: (projects: Project[]) => void;
+    projects: projectType[] | Project[];
+    setProjects: (projects: projectType[] | Project[]) => void;
     hasLoaded: boolean;
     setHasLoaded: (value: boolean) => void;
 };

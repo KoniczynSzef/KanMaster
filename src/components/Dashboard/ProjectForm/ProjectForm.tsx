@@ -1,91 +1,126 @@
 'use client';
 
-import FormField from '@/components/Dashboard/ProjectForm/FormField';
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
+import { useProjectFormStore } from '@/context/project-form-store';
 import {
     ProjectFormSchema,
-    ProjectFormSchemaStepOne,
     ProjectFormSchema as Schema,
 } from '@/types/project-form-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import React, { FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import StepOne from './steps/StepOne';
+import StepTwo from './steps/StepTwo';
+import FormHeader from './FormHeader';
+import StepThree, { dateValidation } from './steps/StepThree';
+import { redirect, useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 interface Props {}
 
 const ProjectForm: FC<Props> = () => {
-    const [step, setStep] = useState(1);
-    const [members, setMembers] = useState<string[]>([]);
+    const router = useRouter();
+    const [date, setDate] = useState<Date>();
+    const {
+        formDescription,
+        step,
+        setStep,
+        changeFormDescription,
+        setTitle,
+        setDescription,
+        deadline,
+    } = useProjectFormStore();
 
     const form = useForm<ProjectFormSchema>({
-        mode: 'onChange',
+        mode: 'all',
         resolver: zodResolver(Schema),
         defaultValues: {
             title: '',
             description: '',
-            members: '',
-            badgeColor: '',
-            badgeIcon: '',
         },
     });
 
-    const onSubmit = (data: ProjectFormSchema) => {
-        console.log(data);
+    const onSubmit = () => {
+        if (step === 3) {
+            console.log('here');
+
+            router.push('/dashboard/summary');
+        }
     };
 
     const handleGoToNextStep = () => {
-        if (ProjectFormSchemaStepOne.safeParse(form.getValues()).success) {
-            setStep((prev) => (prev += 1));
+        setStep();
+        if (step === 3) {
+            form.handleSubmit(onSubmit);
+            return redirect('/dashboard/summary');
         } else {
-            toast.error('Please fill in all the fields');
+            if (Schema.safeParse(form.getValues()).success) {
+                switch (step) {
+                    case 1:
+                        setTitle(form.getValues('title'));
+                        setDescription(form.getValues('description'));
+                        changeFormDescription(
+                            "Now it's time to build your team. Add your first team members who will help you achieve success."
+                        );
+                        break;
+                    case 2:
+                        changeFormDescription(
+                            "Share your project's deadline and add a badge. Your project deserves recognition!"
+                        );
+                        break;
+                    case 3:
+                        if (!dateValidation.safeParse(deadline).success) {
+                            toast.error('Please select a valid date');
+                            return;
+                        }
+                        changeFormDescription(
+                            'Last step! Share your project with the world. You can always edit it later.'
+                        );
+                        break;
+                    default:
+                        break;
+                }
+            } else {
+                toast.error('Please fill in all the fields');
+            }
         }
     };
 
     return (
-        <Form {...form}>
-            <form
-                action=""
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-6 flex flex-col mt-4"
-            >
-                {step === 1 && (
-                    <>
-                        <FormField form={form} prop="title" type="text" />
-                        <FormField form={form} prop="description" type="text" />
-                    </>
-                )}
-
-                {step === 2 && (
-                    <>
-                        <div>
-                            <FormField
-                                form={form}
-                                prop="members"
-                                type="text"
-                                withButton
-                                setMembers={setMembers}
-                            />
-                        </div>
-                        <ol className="list-decimal ml-4">
-                            {members.map((member) => (
-                                <li key={member}>{member}</li>
-                            ))}
-                        </ol>
-                    </>
-                )}
-            </form>
-            {step <= 3 && (
-                <Button
-                    type={`${step === 3 ? 'submit' : 'button'}`}
-                    className="ml-auto"
-                    onClick={handleGoToNextStep}
+        <>
+            <p className="max-w-sm">{formDescription}</p>
+            <Form {...form}>
+                <form
+                    action=""
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="space-y-6 flex flex-col mt-8 border border-muted-background p-8 rounded"
                 >
-                    {step < 3 ? 'Continue' : 'Finish'}
-                </Button>
-            )}
-        </Form>
+                    <FormHeader />
+
+                    {step === 1 && <StepOne form={form} />}
+                    {step === 2 && <StepTwo />}
+                    {step === 3 && <StepThree date={date} setDate={setDate} />}
+
+                    {step !== 3 && (
+                        <Button
+                            type="button"
+                            className="ml-auto"
+                            onClick={handleGoToNextStep}
+                        >
+                            Continue
+                        </Button>
+                    )}
+
+                    {step === 3 && (
+                        <Button type="button" onClick={() => onSubmit()}>
+                            Finish
+                        </Button>
+                    )}
+                </form>
+            </Form>
+        </>
     );
 };
 

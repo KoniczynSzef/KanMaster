@@ -64,6 +64,7 @@ model Project {
   teamLeaderId String 
 
   deadline DateTime
+  createdAt DateTime @default(now())
 
   memberIDs String[] 
   members User[] @relation(fields: [memberIDs], references: [id])

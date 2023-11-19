@@ -7,9 +7,13 @@ interface Props {
 }
 
 const Skeletons: FC<Props> = ({ projects }) => {
-    return projects.map((project) => (
-        <Skeleton key={project.id} className="max-w-sm w-full h-24" />
-    ));
+    return (
+        <div className="grid grid-cols-3">
+            {projects.map((project) => (
+                <Skeleton key={project.id} className="max-w-sm w-full h-24" />
+            ))}
+        </div>
+    );
 };
 
 export default Skeletons;
