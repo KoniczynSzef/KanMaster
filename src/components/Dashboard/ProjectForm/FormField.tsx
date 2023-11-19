@@ -25,7 +25,7 @@ interface Props {
     type: React.HTMLInputTypeAttribute;
     customLabel?: string;
     withButton?: boolean;
-    setMembers?: React.Dispatch<React.SetStateAction<string[]>>;
+    addMember?: (member: string) => void;
 }
 
 const ProjectFormField: FC<Props> = ({
@@ -34,18 +34,19 @@ const ProjectFormField: FC<Props> = ({
     type,
     customLabel,
     withButton,
-    setMembers,
+    addMember,
 }) => {
     const handleAddMember = () => {
         if (
-            setMembers &&
+            addMember &&
             ProjectFormSchemaStepTwo.safeParse(form.getValues()).success
         ) {
-            setMembers((prev) => [...prev, form.getValues(prop)]);
-            form.resetField('members');
+            addMember(form.getValues('members'));
         } else {
             toast.error('Please pass correct email!');
         }
+
+        form.resetField('members');
     };
     return (
         <FormField
