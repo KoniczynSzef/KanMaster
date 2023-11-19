@@ -1,6 +1,5 @@
 'use client';
 
-import FormField from '@/components/Dashboard/ProjectForm/FormField';
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { useProjectFormStore } from '@/context/project-form-store';
@@ -14,18 +13,14 @@ import React, { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import StepOne from './steps/StepOne';
+import StepTwo from './steps/StepTwo';
+import FormHeader from './FormHeader';
 
 interface Props {}
 
 const ProjectForm: FC<Props> = () => {
-    const {
-        formDescription,
-        step,
-        setStep,
-        addMember,
-        members,
-        changeFormDescription,
-    } = useProjectFormStore();
+    const { formDescription, step, setStep, changeFormDescription } =
+        useProjectFormStore();
 
     const form = useForm<ProjectFormSchema>({
         mode: 'all',
@@ -54,43 +49,27 @@ const ProjectForm: FC<Props> = () => {
 
     return (
         <>
-            <p className="max-w-sm mt-2">{formDescription}</p>
+            <p className="max-w-sm">{formDescription}</p>
             <Form {...form}>
                 <form
                     action=""
                     onSubmit={form.handleSubmit(onSubmit)}
-                    className="space-y-6 flex flex-col mt-4"
+                    className="space-y-6 flex flex-col mt-8 border border-muted-background p-8 rounded"
                 >
+                    <FormHeader />
                     {step === 1 && <StepOne form={form} />}
 
-                    {step === 2 && (
-                        <>
-                            <div>
-                                <FormField
-                                    form={form}
-                                    prop="members"
-                                    type="text"
-                                    withButton
-                                    addMember={addMember}
-                                />
-                            </div>
-                            <ol className="list-decimal ml-4">
-                                {members.map((member) => (
-                                    <li key={member}>{member}</li>
-                                ))}
-                            </ol>
-                        </>
+                    {step === 2 && <StepTwo form={form} />}
+                    {step <= 3 && (
+                        <Button
+                            type={`${step === 3 ? 'submit' : 'button'}`}
+                            className="ml-auto"
+                            onClick={handleGoToNextStep}
+                        >
+                            {step < 3 ? 'Continue' : 'Finish'}
+                        </Button>
                     )}
                 </form>
-                {step <= 3 && (
-                    <Button
-                        type={`${step === 3 ? 'submit' : 'button'}`}
-                        className="ml-auto"
-                        onClick={handleGoToNextStep}
-                    >
-                        {step < 3 ? 'Continue' : 'Finish'}
-                    </Button>
-                )}
             </Form>
         </>
     );
