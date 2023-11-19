@@ -21,6 +21,7 @@ const IconButtons: FC<Props> = ({ array, setBadge }) => {
         <div className="grid grid-cols-3 gap-4 self-start">
             {array.map((icon, idx) => (
                 <Button
+                    type="button"
                     variant={
                         typeof icon.value === 'string' ? 'default' : 'outline'
                     }

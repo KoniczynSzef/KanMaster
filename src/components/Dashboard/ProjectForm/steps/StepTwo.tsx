@@ -1,32 +1,41 @@
-import React, { FC } from 'react';
-import ProjectFormField from '../FormField';
+import React, { FC, useState } from 'react';
 import { useProjectFormStore } from '@/context/project-form-store';
-import { UseFormReturn } from 'react-hook-form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { z } from 'zod';
+import { toast } from 'sonner';
 
-interface Props {
-    form: UseFormReturn<
-        {
-            title: string;
-            description: string;
-            members: string;
-            badgeColor: string;
-            badgeIcon: string;
-        },
-        undefined
-    >;
-}
+interface Props {}
 
-const StepTwo: FC<Props> = ({ form }) => {
-    const { members } = useProjectFormStore();
+const emailValidation = z.string().email();
+
+const StepTwo: FC<Props> = () => {
+    const [email, setEmail] = useState('');
+    const { members, addMember } = useProjectFormStore();
+
+    const handleAddMember = () => {
+        if (
+            emailValidation.safeParse(email).success &&
+            !members.includes(email)
+        ) {
+            addMember(email);
+            setEmail('');
+        } else if (members.includes(email)) {
+            toast.error('This member is already added');
+        } else {
+            toast.error('Please enter a valid email');
+        }
+    };
+
     return (
         <>
             <div>
-                <ProjectFormField
-                    form={form}
-                    prop="members"
-                    type="text"
-                    withButton
+                <Input
+                    placeholder="Member email..."
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                 />
+                <Button onClick={handleAddMember}>Invite</Button>
             </div>
             <ol className="list-decimal ml-4">
                 {members.map((member) => (

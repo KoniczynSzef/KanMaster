@@ -5,7 +5,6 @@ import { Form } from '@/components/ui/form';
 import { useProjectFormStore } from '@/context/project-form-store';
 import {
     ProjectFormSchema,
-    ProjectFormSchemaStepOne,
     ProjectFormSchema as Schema,
 } from '@/types/project-form-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -16,13 +15,20 @@ import StepOne from './steps/StepOne';
 import StepTwo from './steps/StepTwo';
 import FormHeader from './FormHeader';
 import StepThree from './steps/StepThree';
+import FormSummary from './FormSummary';
 
 interface Props {}
 
 const ProjectForm: FC<Props> = () => {
     const [date, setDate] = useState<Date>();
-    const { formDescription, step, setStep, changeFormDescription } =
-        useProjectFormStore();
+    const {
+        formDescription,
+        step,
+        setStep,
+        changeFormDescription,
+        setTitle,
+        setDescription,
+    } = useProjectFormStore();
 
     const form = useForm<ProjectFormSchema>({
         mode: 'all',
@@ -30,26 +36,51 @@ const ProjectForm: FC<Props> = () => {
         defaultValues: {
             title: '',
             description: '',
-            members: '',
-            badgeColor: '',
-            badgeIcon: '',
         },
     });
 
     const onSubmit = (data: ProjectFormSchema) => {
-        console.log(data);
-    };
+        console.log(step);
 
-    const handleGoToNextStep = () => {
-        if (ProjectFormSchemaStepOne.safeParse(form.getValues()).success) {
-            setStep();
-            changeFormDescription(formDescription);
-        } else {
-            toast.error('Please fill in all the fields');
+        if (step === 4) {
+            console.log(data);
         }
     };
 
-    return (
+    const handleGoToNextStep = () => {
+        setStep();
+        if (step === 3) {
+            return form.handleSubmit(onSubmit);
+        } else {
+            if (Schema.safeParse(form.getValues()).success) {
+                switch (step) {
+                    case 1:
+                        setTitle(form.getValues('title'));
+                        setDescription(form.getValues('description'));
+                        changeFormDescription(
+                            "Now it's time to build your team. Add your first team members who will help you achieve success."
+                        );
+                        break;
+                    case 2:
+                        changeFormDescription(
+                            "Share your project's deadline and add a badge. Your project deserves recognition!"
+                        );
+                        break;
+                    case 3:
+                        changeFormDescription(
+                            'Last step! Share your project with the world. You can always edit it later.'
+                        );
+                        break;
+                    default:
+                        break;
+                }
+            } else {
+                toast.error('Please fill in all the fields');
+            }
+        }
+    };
+
+    return step <= 3 ? (
         <>
             <p className="max-w-sm">{formDescription}</p>
             <Form {...form}>
@@ -61,8 +92,10 @@ const ProjectForm: FC<Props> = () => {
                     <FormHeader />
 
                     {step === 1 && <StepOne form={form} />}
-                    {step === 2 && <StepTwo form={form} />}
+                    {step === 2 && <StepTwo />}
                     {step === 3 && <StepThree date={date} setDate={setDate} />}
+
+                    {step === 4 && <h3>Finished form</h3>}
 
                     {step <= 3 && (
                         <Button
@@ -76,6 +109,8 @@ const ProjectForm: FC<Props> = () => {
                 </form>
             </Form>
         </>
+    ) : (
+        <FormSummary />
     );
 };
 

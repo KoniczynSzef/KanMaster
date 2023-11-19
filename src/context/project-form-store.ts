@@ -4,7 +4,8 @@ import { create } from 'zustand';
 type formDescription =
     | "Let's start with the project title and a brief description. It's the first step towards your goal."
     | "Now it's time to build your team. Add your first team members who will help you achieve success."
-    | "Share your project's deadline and add a badge. Your project deserves recognition!";
+    | "Share your project's deadline and add a badge. Your project deserves recognition!"
+    | 'Last step! Share your project with the world. You can always edit it later.';
 
 type projectStore = {
     step: number;

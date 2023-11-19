@@ -7,9 +7,6 @@ interface Props {
         {
             title: string;
             description: string;
-            members: string;
-            badgeColor: string;
-            badgeIcon: string;
         },
         undefined
     >;
