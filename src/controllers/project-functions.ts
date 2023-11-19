@@ -19,10 +19,11 @@ export async function getProjects(userEmail: string | null | undefined) {
 }
 
 export async function createProject(
-    project: Omit<Project, 'id' | 'teamLeaderId'>,
+    project: Omit<Project, 'id' | 'teamLeaderId' | 'createdAt'>,
     userEmail: string | null | undefined
 ) {
     const user = await getUser(userEmail);
+    console.log(user);
 
     if (!user) {
         throw new Error('There is no user with that email');

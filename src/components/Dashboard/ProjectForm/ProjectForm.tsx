@@ -15,11 +15,13 @@ import StepOne from './steps/StepOne';
 import StepTwo from './steps/StepTwo';
 import FormHeader from './FormHeader';
 import StepThree, { dateValidation } from './steps/StepThree';
-import FormSummary from './FormSummary';
+import { redirect, useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 interface Props {}
 
 const ProjectForm: FC<Props> = () => {
+    const router = useRouter();
     const [date, setDate] = useState<Date>();
     const {
         formDescription,
@@ -40,18 +42,19 @@ const ProjectForm: FC<Props> = () => {
         },
     });
 
-    const onSubmit = (data: ProjectFormSchema) => {
-        console.log(step);
+    const onSubmit = () => {
+        if (step === 3) {
+            console.log('here');
 
-        if (step === 4) {
-            console.log(data);
+            router.push('/dashboard/summary');
         }
     };
 
     const handleGoToNextStep = () => {
         setStep();
         if (step === 3) {
-            return form.handleSubmit(onSubmit);
+            form.handleSubmit(onSubmit);
+            return redirect('/dashboard/summary');
         } else {
             if (Schema.safeParse(form.getValues()).success) {
                 switch (step) {
@@ -85,7 +88,7 @@ const ProjectForm: FC<Props> = () => {
         }
     };
 
-    return step <= 3 ? (
+    return (
         <>
             <p className="max-w-sm">{formDescription}</p>
             <Form {...form}>
@@ -100,22 +103,24 @@ const ProjectForm: FC<Props> = () => {
                     {step === 2 && <StepTwo />}
                     {step === 3 && <StepThree date={date} setDate={setDate} />}
 
-                    {step === 4 && <h3>Finished form</h3>}
-
-                    {step <= 3 && (
+                    {step !== 3 && (
                         <Button
-                            type={`${step === 3 ? 'submit' : 'button'}`}
+                            type="button"
                             className="ml-auto"
                             onClick={handleGoToNextStep}
                         >
-                            {step < 3 ? 'Continue' : 'Finish'}
+                            Continue
+                        </Button>
+                    )}
+
+                    {step === 3 && (
+                        <Button type="button" onClick={() => onSubmit()}>
+                            Finish
                         </Button>
                     )}
                 </form>
             </Form>
         </>
-    ) : (
-        <FormSummary />
     );
 };
 

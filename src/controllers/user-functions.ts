@@ -13,5 +13,9 @@ export async function getUser(uniqueCredential: string | null | undefined) {
         },
     });
 
+    if (!user) {
+        throw new Error('There is no user with that email');
+    }
+
     return user;
 }
