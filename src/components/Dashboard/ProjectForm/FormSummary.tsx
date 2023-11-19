@@ -5,10 +5,15 @@ import { Separator } from '@/components/ui/separator';
 import { useProjectFormStore } from '@/context/project-form-store';
 import React, { FC } from 'react';
 
+const f = new Intl.DateTimeFormat('en', {
+    dateStyle: 'full',
+});
+
 interface Props {}
 
 const FormSummary: FC<Props> = () => {
-    const { title, description, members, badge } = useProjectFormStore();
+    const { title, description, members, badge, deadline } =
+        useProjectFormStore();
     console.log(title);
 
     return (
@@ -50,6 +55,11 @@ const FormSummary: FC<Props> = () => {
                 ) : (
                     <p className="text-destructive">No members added yet</p>
                 )}
+
+                <p>
+                    <span className="font-bold">Deadline: </span>
+                    {f.format(deadline)}
+                </p>
 
                 <Button className="mt-4 ml-auto">Create Project</Button>
             </CardContent>
