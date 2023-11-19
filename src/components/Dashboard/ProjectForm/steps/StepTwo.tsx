@@ -17,7 +17,7 @@ interface Props {
 }
 
 const StepTwo: FC<Props> = ({ form }) => {
-    const { members, addMember } = useProjectFormStore();
+    const { members } = useProjectFormStore();
     return (
         <>
             <div>
@@ -26,7 +26,6 @@ const StepTwo: FC<Props> = ({ form }) => {
                     prop="members"
                     type="text"
                     withButton
-                    addMember={addMember}
                 />
             </div>
             <ol className="list-decimal ml-4">

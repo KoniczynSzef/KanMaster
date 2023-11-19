@@ -9,16 +9,18 @@ import {
     ProjectFormSchema as Schema,
 } from '@/types/project-form-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import StepOne from './steps/StepOne';
 import StepTwo from './steps/StepTwo';
 import FormHeader from './FormHeader';
+import StepThree from './steps/StepThree';
 
 interface Props {}
 
 const ProjectForm: FC<Props> = () => {
+    const [date, setDate] = useState<Date>();
     const { formDescription, step, setStep, changeFormDescription } =
         useProjectFormStore();
 
@@ -57,9 +59,11 @@ const ProjectForm: FC<Props> = () => {
                     className="space-y-6 flex flex-col mt-8 border border-muted-background p-8 rounded"
                 >
                     <FormHeader />
-                    {step === 1 && <StepOne form={form} />}
 
+                    {step === 1 && <StepOne form={form} />}
                     {step === 2 && <StepTwo form={form} />}
+                    {step === 3 && <StepThree date={date} setDate={setDate} />}
+
                     {step <= 3 && (
                         <Button
                             type={`${step === 3 ? 'submit' : 'button'}`}

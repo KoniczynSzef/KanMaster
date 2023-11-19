@@ -5,6 +5,7 @@ interface Props {}
 
 const FormHeader: FC<Props> = () => {
     const { step } = useProjectFormStore();
+    
     return (
         <article>
             <h3 className="text-3xl font-bold">

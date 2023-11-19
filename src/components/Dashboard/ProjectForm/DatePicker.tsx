@@ -1,6 +1,6 @@
 'use client';
 
-import * as React from 'react';
+import React, { FC } from 'react';
 import { format } from 'date-fns';
 import { Calendar as CalendarIcon } from 'lucide-react';
 
@@ -12,9 +12,12 @@ import {
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 
-function DatePicker() {
-    const [date, setDate] = React.useState<Date>();
+interface Props {
+    date: Date | undefined;
+    setDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
+}
 
+const DatePicker: FC<Props> = ({ date, setDate }) => {
     return (
         <Popover>
             <PopoverTrigger asChild>
@@ -33,6 +36,6 @@ function DatePicker() {
             </PopoverContent>
         </Popover>
     );
-}
+};
 
 export default DatePicker;

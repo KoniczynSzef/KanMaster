@@ -1,24 +1,16 @@
 import React, { FC } from 'react';
-import { UseFormReturn } from 'react-hook-form';
+import DatePicker from '../DatePicker';
 
 interface Props {
-    form: UseFormReturn<
-        {
-            title: string;
-            description: string;
-            members: string;
-            badgeColor: string;
-            badgeIcon: string;
-        },
-        undefined
-    >;
+    date: Date | undefined;
+    setDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
 }
 
-const StepThree: FC<Props> = ({ form }) => {
+const StepThree: FC<Props> = ({ date, setDate }) => {
     return (
-        <div>
-            <p></p>
-        </div>
+        <>
+            <DatePicker date={date} setDate={setDate} />
+        </>
     );
 };
 

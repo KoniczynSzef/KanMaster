@@ -14,10 +14,10 @@ import {
 } from '@/types/project-form-schema';
 import React, { FC } from 'react';
 import { UseFormReturn } from 'react-hook-form';
-import DatePicker from './DatePicker';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
+import { useProjectFormStore } from '@/context/project-form-store';
 
 interface Props {
     form: UseFormReturn<ProjectFormSchema, undefined>;
@@ -25,7 +25,6 @@ interface Props {
     type: React.HTMLInputTypeAttribute;
     customLabel?: string;
     withButton?: boolean;
-    addMember?: (member: string) => void;
 }
 
 const ProjectFormField: FC<Props> = ({
@@ -34,14 +33,17 @@ const ProjectFormField: FC<Props> = ({
     type,
     customLabel,
     withButton,
-    addMember,
 }) => {
+    const { members, addMember } = useProjectFormStore();
     const handleAddMember = () => {
         if (
             addMember &&
-            ProjectFormSchemaStepTwo.safeParse(form.getValues()).success
+            ProjectFormSchemaStepTwo.safeParse(form.getValues()).success &&
+            !members.includes(form.getValues('members'))
         ) {
             addMember(form.getValues('members'));
+        } else if (members.includes(form.getValues('members'))) {
+            toast.error('This email is already in the list!');
         } else {
             toast.error('Please pass correct email!');
         }
@@ -65,27 +67,23 @@ const ProjectFormField: FC<Props> = ({
                                 placeholder="Project's description..."
                                 {...field}
                             />
-                        ) : type !== 'date' ? (
-                            withButton ? (
-                                <div className="flex gap-4">
-                                    <Input
-                                        type={type}
-                                        placeholder={`Project's ${prop}...`}
-                                        {...field}
-                                    />
-                                    <Button onClick={handleAddMember}>
-                                        Invite
-                                    </Button>
-                                </div>
-                            ) : (
+                        ) : withButton ? (
+                            <div className="flex gap-4">
                                 <Input
                                     type={type}
                                     placeholder={`Project's ${prop}...`}
                                     {...field}
                                 />
-                            )
+                                <Button onClick={handleAddMember}>
+                                    Invite
+                                </Button>
+                            </div>
                         ) : (
-                            <DatePicker />
+                            <Input
+                                type={type}
+                                placeholder={`Project's ${prop}...`}
+                                {...field}
+                            />
                         )}
                     </FormControl>
                     <FormMessage />
