@@ -29,7 +29,7 @@ const StepTwo: FC<Props> = () => {
 
     return (
         <>
-            <div>
+            <div className="flex gap-4">
                 <Input
                     placeholder="Member email..."
                     value={email}

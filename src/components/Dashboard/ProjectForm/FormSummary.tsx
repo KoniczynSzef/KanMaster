@@ -98,7 +98,7 @@ const FormSummary: FC<Props> = ({ user }) => {
                     <p className="text-destructive">No members added yet</p>
                 )}
 
-                <p>
+                <p className="mt-4">
                     <span className="font-bold">Deadline: </span>
                     {f.format(deadline)}
                 </p>
