@@ -14,7 +14,7 @@ import { toast } from 'sonner';
 import StepOne from './steps/StepOne';
 import StepTwo from './steps/StepTwo';
 import FormHeader from './FormHeader';
-import StepThree from './steps/StepThree';
+import StepThree, { dateValidation } from './steps/StepThree';
 import FormSummary from './FormSummary';
 
 interface Props {}
@@ -28,6 +28,7 @@ const ProjectForm: FC<Props> = () => {
         changeFormDescription,
         setTitle,
         setDescription,
+        deadline,
     } = useProjectFormStore();
 
     const form = useForm<ProjectFormSchema>({
@@ -67,6 +68,10 @@ const ProjectForm: FC<Props> = () => {
                         );
                         break;
                     case 3:
+                        if (!dateValidation.safeParse(deadline).success) {
+                            toast.error('Please select a valid date');
+                            return;
+                        }
                         changeFormDescription(
                             'Last step! Share your project with the world. You can always edit it later.'
                         );

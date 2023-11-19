@@ -1,11 +1,18 @@
+import React from 'react';
 import { Project } from '@prisma/client';
 import { create } from 'zustand';
+import { Calendar } from 'lucide-react';
 
 type formDescription =
     | "Let's start with the project title and a brief description. It's the first step towards your goal."
     | "Now it's time to build your team. Add your first team members who will help you achieve success."
     | "Share your project's deadline and add a badge. Your project deserves recognition!"
     | 'Last step! Share your project with the world. You can always edit it later.';
+
+export type Badge = {
+    color: string;
+    icon: React.JSX.Element;
+};
 
 type projectStore = {
     step: number;
@@ -28,12 +35,10 @@ type projectStore = {
     addMember: (member: string) => void;
     removeMember: (member: string) => void;
 
-    badgeColor: string;
-    badgeIcon: string;
+    badge: Badge;
     deadline: Date;
 
-    setBadgeColor: (badgeColor: string) => void;
-    setBadgeIcon: (badgeIcon: string) => void;
+    setBadge: (badge: Badge) => void;
     setDeadline: (deadline: Date) => void;
 };
 
@@ -80,19 +85,15 @@ export const useProjectFormStore = create<projectStore>((set) => ({
         }));
     },
 
-    badgeColor: '',
-    badgeIcon: '',
+    badge: {
+        color: 'bg-paletteLighterRed',
+        icon: <Calendar />,
+    },
     deadline: new Date(),
 
-    setBadgeColor(badgeColor) {
+    setBadge(badge) {
         set(() => ({
-            badgeColor,
-        }));
-    },
-
-    setBadgeIcon(badgeIcon) {
-        set(() => ({
-            badgeIcon,
+            badge,
         }));
     },
 

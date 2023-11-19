@@ -1,25 +1,36 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import DatePicker from '../DatePicker';
 import IconButtons from './IconButtons';
 import { colorsArray, iconsArray } from '@/assets/badges';
 import { Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Badge, useProjectFormStore } from '@/context/project-form-store';
+import { z } from 'zod';
 
 interface Props {
     date: Date | undefined;
     setDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
 }
 
-export type Badge = {
-    color: string;
-    icon: React.JSX.Element;
-};
+export const dateValidation = z.date().min(new Date());
 
 const StepThree: FC<Props> = ({ date, setDate }) => {
     const [badge, setBadge] = useState<Badge>({
         color: 'bg-paletteLighterRed',
         icon: <Calendar />,
     });
+
+    const { setBadge: setBadgeStore, setDeadline } = useProjectFormStore();
+
+    useEffect(() => {
+        setBadgeStore(badge);
+    }, [badge]);
+
+    useEffect(() => {
+        if (date) {
+            setDeadline(date);
+        }
+    }, [date]);
 
     return (
         <div className="flex flex-col gap-8">

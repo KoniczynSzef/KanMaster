@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/context/project-form-store';
 import React, { FC } from 'react';
-import { Badge } from './StepThree';
 
 interface Props {
     array: {
