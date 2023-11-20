@@ -47,7 +47,7 @@ const Projects: FC<Props> = ({ projects }) => {
                             <NoProjectFound />
                         )}
 
-                        <div className="grid grid-cols-3">
+                        <div className="grid grid-cols-1 md:grid-cols-3">
                             {state.map((project, idx) => (
                                 <div
                                     key={idx}
