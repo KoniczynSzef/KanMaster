@@ -1,27 +1,22 @@
-'use server';
-
-import { db } from '@/db';
 import { schemaType } from '@/types/form-schema';
-import { hash } from 'bcryptjs';
+import { signIn } from 'next-auth/react';
+import { res } from './login';
 
 export async function register(userProps: schemaType) {
-    const { username, email, password } = userProps;
-
-    const exists = await db.user.findUnique({
-        where: { email },
+    const res = await fetch(`/api/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userProps),
     });
 
-    if (exists) {
-        return null;
+    const user: res = await res.json();
+
+    if (user?.error) {
+        throw new Error(user.error);
     }
 
-    const user = await db.user.create({
-        data: {
-            name: username,
-            email,
-            hashedPassword: await hash(password, 10),
-        },
+    await signIn('credentials', {
+        ...userProps,
+        callbackUrl: '/dashboard',
     });
-
-    return user;
 }

@@ -17,7 +17,6 @@ import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { register } from '@/auth/register';
 import { toast } from 'sonner';
-import { redirect } from 'next/navigation';
 import { schema, schemaType } from '@/types/form-schema';
 import { Separator } from '../ui/separator';
 
@@ -36,13 +35,19 @@ const Register: FC<Props> = () => {
     const onSubmit = async (data: schemaType) => {
         try {
             await register(data);
-            toast.success('You have been registered successfully', {
-                description: 'You can benefit from all the features now',
-            });
 
-            redirect('/');
+            toast.success(
+                'You have been registered and logged in successfully',
+                {
+                    description: 'You can benefit from all the features now',
+                }
+            );
         } catch (error) {
-            toast.error('There was an error while registering you');
+            if (error instanceof Error) {
+                toast.error(error.message);
+            } else {
+                toast.error('There was an error while registering');
+            }
         }
     };
 

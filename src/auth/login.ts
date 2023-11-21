@@ -3,7 +3,7 @@ import { provider } from '.';
 import { signInSchema } from '@/types/form-schema';
 import { User } from '@prisma/client';
 
-type res = User & { error: string };
+export type res = User & { error: string };
 
 export async function login(data: signInSchema) {
     const res = await fetch(`/api/sign-in`, {
