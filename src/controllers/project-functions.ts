@@ -23,7 +23,6 @@ export async function createProject(
     userEmail: string | null | undefined
 ) {
     const user = await getUser(userEmail);
-    console.log(user);
 
     if (!user) {
         throw new Error('There is no user with that email');

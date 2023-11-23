@@ -51,10 +51,14 @@ const FormSummary: FC<Props> = ({ user }) => {
             const newProject = await createProject(project, user.email);
             toast.success('Project created successfully');
 
+            toast.info('Adding badge to project...');
+
             await fetch('/api/badge', {
                 method: 'POST',
                 body: JSON.stringify([newProject, { ...badge }]),
             });
+
+            toast.success('Badge added successfully');
 
             router.push('/dashboard');
         } catch (error) {
