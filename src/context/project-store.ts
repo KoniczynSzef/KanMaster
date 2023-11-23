@@ -1,5 +1,6 @@
-import { Project } from '@prisma/client';
+import { Project, ProjectBadge } from '@prisma/client';
 import { create } from 'zustand';
+import { Badge } from './project-form-store';
 
 export type projectType = Omit<Project, 'id' | 'createdAt' | 'teamLeaderId'> & {
     id?: string;
@@ -10,6 +11,8 @@ type ProjectStore = {
     setProjects: (projects: projectType[] | Project[]) => void;
     hasLoaded: boolean;
     setHasLoaded: (value: boolean) => void;
+    badges: ProjectBadge[] | Badge[];
+    setBadges: (badges: ProjectBadge[] | Badge[]) => void;
 };
 
 export const useProjectStore = create<ProjectStore>((set) => ({
@@ -23,6 +26,13 @@ export const useProjectStore = create<ProjectStore>((set) => ({
     setHasLoaded(value) {
         set(() => ({
             hasLoaded: value,
+        }));
+    },
+
+    badges: [],
+    setBadges(badges) {
+        set(() => ({
+            badges,
         }));
     },
 }));

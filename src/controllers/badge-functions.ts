@@ -5,7 +5,7 @@ import { ProjectBadge } from '@prisma/client';
 
 export async function getBadge(projectId: string) {
     const badge = await db.projectBadge.findUnique({
-        where: { projectId: projectId },
+        where: { projectId },
     });
 
     return badge;
