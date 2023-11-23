@@ -6,7 +6,9 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { useProjectFormStore } from '@/context/project-form-store';
 import { projectType, useProjectStore } from '@/context/project-store';
+import { createBadge } from '@/controllers/badge-functions';
 import { createProject } from '@/controllers/project-functions';
+import { getBadgeColor, getBadgeIcon } from '@/helpers/badge-helpers';
 import { useRouter } from 'next/navigation';
 import React, { FC } from 'react';
 import { toast } from 'sonner';
@@ -35,7 +37,6 @@ const FormSummary: FC<Props> = ({ user }) => {
 
     const handleCreateProject = async () => {
         if (!user) {
-            console.log('no user');
             return;
         }
 
@@ -51,6 +52,12 @@ const FormSummary: FC<Props> = ({ user }) => {
 
             await createProject(project, user.email);
             toast.success('Project created successfully');
+
+            await createBadge(project.id, {
+                color: getBadgeColor(badge.color),
+                icon: getBadgeIcon(badge.icon),
+            });
+
             router.push('/dashboard');
         } catch (error) {
             console.error(error);

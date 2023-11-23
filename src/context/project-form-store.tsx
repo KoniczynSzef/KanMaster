@@ -15,8 +15,9 @@ export type Badge = {
 };
 
 type projectStore = {
+    id?: string;
     step: number;
-    project: Omit<Project, 'id' | 'createdAt' | 'teamLeaderId'> | null;
+    project: Omit<Project, 'createdAt' | 'teamLeaderId'> | null;
     createProject: (project: Project) => void;
     setStep: () => void;
 
