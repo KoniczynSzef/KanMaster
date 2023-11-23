@@ -23,8 +23,6 @@ const page: FC<Props> = async () => {
 
     const badgesArr = await db.projectBadge.findMany();
 
-    console.log(badgesArr);
-
     return (
         <div className="container relative mx-auto py-24">
             <Projects

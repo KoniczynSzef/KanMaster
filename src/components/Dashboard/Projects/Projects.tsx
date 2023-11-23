@@ -22,11 +22,15 @@ const Projects: FC<Props> = ({ projects, badges }) => {
         projects: state,
         hasLoaded,
         setHasLoaded,
+        badges: badgesState,
+        setBadges,
     } = useProjectStore();
 
     useEffect(() => {
         if (!hasLoaded) {
             setProjects(projects);
+            setBadges(badges);
+
             setHasLoaded(true);
         } else {
             setProjects(state);
@@ -55,7 +59,7 @@ const Projects: FC<Props> = ({ projects, badges }) => {
                                 <Project
                                     key={idx}
                                     project={project}
-                                    badge={badges[idx]}
+                                    badges={badgesState}
                                 />
                             ))}
                         </div>

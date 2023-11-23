@@ -2,10 +2,10 @@ import React, { FC, useEffect, useState } from 'react';
 import DatePicker from '../DatePicker';
 import IconButtons from './IconButtons';
 import { colorsArray, iconsArray } from '@/assets/badges';
-import { Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge, useProjectFormStore } from '@/context/project-form-store';
 import { z } from 'zod';
+import { getBadgeIconComponent } from '@/helpers/badge-helpers';
 
 interface Props {
     date: Date | undefined;
@@ -17,7 +17,7 @@ export const dateValidation = z.date().min(new Date());
 const StepThree: FC<Props> = ({ date, setDate }) => {
     const [badge, setBadge] = useState<Badge>({
         color: 'bg-paletteLighterRed',
-        icon: <Calendar />,
+        icon: 'calendar',
     });
 
     const { setBadge: setBadgeStore, setDeadline } = useProjectFormStore();
@@ -47,7 +47,7 @@ const StepThree: FC<Props> = ({ date, setDate }) => {
                     size={'icon'}
                     className={`${badge.color} hover:${badge.color} hover:opacity-70 transition-all duration-300`}
                 >
-                    {badge.icon}
+                    {getBadgeIconComponent(badge.icon)}
                 </Button>
             </div>
         </div>

@@ -7,6 +7,7 @@ import { Separator } from '@/components/ui/separator';
 import { useProjectFormStore } from '@/context/project-form-store';
 import { projectType, useProjectStore } from '@/context/project-store';
 import { createProject } from '@/controllers/project-functions';
+import { ProjectBadge } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import React, { FC } from 'react';
 import { toast } from 'sonner';
@@ -29,7 +30,7 @@ interface Props {
 
 const FormSummary: FC<Props> = ({ user }) => {
     const router = useRouter();
-    const { setProjects, projects } = useProjectStore();
+    const { setProjects, projects, setBadges, badges } = useProjectStore();
     const { title, description, members, badge, deadline } =
         useProjectFormStore();
 
@@ -38,6 +39,8 @@ const FormSummary: FC<Props> = ({ user }) => {
             return;
         }
 
+        console.log(badge);
+
         try {
             const project: projectType = {
                 name: title,
@@ -45,20 +48,21 @@ const FormSummary: FC<Props> = ({ user }) => {
                 description,
                 memberIDs: members,
             };
-            setProjects([...projects, project]);
+
             toast.info('Creating project...');
 
             const newProject = await createProject(project, user.email);
-            toast.success('Project created successfully');
 
-            toast.info('Adding badge to project...');
-
-            await fetch('/api/badge', {
+            const res = await fetch('/api/badge', {
                 method: 'POST',
                 body: JSON.stringify([newProject, { ...badge }]),
             });
 
-            toast.success('Badge added successfully');
+            const newBadge: ProjectBadge = await res.json();
+            setBadges([...badges, newBadge]);
+            setProjects([...projects, project]);
+
+            toast.success('Project created successfully');
 
             router.push('/dashboard');
         } catch (error) {

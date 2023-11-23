@@ -1,7 +1,6 @@
-import React from 'react';
 import { Project } from '@prisma/client';
 import { create } from 'zustand';
-import { Calendar } from 'lucide-react';
+import { BadgeIcon } from '@/types/badge';
 
 type formDescription =
     | "Let's start with the project title and a brief description. It's the first step towards your goal."
@@ -11,7 +10,7 @@ type formDescription =
 
 export type Badge = {
     color: string;
-    icon: React.JSX.Element;
+    icon: BadgeIcon;
 };
 
 type projectStore = {
@@ -88,7 +87,7 @@ export const useProjectFormStore = create<projectStore>((set) => ({
 
     badge: {
         color: 'bg-paletteLighterRed',
-        icon: <Calendar />,
+        icon: 'calendar',
     },
     deadline: new Date(),
 

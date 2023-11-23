@@ -10,9 +10,10 @@ export async function POST(req: Request) {
     const icon = getBadgeIcon(data[1].icon);
 
     const badge = await createBadge(data[0].id, {
-        color: color,
-        icon: icon,
+        color,
+        icon,
         projectId: data[0].id,
     });
+
     return new Response(JSON.stringify(badge));
 }
