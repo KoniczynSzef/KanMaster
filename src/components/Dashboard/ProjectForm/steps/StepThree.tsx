@@ -1,9 +1,11 @@
-import React, { FC, useEffect, useState } from 'react';
+'use client';
+
+import React, { FC, useEffect } from 'react';
 import DatePicker from '../DatePicker';
 import IconButtons from './IconButtons';
 import { colorsArray, iconsArray } from '@/assets/badges';
 import { Button } from '@/components/ui/button';
-import { Badge, useProjectFormStore } from '@/context/project-form-store';
+import { useProjectFormStore } from '@/context/project-form-store';
 import { z } from 'zod';
 import { getBadgeIconComponent } from '@/helpers/badge-helpers';
 
@@ -15,16 +17,7 @@ interface Props {
 export const dateValidation = z.date().min(new Date());
 
 const StepThree: FC<Props> = ({ date, setDate }) => {
-    const [badge, setBadge] = useState<Badge>({
-        color: 'bg-paletteLighterRed',
-        icon: 'calendar',
-    });
-
-    const { setBadge: setBadgeStore, setDeadline } = useProjectFormStore();
-
-    useEffect(() => {
-        setBadgeStore(badge);
-    }, [badge]);
+    const { setBadge, setDeadline, badge } = useProjectFormStore();
 
     useEffect(() => {
         if (date) {
@@ -38,8 +31,18 @@ const StepThree: FC<Props> = ({ date, setDate }) => {
                 <DatePicker date={date} setDate={setDate} />
             </div>
             <div className="flex justify-between">
-                <IconButtons array={colorsArray} setBadge={setBadge} />
-                <IconButtons array={iconsArray} setBadge={setBadge} />
+                <IconButtons
+                    isColors
+                    array={colorsArray}
+                    setBadge={setBadge}
+                    badge={badge}
+                />
+                <IconButtons
+                    isColors={false}
+                    array={iconsArray}
+                    setBadge={setBadge}
+                    badge={badge}
+                />
             </div>
             <div className="flex gap-4 items-center mt-6">
                 <h4 className="text-xl font-semibold">Project badge: </h4>

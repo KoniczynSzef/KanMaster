@@ -8,6 +8,7 @@ import { UserType } from '@/context/user-store';
 import Skeletons from './Skeletons';
 import NoProjectFound from './NoProjectFound';
 import Project from './Project/Project';
+import Badge from '../ProjectForm/Badge';
 
 interface Props {
     projects: ProjectType[];
@@ -37,6 +38,12 @@ const Projects: FC<Props> = ({ projects, badges }) => {
         }
     }, []);
 
+    useEffect(() => {
+        if (hasLoaded && badgesState.length !== 0) {
+            console.log(badgesState);
+        }
+    }, [badgesState]);
+
     return (
         <section>
             <SearchPanel projects={projects} />
@@ -54,13 +61,16 @@ const Projects: FC<Props> = ({ projects, badges }) => {
                             <NoProjectFound />
                         )}
 
-                        <div className="grid grid-cols-1 md:grid-cols-3">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
                             {state.map((project, idx) => (
-                                <Project
-                                    key={idx}
-                                    project={project}
-                                    badges={badgesState}
-                                />
+                                <div key={idx} className="relative">
+                                    <Project project={project} />
+                                    <Badge
+                                        key={idx}
+                                        badges={badgesState}
+                                        project={project}
+                                    />
+                                </div>
                             ))}
                         </div>
                     </>

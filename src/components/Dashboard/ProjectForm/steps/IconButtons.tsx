@@ -1,42 +1,65 @@
+import { tailwindColors } from '@/assets/badges';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/context/project-form-store';
+import { getBadgeIconComponent } from '@/helpers/badge-helpers';
+import { BadgeIcon } from '@/types/badge';
 import React, { FC } from 'react';
 
-interface Props {
-    array: {
-        value: string | React.JSX.Element;
-    }[];
-    setBadge: React.Dispatch<React.SetStateAction<Badge>>;
-}
+type Props = {
+    badge: Badge;
+    setBadge: (badge: Badge) => void;
+} & (
+    | {
+          isColors: true;
+          array: {
+              value: tailwindColors;
+          }[];
+      }
+    | {
+          isColors: false;
+          array: {
+              value: BadgeIcon;
+          }[];
+      }
+);
 
-const IconButtons: FC<Props> = ({ array, setBadge }) => {
-    const handleClick = (value: string | React.JSX.Element) => {
-        if (typeof value === 'string') {
-            setBadge((prev) => ({ ...prev, color: value }));
+const IconButtons: FC<Props> = ({ isColors, array, setBadge, badge }) => {
+    const handleClick = (value: tailwindColors | BadgeIcon) => {
+        if (isColors) {
+            setBadge({
+                ...badge,
+                color: value as tailwindColors,
+            });
         } else {
-            setBadge((prev) => ({ ...prev, icon: value }));
+            setBadge({
+                ...badge,
+                icon: value as BadgeIcon,
+            });
         }
     };
     return (
         <div className="grid grid-cols-3 gap-4 self-start">
-            {array.map((icon, idx) => (
-                <Button
-                    type="button"
-                    variant={
-                        typeof icon.value === 'string' ? 'default' : 'outline'
-                    }
-                    key={idx}
-                    size={'icon'}
-                    className={`${
-                        typeof icon.value === 'string' && icon.value
-                    } hover:opacity-70 hover:${
-                        icon.value
-                    } transition-all duration-300`}
-                    onClick={() => handleClick(icon.value)}
-                >
-                    {typeof icon.value !== 'string' && icon.value}
-                </Button>
-            ))}
+            {isColors
+                ? array.map((icon, idx) => (
+                      <Button
+                          type="button"
+                          key={idx}
+                          size={'icon'}
+                          className={`hover:opacity-70 ${icon.value} hover:${icon.value} transition-all duration-300`}
+                          onClick={() => handleClick(icon.value)}
+                      />
+                  ))
+                : array.map((icon, idx) => (
+                      <Button
+                          type="button"
+                          variant={'outline'}
+                          key={idx}
+                          size={'icon'}
+                          onClick={() => handleClick(icon.value)}
+                      >
+                          {getBadgeIconComponent(icon.value)}
+                      </Button>
+                  ))}
         </div>
     );
 };

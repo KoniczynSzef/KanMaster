@@ -7,6 +7,7 @@ import { Separator } from '@/components/ui/separator';
 import { useProjectFormStore } from '@/context/project-form-store';
 import { projectType, useProjectStore } from '@/context/project-store';
 import { createProject } from '@/controllers/project-functions';
+import { getBadgeIconComponent } from '@/helpers/badge-helpers';
 import { ProjectBadge } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import React, { FC } from 'react';
@@ -60,6 +61,7 @@ const FormSummary: FC<Props> = ({ user }) => {
 
             const newBadge: ProjectBadge = await res.json();
             setBadges([...badges, newBadge]);
+
             setProjects([...projects, project]);
 
             toast.success('Project created successfully');
@@ -90,7 +92,7 @@ const FormSummary: FC<Props> = ({ user }) => {
                         size={'icon'}
                         className={`${badge.color} hover:${badge.color} hover:opacity-70 transition-all duration-300`}
                     >
-                        {badge.icon}
+                        {getBadgeIconComponent(badge.icon)}
                     </Button>
                 </article>
                 {members.length > 0 ? (

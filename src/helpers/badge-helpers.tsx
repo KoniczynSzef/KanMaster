@@ -1,3 +1,4 @@
+import { tailwindColors } from '@/assets/badges';
 import { getBadge } from '@/controllers/badge-functions';
 import { BadgeColor, BadgeIcon } from '@/types/badge';
 import { Project, ProjectBadge } from '@prisma/client';
@@ -99,4 +100,25 @@ export async function fetchBadges(projects: Project[]) {
     await checkForBadges();
 
     return badgesArr;
+}
+
+export function checkForBadgeColor(
+    color: BadgeColor | tailwindColors
+): boolean {
+    const colors: BadgeColor[] | tailwindColors[] = [
+        'blue',
+        'green',
+        'orange',
+        'red',
+        'grey',
+        'indigo',
+    ];
+
+    colors.forEach((c) => {
+        if (c === color) {
+            return true;
+        }
+    });
+
+    return false;
 }
