@@ -31,7 +31,7 @@ interface Props {
 
 const FormSummary: FC<Props> = ({ user }) => {
     const router = useRouter();
-    const { setProjects, projects, setBadges } = useProjectStore();
+    const { setProjects, projects, setBadges, badges } = useProjectStore();
     const { title, description, members, badge, deadline } =
         useProjectFormStore();
 
@@ -39,8 +39,6 @@ const FormSummary: FC<Props> = ({ user }) => {
         if (!user) {
             return;
         }
-
-        console.log(badge);
 
         try {
             const project: projectType = {
@@ -60,11 +58,19 @@ const FormSummary: FC<Props> = ({ user }) => {
             });
 
             const newBadges = await getBadges();
-            console.log(newBadges);
 
-            setBadges(newBadges);
+            console.log(badges.length);
 
-            setProjects([...projects, project]);
+            setBadges([
+                ...badges.slice(0, badges.length - 1),
+                {
+                    ...badges[badges.length - 1],
+                    id: newBadges[newBadges.length - 1].id,
+                    projectId: newProject.id,
+                },
+            ]);
+
+            setProjects([...projects, newProject]);
 
             toast.success('Project created successfully');
 

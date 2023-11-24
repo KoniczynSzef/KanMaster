@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { projectType } from '@/context/project-store';
+import { projectType, useProjectStore } from '@/context/project-store';
 import {
     getBadgeColorClass,
     getBadgeIconComponent,
@@ -9,10 +9,10 @@ import React, { FC, useEffect } from 'react';
 
 interface Props {
     project: projectType;
-    badges: ProjectBadge[];
 }
 
-const Badge: FC<Props> = ({ project, badges }) => {
+const Badge: FC<Props> = ({ project }) => {
+    const { badges } = useProjectStore();
     const [badge, setBadge] = React.useState<ProjectBadge | null>(
         badges.find((badge) => badge.projectId === project.id) ?? null
     );

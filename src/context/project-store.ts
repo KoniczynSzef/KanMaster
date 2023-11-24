@@ -8,6 +8,7 @@ export type projectType = Omit<Project, 'id' | 'createdAt' | 'teamLeaderId'> & {
 type ProjectStore = {
     projects: projectType[] | Project[];
     setProjects: (projects: projectType[] | Project[]) => void;
+
     hasLoaded: boolean;
     setHasLoaded: (value: boolean) => void;
     badges: ProjectBadge[];

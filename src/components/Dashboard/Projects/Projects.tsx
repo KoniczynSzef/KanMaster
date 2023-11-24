@@ -23,7 +23,6 @@ const Projects: FC<Props> = ({ projects, badges }) => {
         projects: state,
         hasLoaded,
         setHasLoaded,
-        badges: badgesState,
         setBadges,
     } = useProjectStore();
 
@@ -59,11 +58,7 @@ const Projects: FC<Props> = ({ projects, badges }) => {
                             {state.map((project, idx) => (
                                 <div key={idx} className="relative">
                                     <Project project={project} />
-                                    <Badge
-                                        key={idx}
-                                        badges={badgesState}
-                                        project={project}
-                                    />
+                                    <Badge key={idx} project={project} />
                                 </div>
                             ))}
                         </div>

@@ -19,6 +19,7 @@ type projectStore = {
     project: Omit<Project, 'createdAt' | 'teamLeaderId'> | null;
     createProject: (project: Project) => void;
     setStep: () => void;
+    decrementStep: () => void;
 
     formDescription: formDescription;
 
@@ -110,6 +111,11 @@ export const useProjectFormStore = create<projectStore>((set) => ({
     setStep() {
         set((state) => ({
             step: (state.step += 1),
+        }));
+    },
+    decrementStep() {
+        set((state) => ({
+            step: (state.step -= 1),
         }));
     },
 }));

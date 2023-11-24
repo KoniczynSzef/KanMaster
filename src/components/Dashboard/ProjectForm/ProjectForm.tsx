@@ -16,6 +16,8 @@ import StepTwo from './steps/StepTwo';
 import FormHeader from './FormHeader';
 import StepThree, { dateValidation } from './steps/StepThree';
 import { redirect, useRouter } from 'next/navigation';
+import { useProjectStore } from '@/context/project-store';
+import { getBadgeColor } from '@/helpers/badge-helpers';
 
 interface Props {}
 
@@ -30,7 +32,11 @@ const ProjectForm: FC<Props> = () => {
         setTitle,
         setDescription,
         deadline,
+        badge,
+        decrementStep,
     } = useProjectFormStore();
+
+    const { badges, setBadges } = useProjectStore();
 
     const form = useForm<ProjectFormSchema>({
         mode: 'all',
@@ -42,16 +48,35 @@ const ProjectForm: FC<Props> = () => {
     });
 
     const onSubmit = () => {
-        if (step === 3) {
-            router.push('/dashboard/summary');
-        }
+        console.log('Step: ', step);
+
+        router.push('/dashboard/summary');
     };
 
     const handleGoToNextStep = () => {
         setStep();
+        console.log('Here: ', step);
+
         if (step === 3) {
-            form.handleSubmit(onSubmit);
-            return redirect('/dashboard/summary');
+            if (!dateValidation.safeParse(deadline).success) {
+                toast.error('Please select a valid date');
+                decrementStep();
+
+                return;
+            } else {
+                setBadges([
+                    ...badges,
+                    {
+                        id: 'placeholder',
+                        projectId: 'placeholder',
+                        color: getBadgeColor(badge.color),
+                        icon: badge.icon,
+                    },
+                ]);
+
+                form.handleSubmit(onSubmit);
+                return redirect('/dashboard/summary');
+            }
         } else {
             if (Schema.safeParse(form.getValues()).success) {
                 switch (step) {
@@ -65,15 +90,6 @@ const ProjectForm: FC<Props> = () => {
                     case 2:
                         changeFormDescription(
                             "Share your project's deadline and add a badge. Your project deserves recognition!"
-                        );
-                        break;
-                    case 3:
-                        if (!dateValidation.safeParse(deadline).success) {
-                            toast.error('Please select a valid date');
-                            return;
-                        }
-                        changeFormDescription(
-                            'Last step! Share your project with the world. You can always edit it later.'
                         );
                         break;
                     default:
@@ -100,21 +116,13 @@ const ProjectForm: FC<Props> = () => {
                     {step === 2 && <StepTwo />}
                     {step === 3 && <StepThree date={date} setDate={setDate} />}
 
-                    {step !== 3 && (
-                        <Button
-                            type="button"
-                            className="ml-auto"
-                            onClick={handleGoToNextStep}
-                        >
-                            Continue
-                        </Button>
-                    )}
-
-                    {step === 3 && (
-                        <Button type="button" onClick={() => onSubmit()}>
-                            Finish
-                        </Button>
-                    )}
+                    <Button
+                        type={step === 3 ? 'submit' : 'button'}
+                        className={`${step !== 3 && 'ml-auto'}`}
+                        onClick={handleGoToNextStep}
+                    >
+                        {step === 3 ? 'Finish' : 'Next'}
+                    </Button>
                 </form>
             </Form>
         </>
