@@ -38,12 +38,6 @@ const Projects: FC<Props> = ({ projects, badges }) => {
         }
     }, []);
 
-    useEffect(() => {
-        if (hasLoaded && badgesState.length !== 0) {
-            console.log(badgesState);
-        }
-    }, [badgesState]);
-
     return (
         <section>
             <SearchPanel projects={projects} />

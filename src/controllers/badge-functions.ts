@@ -28,3 +28,9 @@ export async function createBadge(
 
     return newBadge;
 }
+
+export async function getBadges() {
+    const badges = await db.projectBadge.findMany();
+
+    return badges;
+}

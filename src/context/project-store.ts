@@ -42,6 +42,6 @@ export const filterProjects = (projects: Project[], filter: string) => {
     );
 };
 
-export const filterByDeadline = (projects: Project[]) => {
+export const sortByDeadline = (projects: Project[]) => {
     return projects.sort((a, b) => a.deadline.getTime() - b.deadline.getTime());
 };

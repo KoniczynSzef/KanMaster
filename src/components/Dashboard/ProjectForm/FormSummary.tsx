@@ -6,9 +6,9 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { useProjectFormStore } from '@/context/project-form-store';
 import { projectType, useProjectStore } from '@/context/project-store';
+import { getBadges } from '@/controllers/badge-functions';
 import { createProject } from '@/controllers/project-functions';
 import { getBadgeIconComponent } from '@/helpers/badge-helpers';
-import { ProjectBadge } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import React, { FC } from 'react';
 import { toast } from 'sonner';
@@ -31,7 +31,7 @@ interface Props {
 
 const FormSummary: FC<Props> = ({ user }) => {
     const router = useRouter();
-    const { setProjects, projects, setBadges, badges } = useProjectStore();
+    const { setProjects, projects, setBadges } = useProjectStore();
     const { title, description, members, badge, deadline } =
         useProjectFormStore();
 
@@ -54,13 +54,15 @@ const FormSummary: FC<Props> = ({ user }) => {
 
             const newProject = await createProject(project, user.email);
 
-            const res = await fetch('/api/badge', {
+            await fetch('/api/badge', {
                 method: 'POST',
                 body: JSON.stringify([newProject, { ...badge }]),
             });
 
-            const newBadge: ProjectBadge = await res.json();
-            setBadges([...badges, newBadge]);
+            const newBadges = await getBadges();
+            console.log(newBadges);
+
+            setBadges(newBadges);
 
             setProjects([...projects, project]);
 

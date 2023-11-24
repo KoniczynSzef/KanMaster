@@ -43,8 +43,6 @@ const ProjectForm: FC<Props> = () => {
 
     const onSubmit = () => {
         if (step === 3) {
-            console.log('here');
-
             router.push('/dashboard/summary');
         }
     };

@@ -6,7 +6,7 @@ import { Button } from '../../ui/button';
 import { Menu } from 'lucide-react';
 import { Project } from '@prisma/client';
 import {
-    filterByDeadline,
+    sortByDeadline,
     filterProjects,
     useProjectStore,
 } from '@/context/project-store';
@@ -27,8 +27,9 @@ const SearchPanel: FC<Props> = ({ projects }) => {
         setProjects(filterProjects(projects, e.target.value));
     };
 
-    const handleFilterByDeadline = () => {
-        setProjects(filterByDeadline(projects));
+    const handleSortByDeadline = () => {
+        const newProjects = sortByDeadline(projects);
+        setProjects(newProjects);
     };
 
     return (
@@ -51,12 +52,8 @@ const SearchPanel: FC<Props> = ({ projects }) => {
                         <Button className="self-start">New Project</Button>
                     </Link>
 
-                    <Button
-                        variant={'outline'}
-                        onClick={handleFilterByDeadline}
-                    >
-                        Filter by{' '}
-                        <span className="font-bold ml-1">deadline</span>
+                    <Button variant={'outline'} onClick={handleSortByDeadline}>
+                        Sort by <span className="font-bold ml-1">deadline</span>
                     </Button>
 
                     <Button variant={'outline'}>
