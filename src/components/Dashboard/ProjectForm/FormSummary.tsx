@@ -6,12 +6,12 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { useProjectFormStore } from '@/context/project-form-store';
 import { projectType, useProjectStore } from '@/context/project-store';
-import { createBadge } from '@/controllers/badge-functions';
+import { getBadges } from '@/controllers/badge-functions';
 import { createProject } from '@/controllers/project-functions';
-import { getBadgeColor, getBadgeIcon } from '@/helpers/badge-helpers';
 import { useRouter } from 'next/navigation';
 import React, { FC } from 'react';
 import { toast } from 'sonner';
+import Badge from '../Projects/Badge';
 
 const f = new Intl.DateTimeFormat('en', {
     dateStyle: 'full',
@@ -31,7 +31,7 @@ interface Props {
 
 const FormSummary: FC<Props> = ({ user }) => {
     const router = useRouter();
-    const { setProjects, projects } = useProjectStore();
+    const { setProjects, projects, setBadges, badges } = useProjectStore();
     const { title, description, members, badge, deadline } =
         useProjectFormStore();
 
@@ -47,16 +47,32 @@ const FormSummary: FC<Props> = ({ user }) => {
                 description,
                 memberIDs: members,
             };
-            setProjects([...projects, project]);
+
             toast.info('Creating project...');
 
-            await createProject(project, user.email);
-            toast.success('Project created successfully');
+            const newProject = await createProject(project, user.email);
 
-            await createBadge(project.id, {
-                color: getBadgeColor(badge.color),
-                icon: getBadgeIcon(badge.icon),
+            await fetch('/api/badge', {
+                method: 'POST',
+                body: JSON.stringify([newProject, { ...badge }]),
             });
+
+            const newBadges = await getBadges();
+
+            console.log(badges.length);
+
+            setBadges([
+                ...badges.slice(0, badges.length - 1),
+                {
+                    ...badges[badges.length - 1],
+                    id: newBadges[newBadges.length - 1].id,
+                    projectId: newProject.id,
+                },
+            ]);
+
+            setProjects([...projects, newProject]);
+
+            toast.success('Project created successfully');
 
             router.push('/dashboard');
         } catch (error) {
@@ -80,12 +96,7 @@ const FormSummary: FC<Props> = ({ user }) => {
                         </p>
                     </div>
 
-                    <Button
-                        size={'icon'}
-                        className={`${badge.color} hover:${badge.color} hover:opacity-70 transition-all duration-300`}
-                    >
-                        {badge.icon}
-                    </Button>
+                    <Badge withId={false} badge={badge} />
                 </article>
                 {members.length > 0 ? (
                     <ScrollArea className="h-72 rounded-md border p-4">

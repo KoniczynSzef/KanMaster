@@ -13,6 +13,7 @@ export async function getProjects(userEmail: string | null | undefined) {
 
     const userProjects = await db.project.findMany({
         where: { teamLeaderId: user.id },
+        orderBy: { createdAt: 'desc' },
     });
 
     return userProjects;
@@ -23,7 +24,6 @@ export async function createProject(
     userEmail: string | null | undefined
 ) {
     const user = await getUser(userEmail);
-    console.log(user);
 
     if (!user) {
         throw new Error('There is no user with that email');

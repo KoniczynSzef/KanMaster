@@ -1,34 +1,46 @@
 'use client';
 
 import { useProjectStore } from '@/context/project-store';
-import { Project } from '@prisma/client';
+import { ProjectBadge, type Project as ProjectType } from '@prisma/client';
 import React, { FC, useEffect } from 'react';
 import SearchPanel from '../SearchPanel/SearchPanel';
 import { UserType } from '@/context/user-store';
 import Skeletons from './Skeletons';
 import NoProjectFound from './NoProjectFound';
+import Project from './Project/Project';
 
 interface Props {
-    projects: Project[];
+    projects: ProjectType[];
     user: UserType | null;
+
+    badges: ProjectBadge[];
 }
 
-const Projects: FC<Props> = ({ projects }) => {
+const Projects: FC<Props> = ({ projects, badges }) => {
     const {
         setProjects,
         projects: state,
         hasLoaded,
         setHasLoaded,
+        setBadges,
     } = useProjectStore();
 
     useEffect(() => {
         if (!hasLoaded) {
             setProjects(projects);
+            setBadges(badges);
+
             setHasLoaded(true);
         } else {
             setProjects(state);
         }
     }, []);
+
+    useEffect(() => {
+        if (hasLoaded) {
+            console.log(badges);
+        }
+    }, [state]);
 
     return (
         <section>
@@ -47,19 +59,9 @@ const Projects: FC<Props> = ({ projects }) => {
                             <NoProjectFound />
                         )}
 
-                        <div className="grid grid-cols-1 md:grid-cols-3">
+                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-12 px-4">
                             {state.map((project, idx) => (
-                                <div
-                                    key={idx}
-                                    className="max-w-sm p-4 rounded border border-slate-800"
-                                >
-                                    <h3 className="text-3xl font-bold">
-                                        {project.name}
-                                    </h3>
-                                    <p className="text-sm mt-4">
-                                        {project.description}
-                                    </p>
-                                </div>
+                                <Project key={idx} project={project} />
                             ))}
                         </div>
                     </>

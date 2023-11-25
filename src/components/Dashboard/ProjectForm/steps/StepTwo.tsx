@@ -35,7 +35,9 @@ const StepTwo: FC<Props> = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                 />
-                <Button onClick={handleAddMember}>Invite</Button>
+                <Button onClick={handleAddMember} type="button">
+                    Invite
+                </Button>
             </div>
             <ol className="list-decimal ml-4">
                 {members.map((member) => (

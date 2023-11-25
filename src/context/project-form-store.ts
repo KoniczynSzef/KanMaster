@@ -1,7 +1,6 @@
-import React from 'react';
 import { Project } from '@prisma/client';
 import { create } from 'zustand';
-import { Calendar } from 'lucide-react';
+import { BadgeIcon } from '@/types/badge';
 
 type formDescription =
     | "Let's start with the project title and a brief description. It's the first step towards your goal."
@@ -11,7 +10,7 @@ type formDescription =
 
 export type Badge = {
     color: string;
-    icon: React.JSX.Element;
+    icon: BadgeIcon;
 };
 
 type projectStore = {
@@ -20,6 +19,7 @@ type projectStore = {
     project: Omit<Project, 'createdAt' | 'teamLeaderId'> | null;
     createProject: (project: Project) => void;
     setStep: () => void;
+    decrementStep: () => void;
 
     formDescription: formDescription;
 
@@ -88,9 +88,9 @@ export const useProjectFormStore = create<projectStore>((set) => ({
 
     badge: {
         color: 'bg-paletteLighterRed',
-        icon: <Calendar />,
+        icon: 'calendar',
     },
-    deadline: new Date(),
+    deadline: new Date(new Date().getTime() + 86400000),
 
     setBadge(badge) {
         set(() => ({
@@ -111,6 +111,11 @@ export const useProjectFormStore = create<projectStore>((set) => ({
     setStep() {
         set((state) => ({
             step: (state.step += 1),
+        }));
+    },
+    decrementStep() {
+        set((state) => ({
+            step: (state.step -= 1),
         }));
     },
 }));

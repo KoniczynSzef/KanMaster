@@ -1,6 +1,7 @@
 import { options } from '@/auth/options';
 import Projects from '@/components/Dashboard/Projects/Projects';
 import { getProjects } from '@/controllers/project-functions';
+import { db } from '@/db';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 import React, { FC } from 'react';
@@ -20,9 +21,15 @@ const page: FC<Props> = async () => {
 
     const projects = await getProjects(session?.user?.email);
 
+    const badgesArr = await db.projectBadge.findMany();
+
     return (
         <div className="container relative mx-auto py-24">
-            <Projects projects={projects} user={session.user} />
+            <Projects
+                projects={projects}
+                user={session.user}
+                badges={badgesArr}
+            />
         </div>
     );
 };

@@ -1,54 +1,42 @@
-import React, { FC, useEffect, useState } from 'react';
+'use client';
+
+import React, { FC } from 'react';
 import DatePicker from '../DatePicker';
 import IconButtons from './IconButtons';
 import { colorsArray, iconsArray } from '@/assets/badges';
-import { Calendar } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Badge, useProjectFormStore } from '@/context/project-form-store';
+import { useProjectFormStore } from '@/context/project-form-store';
 import { z } from 'zod';
+import Badge from '../../Projects/Badge';
 
-interface Props {
-    date: Date | undefined;
-    setDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
-}
+interface Props {}
 
 export const dateValidation = z.date().min(new Date());
 
-const StepThree: FC<Props> = ({ date, setDate }) => {
-    const [badge, setBadge] = useState<Badge>({
-        color: 'bg-paletteLighterRed',
-        icon: <Calendar />,
-    });
-
-    const { setBadge: setBadgeStore, setDeadline } = useProjectFormStore();
-
-    useEffect(() => {
-        setBadgeStore(badge);
-    }, [badge]);
-
-    useEffect(() => {
-        if (date) {
-            setDeadline(date);
-        }
-    }, [date]);
+const StepThree: FC<Props> = () => {
+    const { setBadge, badge } = useProjectFormStore();
 
     return (
         <div className="flex flex-col gap-8">
             <div>
-                <DatePicker date={date} setDate={setDate} />
+                <DatePicker />
             </div>
             <div className="flex justify-between">
-                <IconButtons array={colorsArray} setBadge={setBadge} />
-                <IconButtons array={iconsArray} setBadge={setBadge} />
+                <IconButtons
+                    isColors
+                    array={colorsArray}
+                    setBadge={setBadge}
+                    badge={badge}
+                />
+                <IconButtons
+                    isColors={false}
+                    array={iconsArray}
+                    setBadge={setBadge}
+                    badge={badge}
+                />
             </div>
             <div className="flex gap-4 items-center mt-6">
                 <h4 className="text-xl font-semibold">Project badge: </h4>
-                <Button
-                    size={'icon'}
-                    className={`${badge.color} hover:${badge.color} hover:opacity-70 transition-all duration-300`}
-                >
-                    {badge.icon}
-                </Button>
+                <Badge withId={false} badge={badge} />
             </div>
         </div>
     );

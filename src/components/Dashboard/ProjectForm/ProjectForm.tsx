@@ -8,20 +8,22 @@ import {
     ProjectFormSchema as Schema,
 } from '@/types/project-form-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import StepOne from './steps/StepOne';
 import StepTwo from './steps/StepTwo';
 import FormHeader from './FormHeader';
 import StepThree, { dateValidation } from './steps/StepThree';
-import { redirect, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { useProjectStore } from '@/context/project-store';
+import { getBadgeColor } from '@/helpers/badge-helpers';
+import { Loader2 } from 'lucide-react';
 
 interface Props {}
 
 const ProjectForm: FC<Props> = () => {
     const router = useRouter();
-    const [date, setDate] = useState<Date>();
     const {
         formDescription,
         step,
@@ -30,7 +32,11 @@ const ProjectForm: FC<Props> = () => {
         setTitle,
         setDescription,
         deadline,
+        badge,
+        decrementStep,
     } = useProjectFormStore();
+
+    const { badges, setBadges } = useProjectStore();
 
     const form = useForm<ProjectFormSchema>({
         mode: 'all',
@@ -42,49 +48,53 @@ const ProjectForm: FC<Props> = () => {
     });
 
     const onSubmit = () => {
-        if (step === 3) {
-            console.log('here');
-
-            router.push('/dashboard/summary');
-        }
+        router.push('/dashboard/summary');
     };
 
     const handleGoToNextStep = () => {
-        setStep();
+        // Checking for step 3 because it's the last step
+
         if (step === 3) {
-            form.handleSubmit(onSubmit);
-            return redirect('/dashboard/summary');
+            if (!dateValidation.safeParse(deadline).success) {
+                toast.error('Please select a valid date');
+                decrementStep();
+            } else {
+                // Add a placeholder badge to the badges array but with proper color and icon
+
+                setBadges([
+                    ...badges,
+                    {
+                        id: 'placeholder',
+                        projectId: 'placeholder',
+                        color: getBadgeColor(badge.color),
+                        icon: badge.icon,
+                    },
+                ]);
+
+                form.handleSubmit(onSubmit);
+            }
         } else {
-            if (Schema.safeParse(form.getValues()).success) {
-                switch (step) {
-                    case 1:
-                        setTitle(form.getValues('title'));
-                        setDescription(form.getValues('description'));
-                        changeFormDescription(
-                            "Now it's time to build your team. Add your first team members who will help you achieve success."
-                        );
-                        break;
-                    case 2:
-                        changeFormDescription(
-                            "Share your project's deadline and add a badge. Your project deserves recognition!"
-                        );
-                        break;
-                    case 3:
-                        if (!dateValidation.safeParse(deadline).success) {
-                            toast.error('Please select a valid date');
-                            return;
-                        }
-                        changeFormDescription(
-                            'Last step! Share your project with the world. You can always edit it later.'
-                        );
-                        break;
-                    default:
-                        break;
-                }
+            // Checking for step 1 because it's the first step
+
+            if (Schema.safeParse(form.getValues()).success && step !== 2) {
+                setTitle(form.getValues('title'));
+                setDescription(form.getValues('description'));
+                changeFormDescription(
+                    "Now it's time to build your team. Add your first team members who will help you achieve success."
+                );
+            } else if (
+                Schema.safeParse(form.getValues()).success &&
+                step === 2
+            ) {
+                changeFormDescription(
+                    "Share your project's deadline and add a badge. Your project deserves recognition!"
+                );
             } else {
                 toast.error('Please fill in all the fields');
             }
         }
+
+        setStep();
     };
 
     return (
@@ -100,23 +110,21 @@ const ProjectForm: FC<Props> = () => {
 
                     {step === 1 && <StepOne form={form} />}
                     {step === 2 && <StepTwo />}
-                    {step === 3 && <StepThree date={date} setDate={setDate} />}
+                    {step === 3 && <StepThree />}
 
-                    {step !== 3 && (
-                        <Button
-                            type="button"
-                            className="ml-auto"
-                            onClick={handleGoToNextStep}
-                        >
-                            Continue
-                        </Button>
+                    {step === 4 && (
+                        <>
+                            <Loader2 className="self-center h-12 w-12 animate-spin" />
+                        </>
                     )}
 
-                    {step === 3 && (
-                        <Button type="button" onClick={() => onSubmit()}>
-                            Finish
-                        </Button>
-                    )}
+                    <Button
+                        type={step === 4 ? 'submit' : 'button'}
+                        className={`${step !== 3 && 'ml-auto'}`}
+                        onClick={handleGoToNextStep}
+                    >
+                        {step === 3 ? 'Finish' : 'Next'}
+                    </Button>
                 </form>
             </Form>
         </>

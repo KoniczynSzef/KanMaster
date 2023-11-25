@@ -11,26 +11,33 @@ import {
 } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
+import { useProjectFormStore } from '@/context/project-form-store';
 
-interface Props {
-    date: Date | undefined;
-    setDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
-}
+interface Props {}
 
-const DatePicker: FC<Props> = ({ date, setDate }) => {
+const DatePicker: FC<Props> = () => {
+    const { setDeadline, deadline } = useProjectFormStore();
     return (
         <Popover>
             <PopoverTrigger asChild>
                 <Button variant={'outline'}>
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {date ? format(date, 'PPP') : <span>Pick a date</span>}
+                    {deadline ? (
+                        format(deadline, 'PPP')
+                    ) : (
+                        <span>Pick a date</span>
+                    )}
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0">
                 <Calendar
                     mode="single"
-                    selected={date}
-                    onSelect={setDate}
+                    selected={deadline}
+                    onSelect={(date) =>
+                        setDeadline(
+                            date ?? new Date(new Date().getTime() + 86400000)
+                        )
+                    }
                     initialFocus
                 />
             </PopoverContent>

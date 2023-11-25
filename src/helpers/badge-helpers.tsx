@@ -1,4 +1,7 @@
+import { tailwindColors } from '@/assets/badges';
+import { getBadge } from '@/controllers/badge-functions';
 import { BadgeColor, BadgeIcon } from '@/types/badge';
+import { Project, ProjectBadge } from '@prisma/client';
 import { Book, Calendar, Heart, Laptop, Users, Wrench } from 'lucide-react';
 
 import React from 'react';
@@ -81,4 +84,41 @@ export function getBadgeIconComponent(icon: BadgeIcon): React.JSX.Element {
         default:
             return <Calendar />;
     }
+}
+
+export async function fetchBadges(projects: Project[]) {
+    const badgesArr: ProjectBadge[] = [];
+
+    async function checkForBadges() {
+        projects.forEach(async (project) => {
+            const badge = await getBadge(project.id);
+
+            badge && badgesArr.push(badge);
+        });
+    }
+
+    await checkForBadges();
+
+    return badgesArr;
+}
+
+export function checkForBadgeColor(
+    color: BadgeColor | tailwindColors
+): boolean {
+    const colors: BadgeColor[] | tailwindColors[] = [
+        'blue',
+        'green',
+        'orange',
+        'red',
+        'grey',
+        'indigo',
+    ];
+
+    colors.forEach((c) => {
+        if (c === color) {
+            return true;
+        }
+    });
+
+    return false;
 }
