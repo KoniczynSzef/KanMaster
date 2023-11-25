@@ -13,6 +13,7 @@ export async function getProjects(userEmail: string | null | undefined) {
 
     const userProjects = await db.project.findMany({
         where: { teamLeaderId: user.id },
+        orderBy: { createdAt: 'desc' },
     });
 
     return userProjects;

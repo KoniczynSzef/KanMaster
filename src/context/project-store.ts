@@ -44,15 +44,20 @@ export const filterProjects = (projects: Project[], filter: string) => {
 };
 
 export const sortByDeadline = (projects: Project[]) => {
-    return projects.sort((a, b) => a.deadline.getTime() - b.deadline.getTime());
+    const newProjects = projects.toSorted(
+        (a, b) => a.deadline.getTime() - b.deadline.getTime()
+    );
+    return newProjects;
 };
 
 export const sortByName = (projects: Project[], asc: boolean) => {
-    return projects.sort((a, b) => {
+    const sortedProjects = projects.toSorted((a, b) => {
         if (asc) {
             return a.name.localeCompare(b.name);
         } else {
             return b.name.localeCompare(a.name);
         }
     });
+
+    return sortedProjects;
 };

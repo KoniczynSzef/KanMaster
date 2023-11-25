@@ -18,6 +18,7 @@ import StepThree, { dateValidation } from './steps/StepThree';
 import { useRouter } from 'next/navigation';
 import { useProjectStore } from '@/context/project-store';
 import { getBadgeColor } from '@/helpers/badge-helpers';
+import { Loader2 } from 'lucide-react';
 
 interface Props {}
 
@@ -110,6 +111,12 @@ const ProjectForm: FC<Props> = () => {
                     {step === 1 && <StepOne form={form} />}
                     {step === 2 && <StepTwo />}
                     {step === 3 && <StepThree />}
+
+                    {step === 4 && (
+                        <>
+                            <Loader2 className="self-center h-12 w-12 animate-spin" />
+                        </>
+                    )}
 
                     <Button
                         type={step === 4 ? 'submit' : 'button'}

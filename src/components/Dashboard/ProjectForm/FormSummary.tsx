@@ -8,10 +8,10 @@ import { useProjectFormStore } from '@/context/project-form-store';
 import { projectType, useProjectStore } from '@/context/project-store';
 import { getBadges } from '@/controllers/badge-functions';
 import { createProject } from '@/controllers/project-functions';
-import { getBadgeIconComponent } from '@/helpers/badge-helpers';
 import { useRouter } from 'next/navigation';
 import React, { FC } from 'react';
 import { toast } from 'sonner';
+import Badge from '../Projects/Badge';
 
 const f = new Intl.DateTimeFormat('en', {
     dateStyle: 'full',
@@ -96,12 +96,7 @@ const FormSummary: FC<Props> = ({ user }) => {
                         </p>
                     </div>
 
-                    <Button
-                        size={'icon'}
-                        className={`${badge.color} hover:${badge.color} hover:opacity-70 transition-all duration-300`}
-                    >
-                        {getBadgeIconComponent(badge.icon)}
-                    </Button>
+                    <Badge withId={false} badge={badge} />
                 </article>
                 {members.length > 0 ? (
                     <ScrollArea className="h-72 rounded-md border p-4">

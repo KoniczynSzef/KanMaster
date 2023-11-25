@@ -4,10 +4,9 @@ import React, { FC } from 'react';
 import DatePicker from '../DatePicker';
 import IconButtons from './IconButtons';
 import { colorsArray, iconsArray } from '@/assets/badges';
-import { Button } from '@/components/ui/button';
 import { useProjectFormStore } from '@/context/project-form-store';
 import { z } from 'zod';
-import { getBadgeIconComponent } from '@/helpers/badge-helpers';
+import Badge from '../../Projects/Badge';
 
 interface Props {}
 
@@ -37,12 +36,7 @@ const StepThree: FC<Props> = () => {
             </div>
             <div className="flex gap-4 items-center mt-6">
                 <h4 className="text-xl font-semibold">Project badge: </h4>
-                <Button
-                    size={'icon'}
-                    className={`${badge.color} hover:${badge.color} hover:opacity-70 transition-all duration-300`}
-                >
-                    {getBadgeIconComponent(badge.icon)}
-                </Button>
+                <Badge withId={false} badge={badge} />
             </div>
         </div>
     );
