@@ -8,7 +8,6 @@ import { UserType } from '@/context/user-store';
 import Skeletons from './Skeletons';
 import NoProjectFound from './NoProjectFound';
 import Project from './Project/Project';
-import Badge from '../ProjectForm/Badge';
 
 interface Props {
     projects: ProjectType[];
@@ -54,12 +53,9 @@ const Projects: FC<Props> = ({ projects, badges }) => {
                             <NoProjectFound />
                         )}
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-12 px-4">
                             {state.map((project, idx) => (
-                                <div key={idx} className="relative">
-                                    <Project project={project} />
-                                    <Badge key={idx} project={project} />
-                                </div>
+                                <Project key={idx} project={project} />
                             ))}
                         </div>
                     </>

@@ -8,6 +8,7 @@ import { Project } from '@prisma/client';
 import {
     sortByDeadline,
     filterProjects,
+    sortByName,
     useProjectStore,
 } from '@/context/project-store';
 import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover';
@@ -18,6 +19,7 @@ interface Props {
 }
 
 const SearchPanel: FC<Props> = ({ projects }) => {
+    const [asc, setAsc] = useState(true);
     const { setProjects } = useProjectStore();
     const [search, setSearch] = useState('');
 
@@ -30,6 +32,11 @@ const SearchPanel: FC<Props> = ({ projects }) => {
     const handleSortByDeadline = () => {
         const newProjects = sortByDeadline(projects);
         setProjects(newProjects);
+    };
+
+    const handleSortInOrder = () => {
+        setProjects(sortByName(projects, asc));
+        setAsc((prev) => !prev);
     };
 
     return (
@@ -59,6 +66,12 @@ const SearchPanel: FC<Props> = ({ projects }) => {
                     <Button variant={'outline'}>
                         Filter by{' '}
                         <span className="font-bold ml-1">completed tasks</span>
+                    </Button>
+                    <Button variant={'outline'} onClick={handleSortInOrder}>
+                        Filter in{' '}
+                        <span className="font-bold ml-1">
+                            {asc ? 'ascending' : 'descending'} order
+                        </span>
                     </Button>
                 </PopoverContent>
             </Popover>

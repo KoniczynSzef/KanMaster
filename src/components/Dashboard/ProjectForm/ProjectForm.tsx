@@ -23,7 +23,6 @@ interface Props {}
 
 const ProjectForm: FC<Props> = () => {
     const router = useRouter();
-    // const [date, setDate] = useState<Date>();
     const {
         formDescription,
         step,
@@ -52,11 +51,15 @@ const ProjectForm: FC<Props> = () => {
     };
 
     const handleGoToNextStep = () => {
+        // Checking for step 3 because it's the last step
+
         if (step === 3) {
             if (!dateValidation.safeParse(deadline).success) {
                 toast.error('Please select a valid date');
                 decrementStep();
             } else {
+                // Add a placeholder badge to the badges array but with proper color and icon
+
                 setBadges([
                     ...badges,
                     {
@@ -70,6 +73,8 @@ const ProjectForm: FC<Props> = () => {
                 form.handleSubmit(onSubmit);
             }
         } else {
+            // Checking for step 1 because it's the first step
+
             if (Schema.safeParse(form.getValues()).success && step !== 2) {
                 setTitle(form.getValues('title'));
                 setDescription(form.getValues('description'));
