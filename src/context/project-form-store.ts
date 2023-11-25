@@ -90,7 +90,7 @@ export const useProjectFormStore = create<projectStore>((set) => ({
         color: 'bg-paletteLighterRed',
         icon: 'calendar',
     },
-    deadline: new Date(),
+    deadline: new Date(new Date().getTime() + 86400000),
 
     setBadge(badge) {
         set(() => ({

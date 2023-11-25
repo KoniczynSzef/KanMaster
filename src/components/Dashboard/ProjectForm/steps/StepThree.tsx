@@ -1,6 +1,6 @@
 'use client';
 
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import DatePicker from '../DatePicker';
 import IconButtons from './IconButtons';
 import { colorsArray, iconsArray } from '@/assets/badges';
@@ -9,26 +9,17 @@ import { useProjectFormStore } from '@/context/project-form-store';
 import { z } from 'zod';
 import { getBadgeIconComponent } from '@/helpers/badge-helpers';
 
-interface Props {
-    date: Date | undefined;
-    setDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
-}
+interface Props {}
 
 export const dateValidation = z.date().min(new Date());
 
-const StepThree: FC<Props> = ({ date, setDate }) => {
-    const { setBadge, setDeadline, badge } = useProjectFormStore();
-
-    useEffect(() => {
-        if (date) {
-            setDeadline(date);
-        }
-    }, [date]);
+const StepThree: FC<Props> = () => {
+    const { setBadge, badge } = useProjectFormStore();
 
     return (
         <div className="flex flex-col gap-8">
             <div>
-                <DatePicker date={date} setDate={setDate} />
+                <DatePicker />
             </div>
             <div className="flex justify-between">
                 <IconButtons
