@@ -19,13 +19,14 @@ interface Props {
 }
 
 const SearchPanel: FC<Props> = ({ projects }) => {
-    const [asc, setAsc] = useState(true);
-    const { setProjects } = useProjectStore();
+    const { setProjects, sortingDirection, setSortingDirection } =
+        useProjectStore();
     const [search, setSearch] = useState('');
 
     const handleType = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearch(e.target.value);
 
+        setSortingDirection('asc');
         setProjects(filterProjects(projects, e.target.value));
     };
 
@@ -35,8 +36,8 @@ const SearchPanel: FC<Props> = ({ projects }) => {
     };
 
     const handleSortInOrder = () => {
-        setProjects(sortByName(projects, asc));
-        setAsc((prev) => !prev);
+        setProjects(sortByName(projects, sortingDirection === 'asc'));
+        setSortingDirection(sortingDirection === 'asc' ? 'desc' : 'asc');
     };
 
     return (
@@ -60,17 +61,21 @@ const SearchPanel: FC<Props> = ({ projects }) => {
                     </Link>
 
                     <Button variant={'outline'} onClick={handleSortByDeadline}>
-                        Sort by <span className="font-bold ml-1">deadline</span>
+                        Sort projects by{' '}
+                        <span className="font-bold ml-1">deadline</span>
                     </Button>
 
                     <Button variant={'outline'}>
-                        Filter by{' '}
+                        Sort projects by{' '}
                         <span className="font-bold ml-1">completed tasks</span>
                     </Button>
                     <Button variant={'outline'} onClick={handleSortInOrder}>
-                        Filter in{' '}
+                        Sort projects in{' '}
                         <span className="font-bold ml-1">
-                            {asc ? 'ascending' : 'descending'} order
+                            {sortingDirection === 'asc'
+                                ? 'ascending'
+                                : 'descending'}{' '}
+                            order
                         </span>
                     </Button>
                 </PopoverContent>

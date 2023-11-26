@@ -59,8 +59,6 @@ const FormSummary: FC<Props> = ({ user }) => {
 
             const newBadges = await getBadges();
 
-            console.log(badges.length);
-
             setBadges([
                 ...badges.slice(0, badges.length - 1),
                 {
@@ -70,7 +68,7 @@ const FormSummary: FC<Props> = ({ user }) => {
                 },
             ]);
 
-            setProjects([...projects, newProject]);
+            setProjects([project, ...projects]);
 
             toast.success('Project created successfully');
 

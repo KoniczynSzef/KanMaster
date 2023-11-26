@@ -5,6 +5,9 @@ export type projectType = Omit<Project, 'id' | 'createdAt' | 'teamLeaderId'> & {
     id?: string;
 };
 
+type sorting = 'deadline' | 'name';
+type sortingDirection = 'asc' | 'desc';
+
 type ProjectStore = {
     projects: projectType[] | Project[];
     setProjects: (projects: projectType[] | Project[]) => void;
@@ -13,6 +16,11 @@ type ProjectStore = {
     setHasLoaded: (value: boolean) => void;
     badges: ProjectBadge[];
     setBadges: (badges: ProjectBadge[]) => void;
+
+    sorting: sorting;
+    setSorting: (sorting: sorting) => void;
+    sortingDirection: sortingDirection;
+    setSortingDirection: (sortingDirection: sortingDirection) => void;
 };
 
 export const useProjectStore = create<ProjectStore>((set) => ({
@@ -35,6 +43,21 @@ export const useProjectStore = create<ProjectStore>((set) => ({
             badges,
         }));
     },
+
+    sorting: 'name',
+    sortingDirection: 'asc',
+
+    setSorting(sorting) {
+        set(() => ({
+            sorting,
+        }));
+    },
+
+    setSortingDirection(sortingDirection) {
+        set(() => ({
+            sortingDirection,
+        }));
+    },
 }));
 
 export const filterProjects = (projects: Project[], filter: string) => {
@@ -51,13 +74,9 @@ export const sortByDeadline = (projects: Project[]) => {
 };
 
 export const sortByName = (projects: Project[], asc: boolean) => {
-    const sortedProjects = projects.toSorted((a, b) => {
-        if (asc) {
-            return a.name.localeCompare(b.name);
-        } else {
-            return b.name.localeCompare(a.name);
-        }
-    });
+    const sortedProjects = projects.toSorted((a, b) =>
+        a.name.localeCompare(b.name)
+    );
 
-    return sortedProjects;
+    return asc ? sortedProjects : sortedProjects.reverse();
 };
