@@ -13,15 +13,16 @@ import {
 } from '@/context/project-store';
 import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover';
 import Link from 'next/link';
+import SortingButton from './SortingButton';
 
 interface Props {
     projects: Project[];
 }
 
 const SearchPanel: FC<Props> = ({ projects }) => {
+    const [search, setSearch] = useState('');
     const { setProjects, sortingDirection, setSortingDirection } =
         useProjectStore();
-    const [search, setSearch] = useState('');
 
     const handleType = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearch(e.target.value);
@@ -60,7 +61,20 @@ const SearchPanel: FC<Props> = ({ projects }) => {
                         <Button className="self-start">New Project</Button>
                     </Link>
 
-                    <Button variant={'outline'} onClick={handleSortByDeadline}>
+                    <SortingButton
+                        onClick={handleSortByDeadline}
+                        text="deadline"
+                    />
+                    <SortingButton
+                        onClick={handleSortInOrder}
+                        text={
+                            sortingDirection === 'asc'
+                                ? 'ascending'
+                                : 'descending'
+                        }
+                    />
+
+                    {/* <Button variant={'outline'} onClick={handleSortByDeadline}>
                         Sort projects by{' '}
                         <span className="font-bold ml-1">deadline</span>
                     </Button>
@@ -77,7 +91,7 @@ const SearchPanel: FC<Props> = ({ projects }) => {
                                 : 'descending'}{' '}
                             order
                         </span>
-                    </Button>
+                    </Button> */}
                 </PopoverContent>
             </Popover>
         </div>
