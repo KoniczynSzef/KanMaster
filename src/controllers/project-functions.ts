@@ -38,3 +38,15 @@ export async function createProject(
 
     return newProject;
 }
+
+export async function deleteProject(projectId: string) {
+    await db.projectBadge.delete({
+        where: { projectId },
+    });
+
+    const deletedProject = await db.project.delete({
+        where: { id: projectId },
+    });
+
+    return deletedProject;
+}
