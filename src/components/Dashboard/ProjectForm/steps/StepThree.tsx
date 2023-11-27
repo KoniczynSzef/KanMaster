@@ -27,6 +27,7 @@ const StepThree: FC<Props> = () => {
                     setBadge={setBadge}
                     badge={badge}
                 />
+
                 <IconButtons
                     isColors={false}
                     array={iconsArray}

@@ -38,7 +38,7 @@ const StepTwo: FC<Props> = () => {
                 <Button
                     onClick={handleAddMember}
                     type="button"
-                    variant={'ghost'}
+                    variant={'outline'}
                 >
                     Invite
                 </Button>

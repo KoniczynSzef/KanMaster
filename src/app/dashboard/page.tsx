@@ -22,7 +22,6 @@ const page: FC<Props> = async () => {
     const projects = await getProjects(session?.user?.email);
 
     const badgesArr = await db.projectBadge.findMany();
-
     return (
         <div className="container relative mx-auto py-24">
             <Projects

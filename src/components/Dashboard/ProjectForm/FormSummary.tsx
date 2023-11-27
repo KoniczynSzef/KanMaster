@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
-import { useProjectFormStore } from '@/context/project-form-store';
+import { resetStore, useProjectFormStore } from '@/context/project-form-store';
 import { projectType, useProjectStore } from '@/context/project-store';
 import { getBadges } from '@/controllers/badge-functions';
 import { createProject } from '@/controllers/project-functions';
@@ -34,6 +34,13 @@ const FormSummary: FC<Props> = ({ user }) => {
     const { setProjects, projects, setBadges, badges } = useProjectStore();
     const { title, description, members, badge, deadline } =
         useProjectFormStore();
+
+    const handleCancel = () => {
+        toast.error('Project creation cancelled');
+        resetStore();
+
+        return router.push('/dashboard');
+    };
 
     const handleCreateProject = async () => {
         if (!user) {
@@ -68,7 +75,7 @@ const FormSummary: FC<Props> = ({ user }) => {
                 },
             ]);
 
-            setProjects([project, ...projects]);
+            setProjects([newProject, ...projects]);
 
             toast.success('Project created successfully');
 
@@ -119,9 +126,15 @@ const FormSummary: FC<Props> = ({ user }) => {
                     {f.format(deadline)}
                 </p>
 
-                <Button className="mt-4 ml-auto" onClick={handleCreateProject}>
-                    Create Project
-                </Button>
+                <div className="flex justify-between items-center mt-8">
+                    <Button variant={'destructive'} onClick={handleCancel}>
+                        Cancel
+                    </Button>
+
+                    <Button onClick={handleCreateProject}>
+                        Create Project
+                    </Button>
+                </div>
             </CardContent>
         </Card>
     );
