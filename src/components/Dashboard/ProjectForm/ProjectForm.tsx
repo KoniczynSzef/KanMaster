@@ -47,21 +47,17 @@ const ProjectForm: FC<Props> = () => {
         },
     });
 
-    const onSubmit = () => {
-        router.push('/dashboard/summary');
-    };
-
     const handleGoToNextStep = () => {
         // Checking for step 3 because it's the last step
 
         if (step === 3) {
-            // We need to check if the date is valid before submitting the form
-
             if (!dateValidation.safeParse(deadline).success) {
                 toast.error('Please select a valid date');
                 decrementStep();
             } else {
                 // Add a placeholder badge to the badges array but with proper color and icon
+
+                toast.info('Creating summary...', { duration: 1000 });
 
                 setBadges([
                     ...badges,
@@ -73,7 +69,7 @@ const ProjectForm: FC<Props> = () => {
                     },
                 ]);
 
-                form.handleSubmit(onSubmit);
+                router.push('/dashboard/summary');
             }
         } else {
             // checking for valid form values
@@ -106,7 +102,7 @@ const ProjectForm: FC<Props> = () => {
             <Form {...form}>
                 <form
                     action=""
-                    onSubmit={form.handleSubmit(onSubmit)}
+                    // onSubmit={form.handleSubmit(onSubmit)}
                     className="space-y-6 flex flex-col mt-8 border border-muted-background p-8 rounded"
                 >
                     <FormHeader />
@@ -122,7 +118,7 @@ const ProjectForm: FC<Props> = () => {
                     )}
 
                     <Button
-                        type={step === 4 ? 'submit' : 'button'}
+                        type={'button'}
                         className={`${step !== 3 && 'ml-auto'}`}
                         onClick={handleGoToNextStep}
                     >
