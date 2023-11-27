@@ -55,6 +55,8 @@ const ProjectForm: FC<Props> = () => {
         // Checking for step 3 because it's the last step
 
         if (step === 3) {
+            // We need to check if the date is valid before submitting the form
+
             if (!dateValidation.safeParse(deadline).success) {
                 toast.error('Please select a valid date');
                 decrementStep();
@@ -74,27 +76,28 @@ const ProjectForm: FC<Props> = () => {
                 form.handleSubmit(onSubmit);
             }
         } else {
-            // Checking for step 1 because it's the first step
+            // checking for valid form values
+            if (!Schema.safeParse(form.getValues()).success) {
+                toast.error('Please fill in all the fields');
+                return;
+            }
 
-            if (Schema.safeParse(form.getValues()).success && step !== 2) {
+            // Checking which step we are on and changing the form description accordingly
+
+            if (step === 1) {
                 setTitle(form.getValues('title'));
                 setDescription(form.getValues('description'));
                 changeFormDescription(
                     "Now it's time to build your team. Add your first team members who will help you achieve success."
                 );
-            } else if (
-                Schema.safeParse(form.getValues()).success &&
-                step === 2
-            ) {
+            } else if (step === 2) {
                 changeFormDescription(
                     "Share your project's deadline and add a badge. Your project deserves recognition!"
                 );
-            } else {
-                toast.error('Please fill in all the fields');
             }
-        }
 
-        setStep();
+            setStep();
+        }
     };
 
     return (
