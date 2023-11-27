@@ -20,6 +20,8 @@ import { useProjectStore } from '@/context/project-store';
 import { getBadgeColor } from '@/helpers/badge-helpers';
 import { Loader2 } from 'lucide-react';
 
+import { motion } from 'framer-motion';
+
 interface Props {}
 
 const ProjectForm: FC<Props> = () => {
@@ -97,7 +99,7 @@ const ProjectForm: FC<Props> = () => {
     };
 
     return (
-        <>
+        <motion.section initial={{ opacity: 0.5 }} animate={{ opacity: 1 }}>
             <p className="max-w-sm">{formDescription}</p>
             <Form {...form}>
                 <form
@@ -126,7 +128,7 @@ const ProjectForm: FC<Props> = () => {
                     </Button>
                 </form>
             </Form>
-        </>
+        </motion.section>
     );
 };
 

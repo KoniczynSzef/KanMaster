@@ -55,7 +55,11 @@ const Projects: FC<Props> = ({ projects, badges }) => {
 
                         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-12 px-4">
                             {state.map((project, idx) => (
-                                <Project key={idx} project={project} />
+                                <Project
+                                    key={project.id}
+                                    project={project}
+                                    idx={idx}
+                                />
                             ))}
                         </div>
                     </>

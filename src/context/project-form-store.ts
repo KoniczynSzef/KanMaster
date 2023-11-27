@@ -119,3 +119,22 @@ export const useProjectFormStore = create<projectStore>((set) => ({
         }));
     },
 }));
+
+export function resetStore() {
+    useProjectFormStore.setState({
+        project: null,
+        step: 1,
+        title: '',
+        description: '',
+        formDescription:
+            "Let's start with the project title and a brief description. It's the first step towards your goal.",
+        members: [],
+        badge: {
+            color: 'bg-paletteLighterRed',
+            icon: 'calendar',
+        },
+        deadline: new Date(new Date().getTime() + 86400000),
+    });
+
+    console.log('reset');
+}
