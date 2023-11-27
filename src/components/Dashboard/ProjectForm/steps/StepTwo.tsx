@@ -29,13 +29,17 @@ const StepTwo: FC<Props> = () => {
 
     return (
         <>
-            <div className="flex gap-4">
+            <div className="flex gap-4 flex-col md:flex-row">
                 <Input
                     placeholder="Member email..."
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                 />
-                <Button onClick={handleAddMember} type="button">
+                <Button
+                    onClick={handleAddMember}
+                    type="button"
+                    variant={'ghost'}
+                >
                     Invite
                 </Button>
             </div>
