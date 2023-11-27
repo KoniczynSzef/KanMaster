@@ -135,6 +135,4 @@ export function resetStore() {
         },
         deadline: new Date(new Date().getTime() + 86400000),
     });
-
-    console.log('reset');
 }

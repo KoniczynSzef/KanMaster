@@ -38,7 +38,7 @@ const IconButtons: FC<Props> = ({ isColors, array, setBadge, badge }) => {
         }
     };
     return (
-        <div className="grid grid-cols-3 gap-4 self-start">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 self-start">
             {isColors
                 ? array.map((icon, idx) => (
                       <Button

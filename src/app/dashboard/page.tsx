@@ -1,6 +1,5 @@
 import { options } from '@/auth/options';
 import Projects from '@/components/Dashboard/Projects/Projects';
-import { resetStore } from '@/context/project-form-store';
 import { getProjects } from '@/controllers/project-functions';
 import { db } from '@/db';
 import { getServerSession } from 'next-auth';
@@ -23,9 +22,6 @@ const page: FC<Props> = async () => {
     const projects = await getProjects(session?.user?.email);
 
     const badgesArr = await db.projectBadge.findMany();
-
-    resetStore();
-
     return (
         <div className="container relative mx-auto py-24">
             <Projects
