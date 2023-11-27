@@ -23,6 +23,7 @@ const Projects: FC<Props> = ({ projects, badges }) => {
         hasLoaded,
         setHasLoaded,
         setBadges,
+        badges: stateBadges,
     } = useProjectStore();
 
     useEffect(() => {
@@ -35,6 +36,13 @@ const Projects: FC<Props> = ({ projects, badges }) => {
             setProjects(state);
         }
     }, []);
+
+    useEffect(() => {
+        if (!hasLoaded) return;
+
+        console.log(state);
+        console.log('Badges', stateBadges);
+    }, [state]);
 
     return (
         <section>
@@ -53,10 +61,10 @@ const Projects: FC<Props> = ({ projects, badges }) => {
                             <NoProjectFound />
                         )}
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-12 px-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-12 md:gap-y-16 px-4">
                             {state.map((project, idx) => (
                                 <Project
-                                    key={project.id}
+                                    key={idx}
                                     project={project}
                                     idx={idx}
                                 />

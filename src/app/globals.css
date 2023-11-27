@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+    scroll-behavior: smooth;
+}
+
+::selection {
+    background-color: #390099;
+    color: white;
+}
+
+.light ::selection {
+    background-color: #7344c4;
+}
+
 @layer base {
     :root {
         --background: 0 0% 100%;

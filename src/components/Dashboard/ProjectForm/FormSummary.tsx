@@ -75,7 +75,7 @@ const FormSummary: FC<Props> = ({ user }) => {
                 },
             ]);
 
-            setProjects([project, ...projects]);
+            setProjects([newProject, ...projects]);
 
             toast.success('Project created successfully');
 

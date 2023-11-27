@@ -35,7 +35,11 @@ const StepTwo: FC<Props> = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                 />
-                <Button onClick={handleAddMember} type="button">
+                <Button
+                    onClick={handleAddMember}
+                    type="button"
+                    variant={'outline'}
+                >
                     Invite
                 </Button>
             </div>
