@@ -38,7 +38,7 @@ const LoadMore: FC<Props> = ({ length, session, className }) => {
             {remainingProjects > 0 ? (
                 <Button onClick={handleClick}>Load more projects</Button>
             ) : (
-                <div className="text-center text-muted-foreground">
+                <div className="text-center text-muted-foreground transition">
                     No more projects to load
                 </div>
             )}

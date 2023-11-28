@@ -47,6 +47,8 @@ model User {
   projectIDs   String[] 
   projects     Project[] @relation(fields: [projectIDs], references: [id])
 
+  badges       ProjectBadge[]
+
 }
 
 model VerificationToken {
@@ -89,6 +91,9 @@ model ProjectBadge {
 
   project Project @relation(fields: [projectId], references: [id])
   projectId String @unique
+
+  userId String
+  user User @relation(fields: [userId], references: [id])
 }
 
 enum TaskCategories {
