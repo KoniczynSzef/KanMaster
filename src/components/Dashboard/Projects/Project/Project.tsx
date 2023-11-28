@@ -8,22 +8,23 @@ import { X } from 'lucide-react';
 import { deleteProject } from '@/controllers/project-functions';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import { User } from '@prisma/client';
 
 interface Props {
     project: projectType;
     idx: number;
+    user: User;
 }
 
-const Project: FC<Props> = ({ project, idx }) => {
+const Project: FC<Props> = ({ project, idx, user }) => {
     const router = useRouter();
-
     const { badges, setProjects, projects } = useProjectStore();
     const badge = badges.find((badge) => badge.projectId === project.id);
 
     const handleDelete = async () => {
         try {
             toast.info('Deleting project...');
-            await deleteProject(project.id ?? '');
+            await deleteProject(project.id ?? '', user?.email);
 
             setProjects(projects.filter((p) => p.id !== project.id));
 

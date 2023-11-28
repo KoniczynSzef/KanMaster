@@ -61,10 +61,10 @@ const FormSummary: FC<Props> = ({ user }) => {
 
             await fetch('/api/badge', {
                 method: 'POST',
-                body: JSON.stringify([newProject, { ...badge }]),
+                body: JSON.stringify([newProject, { ...badge }, user.id]),
             });
 
-            const newBadges = await getBadges();
+            const newBadges = await getBadges(user.email);
 
             setBadges([
                 ...badges.slice(0, badges.length - 1),
@@ -72,6 +72,7 @@ const FormSummary: FC<Props> = ({ user }) => {
                     ...badges[badges.length - 1],
                     id: newBadges[newBadges.length - 1].id,
                     projectId: newProject.id,
+                    userId: user.id,
                 },
             ]);
 

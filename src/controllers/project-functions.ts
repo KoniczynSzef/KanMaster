@@ -58,9 +58,18 @@ export async function createProject(
     return newProject;
 }
 
-export async function deleteProject(projectId: string) {
-    await db.projectBadge.delete({
-        where: { projectId },
+export async function deleteProject(
+    projectId: string,
+    userEmail: string | null | undefined
+) {
+    const user = await getUser(userEmail);
+
+    if (!user) {
+        throw new Error('There is no user with that email');
+    }
+
+    await db.projectBadge.deleteMany({
+        where: { projectId, AND: { userId: user.id } },
     });
 
     const deletedProject = await db.project.delete({

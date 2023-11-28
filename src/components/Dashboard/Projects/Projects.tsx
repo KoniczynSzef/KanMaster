@@ -1,22 +1,27 @@
 'use client';
 
 import { useProjectStore } from '@/context/project-store';
-import { ProjectBadge, type Project as ProjectType } from '@prisma/client';
+import {
+    ProjectBadge,
+    User,
+    type Project as ProjectType,
+} from '@prisma/client';
 import React, { FC, useEffect } from 'react';
 import SearchPanel from '../SearchPanel/SearchPanel';
-import { UserType } from '@/context/user-store';
+import { useUserStore } from '@/context/user-store';
 import Skeletons from './Skeletons';
 import NoProjectFound from './NoProjectFound';
 import Project from './Project/Project';
 
 interface Props {
     projects: ProjectType[];
-    user: UserType | null;
+    user: User;
 
     badges: ProjectBadge[];
 }
 
-const Projects: FC<Props> = ({ projects, badges }) => {
+const Projects: FC<Props> = ({ projects, badges, user }) => {
+    const { setUser } = useUserStore();
     const {
         setProjects,
         projects: state,
@@ -27,6 +32,7 @@ const Projects: FC<Props> = ({ projects, badges }) => {
 
     useEffect(() => {
         if (!hasLoaded) {
+            setUser(user);
             setProjects(projects);
             setBadges(badges);
 
@@ -56,6 +62,7 @@ const Projects: FC<Props> = ({ projects, badges }) => {
                         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-12 md:gap-y-16 px-4">
                             {state.map((project, idx) => (
                                 <Project
+                                    user={user}
                                     key={idx}
                                     project={project}
                                     idx={idx}

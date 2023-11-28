@@ -4,15 +4,16 @@ import { getBadgeColor } from '@/helpers/badge-helpers';
 import { Project } from '@prisma/client';
 
 export async function POST(req: Request) {
-    const data: [Project, Badge] = await req.json();
+    const [project, badge, userId]: [Project, Badge, string] = await req.json();
 
-    const color = getBadgeColor(data[1].color);
+    const color = getBadgeColor(badge.color);
 
-    const badge = await createBadge(data[0].id, {
+    const newBadge = await createBadge(project.id, {
         color,
-        icon: data[1].icon,
-        projectId: data[0].id,
+        icon: badge.icon,
+        projectId: project.id,
+        userId,
     });
 
-    return new Response(JSON.stringify(badge));
+    return new Response(JSON.stringify(newBadge));
 }
