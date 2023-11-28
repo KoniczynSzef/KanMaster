@@ -31,7 +31,8 @@ interface Props {
 
 const FormSummary: FC<Props> = ({ user }) => {
     const router = useRouter();
-    const { setProjects, projects, setBadges, badges } = useProjectStore();
+    const { setProjects, projects, setBadges, badges, setRemainingProjects } =
+        useProjectStore();
     const { title, description, members, badge, deadline } =
         useProjectFormStore();
 
@@ -77,10 +78,12 @@ const FormSummary: FC<Props> = ({ user }) => {
             ]);
 
             setProjects([newProject, ...projects]);
+            setRemainingProjects(0);
 
             toast.success('Project created successfully');
 
             router.push('/dashboard');
+            resetStore();
         } catch (error) {
             console.error(error);
             toast.error('Something went wrong while creating the project');

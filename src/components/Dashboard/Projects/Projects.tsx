@@ -13,6 +13,8 @@ import Skeletons from './Skeletons';
 import NoProjectFound from './NoProjectFound';
 import Project from './Project/Project';
 
+import { useAutoAnimate } from '@formkit/auto-animate/react';
+
 interface Props {
     projects: ProjectType[];
     user: User;
@@ -21,6 +23,7 @@ interface Props {
 }
 
 const Projects: FC<Props> = ({ projects, badges, user }) => {
+    const [projectList] = useAutoAnimate();
     const { setUser } = useUserStore();
     const {
         setProjects,
@@ -59,7 +62,10 @@ const Projects: FC<Props> = ({ projects, badges, user }) => {
                             <NoProjectFound />
                         )}
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-12 md:gap-y-16 px-4">
+                        <ul
+                            className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-12 md:gap-y-16 px-4"
+                            ref={projectList}
+                        >
                             {state.map((project, idx) => (
                                 <Project
                                     user={user}
@@ -68,7 +74,7 @@ const Projects: FC<Props> = ({ projects, badges, user }) => {
                                     idx={idx}
                                 />
                             ))}
-                        </div>
+                        </ul>
                     </>
                 )}
             </section>

@@ -35,11 +35,7 @@ const DashboardPage: FC<Props> = async () => {
         <div className="container relative mx-auto py-24 flex flex-col gap-12">
             <Projects projects={projects} user={user} badges={badgesArr} />
 
-            <LoadMore
-                length={length}
-                session={session}
-                className="self-end transition"
-            />
+            <LoadMore length={length} session={session} user={user} />
         </div>
     );
 };
