@@ -17,6 +17,9 @@ type ProjectStore = {
     badges: ProjectBadge[];
     setBadges: (badges: ProjectBadge[]) => void;
 
+    page: number;
+    incrementPage: (apge: number) => void;
+
     sorting: sorting;
     setSorting: (sorting: sorting) => void;
     sortingDirection: sortingDirection;
@@ -46,6 +49,13 @@ export const useProjectStore = create<ProjectStore>((set) => ({
 
     sorting: 'name',
     sortingDirection: 'asc',
+
+    page: 2,
+    incrementPage(page) {
+        set(() => ({
+            page,
+        }));
+    },
 
     setSorting(sorting) {
         set(() => ({
@@ -80,3 +90,7 @@ export const sortByName = (projects: Project[], asc: boolean) => {
 
     return asc ? sortedProjects : sortedProjects.reverse();
 };
+
+export function getRemainingCount(length: number, page: number) {
+    return length - page * 6;
+}

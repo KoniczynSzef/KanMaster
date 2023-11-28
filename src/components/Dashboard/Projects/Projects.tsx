@@ -23,7 +23,6 @@ const Projects: FC<Props> = ({ projects, badges }) => {
         hasLoaded,
         setHasLoaded,
         setBadges,
-        badges: stateBadges,
     } = useProjectStore();
 
     useEffect(() => {
@@ -36,13 +35,6 @@ const Projects: FC<Props> = ({ projects, badges }) => {
             setProjects(state);
         }
     }, []);
-
-    useEffect(() => {
-        if (!hasLoaded) return;
-
-        console.log(state);
-        console.log('Badges', stateBadges);
-    }, [state]);
 
     return (
         <section>
