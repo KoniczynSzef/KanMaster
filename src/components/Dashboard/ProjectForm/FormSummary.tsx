@@ -31,7 +31,8 @@ interface Props {
 
 const FormSummary: FC<Props> = ({ user }) => {
     const router = useRouter();
-    const { setProjects, projects, setBadges, badges } = useProjectStore();
+    const { setProjects, projects, setBadges, badges, setRemainingProjects } =
+        useProjectStore();
     const { title, description, members, badge, deadline } =
         useProjectFormStore();
 
@@ -61,10 +62,10 @@ const FormSummary: FC<Props> = ({ user }) => {
 
             await fetch('/api/badge', {
                 method: 'POST',
-                body: JSON.stringify([newProject, { ...badge }]),
+                body: JSON.stringify([newProject, { ...badge }, user.id]),
             });
 
-            const newBadges = await getBadges();
+            const newBadges = await getBadges(user.email);
 
             setBadges([
                 ...badges.slice(0, badges.length - 1),
@@ -72,14 +73,17 @@ const FormSummary: FC<Props> = ({ user }) => {
                     ...badges[badges.length - 1],
                     id: newBadges[newBadges.length - 1].id,
                     projectId: newProject.id,
+                    userId: user.id,
                 },
             ]);
 
             setProjects([newProject, ...projects]);
+            setRemainingProjects(0);
 
             toast.success('Project created successfully');
 
             router.push('/dashboard');
+            resetStore();
         } catch (error) {
             console.error(error);
             toast.error('Something went wrong while creating the project');

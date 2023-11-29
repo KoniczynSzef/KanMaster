@@ -35,7 +35,7 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid()) @map("_id")  
+  id            String    @id @default(cuid()) @map("_id")
   name          String?   @unique
   email         String?   @unique
   hashedPassword String?
@@ -46,6 +46,8 @@ model User {
   
   projectIDs   String[] 
   projects     Project[] @relation(fields: [projectIDs], references: [id])
+
+  badges      ProjectBadge[]
 
 }
 
@@ -89,6 +91,9 @@ model ProjectBadge {
 
   project Project @relation(fields: [projectId], references: [id])
   projectId String @unique
+
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 enum TaskCategories {

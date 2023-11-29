@@ -4,6 +4,8 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { z } from 'zod';
 import { toast } from 'sonner';
+import { X } from 'lucide-react';
+import { useUserStore } from '@/context/user-store';
 
 interface Props {}
 
@@ -11,20 +13,28 @@ const emailValidation = z.string().email();
 
 const StepTwo: FC<Props> = () => {
     const [email, setEmail] = useState('');
-    const { members, addMember } = useProjectFormStore();
+    const { user } = useUserStore();
+    const { members, addMember, removeMember } = useProjectFormStore();
 
     const handleAddMember = () => {
+        if (email === user?.email) {
+            toast.error('You cannot add yourself!');
+            setEmail('');
+            return;
+        }
+
         if (
             emailValidation.safeParse(email).success &&
             !members.includes(email)
         ) {
             addMember(email);
-            setEmail('');
         } else if (members.includes(email)) {
             toast.error('This member is already added');
         } else {
             toast.error('Please enter a valid email');
         }
+
+        setEmail('');
     };
 
     return (
@@ -43,11 +53,23 @@ const StepTwo: FC<Props> = () => {
                     Invite
                 </Button>
             </div>
-            <ol className="list-decimal ml-4">
+            <ul className="my-4 space-y-2">
                 {members.map((member) => (
-                    <li key={member}>{member}</li>
+                    <li
+                        key={member}
+                        className="border border-muted px-4 py-2 rounded flex justify-between items-center"
+                    >
+                        <span className="font-medium">{member}</span>
+                        <Button
+                            size={'icon'}
+                            variant={'destructive'}
+                            onClick={() => removeMember(member)}
+                        >
+                            <X />
+                        </Button>
+                    </li>
                 ))}
-            </ol>
+            </ul>
         </>
     );
 };

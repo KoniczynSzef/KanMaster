@@ -1,33 +1,41 @@
 'use client';
 
 import { useProjectStore } from '@/context/project-store';
-import { ProjectBadge, type Project as ProjectType } from '@prisma/client';
+import {
+    ProjectBadge,
+    User,
+    type Project as ProjectType,
+} from '@prisma/client';
 import React, { FC, useEffect } from 'react';
 import SearchPanel from '../SearchPanel/SearchPanel';
-import { UserType } from '@/context/user-store';
+import { useUserStore } from '@/context/user-store';
 import Skeletons from './Skeletons';
 import NoProjectFound from './NoProjectFound';
 import Project from './Project/Project';
 
+import { useAutoAnimate } from '@formkit/auto-animate/react';
+
 interface Props {
     projects: ProjectType[];
-    user: UserType | null;
+    user: User;
 
     badges: ProjectBadge[];
 }
 
-const Projects: FC<Props> = ({ projects, badges }) => {
+const Projects: FC<Props> = ({ projects, badges, user }) => {
+    const [projectList] = useAutoAnimate();
+    const { setUser } = useUserStore();
     const {
         setProjects,
         projects: state,
         hasLoaded,
         setHasLoaded,
         setBadges,
-        badges: stateBadges,
     } = useProjectStore();
 
     useEffect(() => {
         if (!hasLoaded) {
+            setUser(user);
             setProjects(projects);
             setBadges(badges);
 
@@ -36,13 +44,6 @@ const Projects: FC<Props> = ({ projects, badges }) => {
             setProjects(state);
         }
     }, []);
-
-    useEffect(() => {
-        if (!hasLoaded) return;
-
-        console.log(state);
-        console.log('Badges', stateBadges);
-    }, [state]);
 
     return (
         <section>
@@ -61,15 +62,19 @@ const Projects: FC<Props> = ({ projects, badges }) => {
                             <NoProjectFound />
                         )}
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-12 md:gap-y-16 px-4">
+                        <ul
+                            className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-12 md:gap-y-16 px-4"
+                            ref={projectList}
+                        >
                             {state.map((project, idx) => (
                                 <Project
+                                    user={user}
                                     key={idx}
                                     project={project}
                                     idx={idx}
                                 />
                             ))}
-                        </div>
+                        </ul>
                     </>
                 )}
             </section>

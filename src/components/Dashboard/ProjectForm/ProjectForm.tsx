@@ -8,7 +8,7 @@ import {
     ProjectFormSchema as Schema,
 } from '@/types/project-form-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import StepOne from './steps/StepOne';
@@ -21,10 +21,14 @@ import { getBadgeColor } from '@/helpers/badge-helpers';
 import { Loader2 } from 'lucide-react';
 
 import { motion } from 'framer-motion';
+import { User } from '@prisma/client';
+import { useUserStore } from '@/context/user-store';
 
-interface Props {}
+interface Props {
+    user: User;
+}
 
-const ProjectForm: FC<Props> = () => {
+const ProjectForm: FC<Props> = ({ user }) => {
     const router = useRouter();
     const {
         formDescription,
@@ -37,6 +41,12 @@ const ProjectForm: FC<Props> = () => {
         badge,
         decrementStep,
     } = useProjectFormStore();
+
+    const { setUser } = useUserStore();
+
+    useEffect(() => {
+        setUser(user);
+    }, []);
 
     const { badges, setBadges } = useProjectStore();
 
@@ -68,6 +78,7 @@ const ProjectForm: FC<Props> = () => {
                         projectId: 'placeholder',
                         color: getBadgeColor(badge.color),
                         icon: badge.icon,
+                        userId: 'placeholder',
                     },
                 ]);
 
@@ -105,7 +116,7 @@ const ProjectForm: FC<Props> = () => {
                 <form
                     action=""
                     // onSubmit={form.handleSubmit(onSubmit)}
-                    className="space-y-6 flex flex-col mt-8 border border-muted-background p-8 rounded"
+                    className="gap-6 flex flex-col mt-8 border border-muted-background p-8 rounded"
                 >
                     <FormHeader />
 
