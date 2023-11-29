@@ -48,7 +48,7 @@ model User {
   projects     Project[] @relation(fields: [projectIDs], references: [id])
 
   badges      ProjectBadge[]
-
+  notifications Notification[]
 }
 
 model VerificationToken {
@@ -94,6 +94,18 @@ model ProjectBadge {
 
   userId String
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id           String    @id @default(cuid()) @map("_id")  
+  title String
+  description String?
+  createdAt DateTime @default(now())
+ 
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  isSender Boolean
 }
 
 enum TaskCategories {

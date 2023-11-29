@@ -2,11 +2,13 @@ import { options } from '@/auth/options';
 import LoadMore from '@/components/Dashboard/Projects/LoadMore';
 import Projects from '@/components/Dashboard/Projects/Projects';
 import { getBadges } from '@/controllers/badge-functions';
+import { getNotifications } from '@/controllers/notification-functions';
 import {
     getProjects,
     getProjectsLength,
 } from '@/controllers/project-functions';
 import { getUser } from '@/controllers/user-functions';
+import { db } from '@/db';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 import React, { FC } from 'react';
@@ -28,8 +30,14 @@ const DashboardPage: FC<Props> = async () => {
     const length = await getProjectsLength(session?.user?.email);
 
     const badgesArr = await getBadges(session?.user?.email);
-
     const user = await getUser(session?.user?.email);
+
+    // await getNotifications(session.user.email, false);
+
+    // console.log(notifications);
+
+    const notifications = await getNotifications(session.user.email, false);
+    console.log(notifications);
 
     return (
         <div className="container relative mx-auto py-24 flex flex-col gap-12">
