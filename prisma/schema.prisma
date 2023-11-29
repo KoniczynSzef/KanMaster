@@ -102,8 +102,8 @@ model Notification {
   description String?
   createdAt DateTime @default(now())
  
-  userId String
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userEmail String
+  user User @relation(fields: [userEmail], references: [email], onDelete: Cascade)
 
   isSender Boolean
 }

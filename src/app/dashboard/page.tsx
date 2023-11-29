@@ -8,7 +8,6 @@ import {
     getProjectsLength,
 } from '@/controllers/project-functions';
 import { getUser } from '@/controllers/user-functions';
-import { db } from '@/db';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 import React, { FC } from 'react';
@@ -31,10 +30,6 @@ const DashboardPage: FC<Props> = async () => {
 
     const badgesArr = await getBadges(session?.user?.email);
     const user = await getUser(session?.user?.email);
-
-    // await getNotifications(session.user.email, false);
-
-    // console.log(notifications);
 
     const notifications = await getNotifications(session.user.email, false);
     console.log(notifications);

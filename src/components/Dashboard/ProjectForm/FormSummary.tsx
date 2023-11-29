@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation';
 import React, { FC } from 'react';
 import { toast } from 'sonner';
 import Badge from '../Projects/Badge';
+import { sendNotification } from '@/controllers/notification-functions';
 
 const f = new Intl.DateTimeFormat('en', {
     dateStyle: 'full',
@@ -79,6 +80,20 @@ const FormSummary: FC<Props> = ({ user }) => {
 
             setProjects([newProject, ...projects]);
             setRemainingProjects(0);
+
+            members.forEach(async (member) => {
+                console.log(member);
+
+                await sendNotification(
+                    {
+                        title: `${user.name} added you to a project`,
+                        description: `You have been added to the project ${title}`,
+                        isSender: false,
+                        userEmail: member,
+                    },
+                    false
+                );
+            });
 
             toast.success('Project created successfully');
 

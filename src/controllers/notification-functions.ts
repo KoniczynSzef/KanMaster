@@ -5,14 +5,12 @@ import { Notification } from '@prisma/client';
 import { getUser } from './user-functions';
 
 export async function sendNotification(
-    notification: Notification,
-    userId: string,
+    notification: Omit<Notification, 'id' | 'createdAt'>,
     isSender: boolean
 ) {
     const newNotification = await db.notification.create({
         data: {
             ...notification,
-            userId,
             isSender,
         },
     });
@@ -30,10 +28,15 @@ export async function getNotifications(
         throw new Error('There is no user with that email');
     }
 
-    console.log(user);
+    if (!user.email) {
+        throw new Error('User does not have an email');
+    }
 
     const notifications = await db.notification.findMany({
-        where: { userId: user.id, isSender },
+        where: {
+            userEmail: user.email,
+            isSender,
+        },
     });
 
     return notifications;
