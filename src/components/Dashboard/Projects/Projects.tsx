@@ -38,6 +38,7 @@ const Projects: FC<Props> = ({ projects, badges, user }) => {
             setUser(user);
             setProjects(projects);
             setBadges(badges);
+            console.log('Projects: ', projects);
 
             setHasLoaded(true);
         } else {

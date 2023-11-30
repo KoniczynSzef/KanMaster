@@ -9,6 +9,7 @@ import {
     DropdownMenuLabel,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import NotificationMenuItem from './NotificationMenuItem';
 
 interface Props {
     user: {
@@ -20,6 +21,7 @@ interface Props {
 
 const Notification: FC<Props> = async ({ user }) => {
     const notifications = await getNotifications(user.email, false);
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -30,14 +32,12 @@ const Notification: FC<Props> = async ({ user }) => {
                             <span className="sr-only">
                                 Notifications remaining: {notifications.length}
                             </span>
-                            <Button
+                            <div
                                 aria-label="Notifications count"
-                                size={'icon'}
-                                variant={'destructive'}
-                                className="absolute -bottom-3 -right-3 text-xs rounded-full px-1 pointer-events-none w-5 h-5"
+                                className="absolute -bottom-3 -right-3 text-xs rounded-full px-1 pointer-events-none w-5 h-5 bg-red-700 flex items-center justify-center"
                             >
                                 {notifications.length}
-                            </Button>
+                            </div>
                         </div>
                     ) : (
                         <Bell />
@@ -48,13 +48,10 @@ const Notification: FC<Props> = async ({ user }) => {
                 <DropdownMenuLabel>Notifications</DropdownMenuLabel>
                 {notifications.length > 0 ? (
                     notifications.map((notification) => (
-                        <DropdownMenuItem
+                        <NotificationMenuItem
                             key={notification.id}
-                            className="flex gap-4 items-center"
-                        >
-                            {notification.title}
-                            <Button>Join project!</Button>
-                        </DropdownMenuItem>
+                            notification={notification}
+                        />
                     ))
                 ) : (
                     <DropdownMenuItem>No notifications</DropdownMenuItem>

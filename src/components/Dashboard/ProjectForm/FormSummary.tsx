@@ -50,7 +50,7 @@ const FormSummary: FC<Props> = ({ user }) => {
         }
 
         try {
-            const project: projectType = {
+            const project: Omit<projectType, 'memberEmails'> = {
                 name: title,
                 deadline,
                 description,
@@ -90,6 +90,7 @@ const FormSummary: FC<Props> = ({ user }) => {
                         description: `You have been added to the project ${title}`,
                         isSender: false,
                         userEmail: member,
+                        projectId: newProject.id,
                     },
                     false
                 );

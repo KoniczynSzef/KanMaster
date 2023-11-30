@@ -21,14 +21,25 @@ export async function getProjects(
         take: 6,
     });
 
+    console.log(projectsAsLeader);
+
     const projectsAsMember = await db.project.findMany({
-        where: { memberIDs: { has: userEmail } },
+        where: { memberEmails: { has: user.email } },
         orderBy: { createdAt: 'desc' },
         skip: (page - 1) * 6,
         take: 6,
     });
 
-    return [...projectsAsLeader, ...projectsAsMember];
+    return [
+        ...projectsAsLeader.map((project) => ({
+            ...project,
+            isLeader: true,
+        })),
+        ...projectsAsMember.map((project) => ({
+            ...project,
+            isLeader: false,
+        })),
+    ];
 }
 
 export async function getProjectsLength(userEmail: string | null | undefined) {
@@ -46,7 +57,10 @@ export async function getProjectsLength(userEmail: string | null | undefined) {
 }
 
 export async function createProject(
-    project: Omit<Project, 'id' | 'teamLeaderId' | 'createdAt'>,
+    project: Omit<
+        Project,
+        'id' | 'teamLeaderId' | 'createdAt' | 'memberEmails'
+    >,
     userEmail: string | null | undefined
 ) {
     const user = await getUser(userEmail);
@@ -59,6 +73,7 @@ export async function createProject(
         data: {
             ...project,
             teamLeaderId: user.id,
+            memberEmails: [],
         },
     });
 
