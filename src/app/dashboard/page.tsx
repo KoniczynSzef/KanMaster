@@ -26,6 +26,8 @@ const DashboardPage: FC<Props> = async () => {
     }
 
     const projects = await getProjects(session?.user?.email, 1);
+    console.log(projects);
+
     const length = await getProjectsLength(session?.user?.email);
 
     const badgesArr = await getBadges(session?.user?.email);

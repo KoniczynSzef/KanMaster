@@ -37,7 +37,7 @@ const Project: FC<Props> = ({ project, idx, user }) => {
 
     return (
         <motion.div
-            className="md:max-w-sm lg:max-w-md p-8 rounded border border-slate-800 relative h-32 w-full origin-center"
+            className="md:max-w-sm lg:max-w-md p-8 rounded border border-muted relative h-32 w-full origin-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.15 * idx }}

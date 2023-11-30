@@ -14,14 +14,21 @@ export async function getProjects(
         throw new Error('There is no user with that email');
     }
 
-    const userProjects = await db.project.findMany({
+    const projectsAsLeader = await db.project.findMany({
         where: { teamLeaderId: user.id },
         orderBy: { createdAt: 'desc' },
         skip: (page - 1) * 6,
         take: 6,
     });
 
-    return userProjects;
+    const projectsAsMember = await db.project.findMany({
+        where: { memberIDs: { has: userEmail } },
+        orderBy: { createdAt: 'desc' },
+        skip: (page - 1) * 6,
+        take: 6,
+    });
+
+    return [...projectsAsLeader, ...projectsAsMember];
 }
 
 export async function getProjectsLength(userEmail: string | null | undefined) {
