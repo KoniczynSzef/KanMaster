@@ -3,6 +3,7 @@
 import { db } from '@/db';
 import { Project, ProjectBadge } from '@prisma/client';
 import { getUser } from './user-functions';
+import { projectType } from '@/context/project-store';
 
 export async function getBadge(projectId: string) {
     const badge = await db.projectBadge.findUnique({
@@ -32,7 +33,7 @@ export async function createBadge(
 
 export async function getBadges(
     userEmail: string | null | undefined,
-    projects: Project[]
+    projects: Project[] | projectType[]
 ) {
     const user = await getUser(userEmail);
 
@@ -43,7 +44,7 @@ export async function getBadges(
     const projectBadges = await db.projectBadge.findMany({
         where: {
             projectId: {
-                in: projects.map((project) => project.id),
+                in: projects.map((project) => project.id ?? ''),
             },
         },
     });

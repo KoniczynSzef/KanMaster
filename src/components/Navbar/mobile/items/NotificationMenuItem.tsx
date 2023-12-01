@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { useProjectStore } from '@/context/project-store';
 import { useUserStore } from '@/context/user-store';
+import { getBadges } from '@/controllers/badge-functions';
 import {
     deleteNotification,
     joinProject,
@@ -19,7 +20,7 @@ interface Props {
 
 const NotificationMenuItem: FC<Props> = ({ notification }) => {
     const { user } = useUserStore();
-    const { setProjects } = useProjectStore();
+    const { setProjects, setBadges } = useProjectStore();
 
     const handleJoinProject = async () => {
         try {
@@ -29,6 +30,10 @@ const NotificationMenuItem: FC<Props> = ({ notification }) => {
             await deleteNotification(notification.id);
 
             setProjects(newProjects);
+
+            const badges = await getBadges(user?.email, newProjects);
+            setBadges(badges);
+
             toast.success('Successfully joined project');
         } catch (error) {
             throw new Error('Error joining project');
@@ -37,7 +42,7 @@ const NotificationMenuItem: FC<Props> = ({ notification }) => {
     return (
         <DropdownMenuItem
             key={notification.id}
-            className="flex gap-4 items-center"
+            className="flex gap-4 items-center flex-col"
         >
             {notification.title}
             <Button onClick={handleJoinProject}>Join project!</Button>

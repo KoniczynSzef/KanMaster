@@ -32,8 +32,6 @@ const DashboardPage: FC<Props> = async () => {
     const badgesArr = await getBadges(session?.user?.email, projects);
     const user = await getUser(session?.user?.email);
 
-    console.log(badgesArr);
-
     // const notifications = await getNotifications(session.user.email, false);
     // console.log(notifications);
 
