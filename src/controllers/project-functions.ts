@@ -21,8 +21,6 @@ export async function getProjects(
         take: 6,
     });
 
-    console.log(projectsAsLeader);
-
     const projectsAsMember = await db.project.findMany({
         where: { memberEmails: { has: user.email } },
         orderBy: { createdAt: 'desc' },

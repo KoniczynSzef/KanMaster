@@ -20,6 +20,7 @@ interface Props {
 const NotificationMenuItem: FC<Props> = ({ notification }) => {
     const { user } = useUserStore();
     const { setProjects } = useProjectStore();
+
     const handleJoinProject = async () => {
         try {
             await joinProject(notification, user?.email);

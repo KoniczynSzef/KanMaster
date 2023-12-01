@@ -73,6 +73,7 @@ const Projects: FC<Props> = ({ projects, badges, user }) => {
                                     key={idx}
                                     project={project}
                                     idx={idx}
+                                    isLeader={project.teamLeaderId === user.id}
                                 />
                             ))}
                         </ul>
