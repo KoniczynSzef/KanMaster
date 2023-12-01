@@ -1,8 +1,9 @@
 'use server';
 
 import { db } from '@/db';
-import { ProjectBadge } from '@prisma/client';
+import { Project, ProjectBadge } from '@prisma/client';
 import { getUser } from './user-functions';
+import { projectType } from '@/context/project-store';
 
 export async function getBadge(projectId: string) {
     const badge = await db.projectBadge.findUnique({
@@ -30,16 +31,23 @@ export async function createBadge(
     return newBadge;
 }
 
-export async function getBadges(userEmail: string | null | undefined) {
+export async function getBadges(
+    userEmail: string | null | undefined,
+    projects: Project[] | projectType[]
+) {
     const user = await getUser(userEmail);
 
     if (!user) {
         throw new Error('There is no user with that email');
     }
 
-    const badges = await db.projectBadge.findMany({
-        where: { userId: user.id },
+    const projectBadges = await db.projectBadge.findMany({
+        where: {
+            projectId: {
+                in: projects.map((project) => project.id ?? ''),
+            },
+        },
     });
 
-    return badges;
+    return projectBadges;
 }

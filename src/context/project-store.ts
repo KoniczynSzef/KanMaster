@@ -1,7 +1,7 @@
 import { Project, ProjectBadge } from '@prisma/client';
 import { create } from 'zustand';
 
-export type projectType = Omit<Project, 'id' | 'createdAt' | 'teamLeaderId'> & {
+export type projectType = Omit<Project, 'id' | 'createdAt'> & {
     id?: string;
 };
 

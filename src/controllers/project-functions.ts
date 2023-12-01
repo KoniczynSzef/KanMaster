@@ -14,14 +14,30 @@ export async function getProjects(
         throw new Error('There is no user with that email');
     }
 
-    const userProjects = await db.project.findMany({
+    const projectsAsLeader = await db.project.findMany({
         where: { teamLeaderId: user.id },
         orderBy: { createdAt: 'desc' },
         skip: (page - 1) * 6,
         take: 6,
     });
 
-    return userProjects;
+    const projectsAsMember = await db.project.findMany({
+        where: { memberEmails: { has: user.email } },
+        orderBy: { createdAt: 'desc' },
+        skip: (page - 1) * 6,
+        take: 6,
+    });
+
+    return [
+        ...projectsAsLeader.map((project) => ({
+            ...project,
+            isLeader: true,
+        })),
+        ...projectsAsMember.map((project) => ({
+            ...project,
+            isLeader: false,
+        })),
+    ];
 }
 
 export async function getProjectsLength(userEmail: string | null | undefined) {
@@ -39,7 +55,10 @@ export async function getProjectsLength(userEmail: string | null | undefined) {
 }
 
 export async function createProject(
-    project: Omit<Project, 'id' | 'teamLeaderId' | 'createdAt'>,
+    project: Omit<
+        Project,
+        'id' | 'teamLeaderId' | 'createdAt' | 'memberEmails'
+    >,
     userEmail: string | null | undefined
 ) {
     const user = await getUser(userEmail);
@@ -52,6 +71,7 @@ export async function createProject(
         data: {
             ...project,
             teamLeaderId: user.id,
+            memberEmails: [],
         },
     });
 

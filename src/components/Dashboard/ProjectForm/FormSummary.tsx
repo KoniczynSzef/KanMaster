@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation';
 import React, { FC } from 'react';
 import { toast } from 'sonner';
 import Badge from '../Projects/Badge';
+import { sendNotification } from '@/controllers/notification-functions';
 
 const f = new Intl.DateTimeFormat('en', {
     dateStyle: 'full',
@@ -49,11 +50,12 @@ const FormSummary: FC<Props> = ({ user }) => {
         }
 
         try {
-            const project: projectType = {
+            const project: Omit<projectType, 'memberEmails'> = {
                 name: title,
                 deadline,
                 description,
                 memberIDs: members,
+                teamLeaderId: user.id,
             };
 
             toast.info('Creating project...');
@@ -65,12 +67,14 @@ const FormSummary: FC<Props> = ({ user }) => {
                 body: JSON.stringify([newProject, { ...badge }, user.id]),
             });
 
-            const newBadges = await getBadges(user.email);
+            const newBadges = await getBadges(user.email, projects);
+
+            const idx = badges.length - 1;
 
             setBadges([
-                ...badges.slice(0, badges.length - 1),
+                ...badges.slice(0, idx),
                 {
-                    ...badges[badges.length - 1],
+                    ...badges[idx],
                     id: newBadges[newBadges.length - 1].id,
                     projectId: newProject.id,
                     userId: user.id,
@@ -79,6 +83,21 @@ const FormSummary: FC<Props> = ({ user }) => {
 
             setProjects([newProject, ...projects]);
             setRemainingProjects(0);
+
+            members.forEach(async (member) => {
+                console.log(member);
+
+                await sendNotification(
+                    {
+                        title: `${user.name} added you to a project ${title}`,
+                        description: `You have been added to the project ${title}`,
+                        isSender: false,
+                        userEmail: member,
+                        projectId: newProject.id,
+                    },
+                    false
+                );
+            });
 
             toast.success('Project created successfully');
 
