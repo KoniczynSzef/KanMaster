@@ -40,7 +40,10 @@ const Project: FC<Props> = ({ project, idx, user, isLeader }) => {
     };
 
     return (
-        <Link href={`/dashboard/projects/${project.id}`} className="group">
+        <Link
+            href={`/dashboard/projects/${project.id}`}
+            className="group relative"
+        >
             <motion.div
                 className="md:max-w-sm lg:max-w-md p-8 rounded border border-muted relative h-32 w-full origin-center flex justify-between items-start group-hover:bg-muted transition duration-300"
                 initial={{ opacity: 0 }}
