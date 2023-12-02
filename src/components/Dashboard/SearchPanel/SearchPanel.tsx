@@ -62,15 +62,17 @@ const SearchPanel: FC<Props> = ({ projects }) => {
                     </Link>
 
                     <SortingButton
+                        usingIn={false}
                         onClick={handleSortByDeadline}
                         text="deadline"
                     />
                     <SortingButton
+                        usingIn
                         onClick={handleSortInOrder}
                         text={
                             sortingDirection === 'asc'
-                                ? 'ascending'
-                                : 'descending'
+                                ? 'asc order'
+                                : 'desc order'
                         }
                     />
 

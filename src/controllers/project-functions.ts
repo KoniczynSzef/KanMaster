@@ -78,6 +78,14 @@ export async function createProject(
     return newProject;
 }
 
+export async function getProject(id: string) {
+    const project = await db.project.findUnique({
+        where: { id },
+    });
+
+    return project;
+}
+
 export async function deleteProject(
     projectId: string,
     userEmail: string | null | undefined
