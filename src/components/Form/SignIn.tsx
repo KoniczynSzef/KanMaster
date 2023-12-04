@@ -10,7 +10,7 @@ import { toast } from 'sonner';
 import { handleLogInWithProvider, login } from '@/auth/login';
 import { Separator } from '../ui/separator';
 import { provider } from '@/auth';
-import Field from './Field';
+import Field from './form-fields/Field';
 import { signInSchema } from '@/types/form-schema';
 import Link from 'next/link';
 import { handleError } from '@/auth/error-handlers';
@@ -55,7 +55,18 @@ const SignIn: FC<Props> = () => {
 
     return (
         <section className="max-w-3xl w-full flex flex-col gap-4 border border-muted-background p-8 rounded mx-8">
-            <h3 className="text-3xl font-bold">Sign In</h3>
+            <article>
+                <h3 className="text-3xl font-bold">Sign In</h3>
+                <p className="text-muted-foreground mt-2">
+                    Don&apos;t have an account?{' '}
+                    <Link
+                        href="/register"
+                        className="text-purple-600 hover:text-purple-700 dark:hover:text-purple-500 transition duration-150"
+                    >
+                        Sign up
+                    </Link>
+                </p>
+            </article>
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(onSubmit)}
@@ -80,15 +91,15 @@ const SignIn: FC<Props> = () => {
 
             <Separator className="my-8" />
 
-            <Button onClick={() => handleLogIn('google')} type="button">
-                Sign in with Google
-            </Button>
             <Button
                 onClick={() => handleLogIn('github')}
                 type="button"
                 variant={'outline'}
             >
                 Sign in with GitHub
+            </Button>
+            <Button onClick={() => handleLogIn('google')} type="button">
+                Sign in with Google
             </Button>
         </section>
     );

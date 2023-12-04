@@ -3,23 +3,24 @@
 import React, { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { Form } from '../ui/form';
-import { signInSchema } from '@/types/form-schema';
-import Field from './Field';
+import { forgotPasswordSchemaType, signInSchema } from '@/types/form-schema';
 import { Button } from '../ui/button';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { resetPassword } from '@/auth/reset-password';
 import { toast } from 'sonner';
 import { redirect } from 'next/navigation';
+import ForgotPasswordField from './form-fields/ForgotPasswordField';
 
 interface Props {}
 
 const ForgotPassword: FC<Props> = () => {
-    const form = useForm<signInSchema>({
+    const form = useForm<forgotPasswordSchemaType>({
         mode: 'all',
         resolver: zodResolver(signInSchema),
         defaultValues: {
             email: '',
             password: '',
+            confirmPassword: '',
         },
     });
 
@@ -48,13 +49,20 @@ const ForgotPassword: FC<Props> = () => {
                     onSubmit={form.handleSubmit(onSubmit)}
                     className="space-y-6 flex flex-col mt-6"
                 >
-                    <Field form={form} prop={'email'} type="email" />
-
-                    <Field
+                    <ForgotPasswordField
+                        form={form}
+                        prop={'email'}
+                        type="email"
+                    />
+                    <ForgotPasswordField
                         form={form}
                         prop={'password'}
                         type="password"
-                        customLabel="New Password"
+                    />
+                    <ForgotPasswordField
+                        form={form}
+                        prop={'confirmPassword'}
+                        type="password"
                     />
 
                     <div className="flex justify-between items-center">

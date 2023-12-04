@@ -7,8 +7,8 @@ import {
     FormItem,
     FormLabel,
     FormMessage,
-} from '../ui/form';
-import { Input } from '../ui/input';
+} from '../../ui/form';
+import { Input } from '../../ui/input';
 import { UseFormReturn } from 'react-hook-form';
 
 interface Props {
@@ -16,15 +16,16 @@ interface Props {
         {
             password: string;
             email: string;
+            confirmPassword: string;
         },
         undefined
     >;
-    prop: 'password' | 'email';
+    prop: 'email' | 'password' | 'confirmPassword';
     type: React.HTMLInputTypeAttribute;
     customLabel?: string;
 }
 
-const Field: FC<Props> = ({ form, prop, type, customLabel }) => {
+const ForgotPasswordField: FC<Props> = ({ form, prop, type, customLabel }) => {
     return (
         <FormField
             control={form.control}
@@ -50,4 +51,4 @@ const Field: FC<Props> = ({ form, prop, type, customLabel }) => {
     );
 };
 
-export default Field;
+export default ForgotPasswordField;
