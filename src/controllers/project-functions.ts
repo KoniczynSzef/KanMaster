@@ -22,7 +22,7 @@ export async function getProjects(
     });
 
     const projectsAsMember = await db.project.findMany({
-        where: { memberEmails: { has: user.email } },
+        where: { memberEmailsVerified: { has: user.email } },
         orderBy: { createdAt: 'desc' },
         skip: (page - 1) * 6,
         take: 6,
