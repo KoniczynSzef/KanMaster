@@ -56,12 +56,10 @@ export const joinProject = async (
         throw new Error('User does not have an email');
     }
 
-    console.log(notification);
-
     const updatedProject = await db.project.update({
         where: { id: notification.projectId },
         data: {
-            memberEmails: {
+            memberEmailsVerified: {
                 push: user.email,
             },
         },

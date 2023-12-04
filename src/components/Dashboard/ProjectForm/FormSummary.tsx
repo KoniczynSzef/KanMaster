@@ -5,37 +5,40 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { resetStore, useProjectFormStore } from '@/context/project-form-store';
-import { projectType, useProjectStore } from '@/context/project-store';
-import { getBadges } from '@/controllers/badge-functions';
-import { createProject } from '@/controllers/project-functions';
 import { useRouter } from 'next/navigation';
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { toast } from 'sonner';
 import Badge from '../Projects/Badge';
+import { getUser } from '@/controllers/user-functions';
+import { useProjectStore } from '@/context/project-store';
+import { createProject } from '@/controllers/project-functions';
+import { ProjectBadge } from '@prisma/client';
 import { sendNotification } from '@/controllers/notification-functions';
+import { CreatedProject } from '@/types/project';
 
 const f = new Intl.DateTimeFormat('en', {
     dateStyle: 'full',
 });
 
 interface Props {
-    user: {
-        id: string;
-        name: string | null;
-        email: string | null;
-        hashedPassword: string | null;
-        emailVerified: Date | null;
-        image: string | null;
-        projectIDs: string[];
-    } | null;
+    user: Awaited<ReturnType<typeof getUser>>;
 }
 
 const FormSummary: FC<Props> = ({ user }) => {
     const router = useRouter();
-    const { setProjects, projects, setBadges, badges, setRemainingProjects } =
-        useProjectStore();
-    const { title, description, members, badge, deadline } =
+    const { title, description, members, badge, deadline, step } =
         useProjectFormStore();
+    const { setBadges, badges, setProjects, projects, setRemainingProjects } =
+        useProjectStore();
+
+    useEffect(() => {
+        if (step < 3) {
+            toast.error('You must complete all steps before submitting');
+
+            resetStore();
+            return router.push('/dashboard');
+        }
+    }, []);
 
     const handleCancel = () => {
         toast.error('Project creation cancelled');
@@ -50,32 +53,32 @@ const FormSummary: FC<Props> = ({ user }) => {
         }
 
         try {
-            const project: Omit<projectType, 'memberEmails'> = {
+            toast.info('Creating project...');
+
+            const project: CreatedProject = {
                 name: title,
                 deadline,
                 description,
-                memberIDs: members,
+                memberEmails: members,
+                memberEmailsVerified: [],
+
                 teamLeaderId: user.id,
             };
 
-            toast.info('Creating project...');
-
             const newProject = await createProject(project, user.email);
 
-            await fetch('/api/badge', {
+            const res = await fetch('/api/badge', {
                 method: 'POST',
                 body: JSON.stringify([newProject, { ...badge }, user.id]),
             });
 
-            const newBadges = await getBadges(user.email, projects);
-
-            const idx = badges.length - 1;
+            const createdBadge: ProjectBadge = await res.json();
 
             setBadges([
-                ...badges.slice(0, idx),
+                ...badges.slice(0, badges.length - 1),
                 {
-                    ...badges[idx],
-                    id: newBadges[newBadges.length - 1].id,
+                    ...createdBadge,
+                    id: createdBadge.id,
                     projectId: newProject.id,
                     userId: user.id,
                 },
@@ -85,8 +88,6 @@ const FormSummary: FC<Props> = ({ user }) => {
             setRemainingProjects(0);
 
             members.forEach(async (member) => {
-                console.log(member);
-
                 await sendNotification(
                     {
                         title: `${user.name} added you to a project ${title}`,
@@ -99,10 +100,10 @@ const FormSummary: FC<Props> = ({ user }) => {
                 );
             });
 
+            resetStore();
             toast.success('Project created successfully');
 
             router.push('/dashboard');
-            resetStore();
         } catch (error) {
             console.error(error);
             toast.error('Something went wrong while creating the project');

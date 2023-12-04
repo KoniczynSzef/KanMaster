@@ -2,7 +2,7 @@
 
 import { db } from '@/db';
 import { getUser } from './user-functions';
-import { Project } from '@prisma/client';
+import { CreatedProject } from '@/types/project';
 
 export async function getProjects(
     userEmail: string | null | undefined,
@@ -55,10 +55,7 @@ export async function getProjectsLength(userEmail: string | null | undefined) {
 }
 
 export async function createProject(
-    project: Omit<
-        Project,
-        'id' | 'teamLeaderId' | 'createdAt' | 'memberEmails'
-    >,
+    project: CreatedProject,
     userEmail: string | null | undefined
 ) {
     const user = await getUser(userEmail);
@@ -71,7 +68,6 @@ export async function createProject(
         data: {
             ...project,
             teamLeaderId: user.id,
-            memberEmails: [],
         },
     });
 
