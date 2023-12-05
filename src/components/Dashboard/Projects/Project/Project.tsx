@@ -25,7 +25,7 @@ const Project: FC<Props> = ({ project, idx, isLeader }) => {
             className="group relative"
         >
             <motion.div
-                className="md:max-w-sm lg:max-w-md p-8 rounded border border-muted relative h-32 w-full origin-center flex justify-between items-start scale-100 group-hover:bg-muted group-hover:scale-105 transition duration-300"
+                className="md:max-w-sm lg:max-w-md p-8 rounded-3xl border border-muted relative h-48 w-full origin-center flex justify-between items-start group-hover:border-violet-300 dark:group-hover:border-primary dark:group-hover:shadow-primary group-hover:shadow-violet-300 group-hover:shadow-lg transition duration-300"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.15 * idx }}
