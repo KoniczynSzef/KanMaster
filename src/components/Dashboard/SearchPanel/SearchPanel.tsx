@@ -10,16 +10,20 @@ import {
     filterProjects,
     sortByName,
     useProjectStore,
+    getProjectsWhereLeader,
 } from '@/context/project-store';
 import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover';
 import Link from 'next/link';
 import SortingButton from './SortingButton';
+import { useUserStore } from '@/context/user-store';
+import { Separator } from '@/components/ui/separator';
 
 interface Props {
     projects: Project[];
 }
 
 const SearchPanel: FC<Props> = ({ projects }) => {
+    const { user } = useUserStore();
     const [search, setSearch] = useState('');
     const { setProjects, sortingDirection, setSortingDirection } =
         useProjectStore();
@@ -39,6 +43,10 @@ const SearchPanel: FC<Props> = ({ projects }) => {
     const handleSortInOrder = () => {
         setProjects(sortByName(projects, sortingDirection === 'asc'));
         setSortingDirection(sortingDirection === 'asc' ? 'desc' : 'asc');
+    };
+
+    const handleSortWhereLeader = () => {
+        setProjects(getProjectsWhereLeader(projects, user?.id as string));
     };
 
     return (
@@ -61,19 +69,21 @@ const SearchPanel: FC<Props> = ({ projects }) => {
                         <Button className="self-start">New Project</Button>
                     </Link>
 
+                    <Separator className="my-2" />
+
                     <SortingButton
-                        usingIn={false}
                         onClick={handleSortByDeadline}
-                        text="deadline"
+                        text="Sort projects by deadline"
                     />
                     <SortingButton
-                        usingIn
                         onClick={handleSortInOrder}
-                        text={
-                            sortingDirection === 'asc'
-                                ? 'asc order'
-                                : 'desc order'
-                        }
+                        text={`Sort projects in ${
+                            sortingDirection === 'asc' ? 'desc' : 'asc'
+                        } order`}
+                    />
+                    <SortingButton
+                        onClick={handleSortWhereLeader}
+                        text={'Sort projects as leader'}
                     />
 
                     {/* <Button variant={'outline'} onClick={handleSortByDeadline}>
