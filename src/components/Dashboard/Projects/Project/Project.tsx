@@ -7,6 +7,13 @@ import { User } from '@prisma/client';
 
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 
 interface Props {
     project: projectType;
@@ -25,25 +32,31 @@ const Project: FC<Props> = ({ project, idx, isLeader }) => {
             className="group relative"
         >
             <motion.div
-                className="md:max-w-sm lg:max-w-md p-8 rounded-3xl border border-muted relative h-48 w-full origin-center flex justify-between items-start group-hover:border-violet-300 dark:group-hover:border-primary dark:group-hover:shadow-primary group-hover:shadow-violet-300 group-hover:shadow-lg transition duration-300"
+                className={
+                    'md:max-w-sm lg:max-w-md rounded-3xl border border-muted relative h-48 w-full origin-center group-hover:border-violet-300 dark:group-hover:border-primary dark:group-hover:shadow-primary group-hover:shadow-violet-300 group-hover:shadow-lg transition duration-300 p-2'
+                }
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.15 * idx }}
             >
-                <ProjectBadge withId badge={badge} withoutAnimation />
-                <div className="flex-col">
-                    <h3 className="text-3xl font-bold">{project.name}</h3>
-                    <p className="text-sm mt-4 text-muted-foreground">
-                        {project.description}
-                    </p>
-                </div>
-                <Badge
-                    className={`${
-                        isLeader ? 'bg-paletteVioletMain' : 'bg-paletteAmber'
-                    } pointer-events-none `}
-                >
-                    {isLeader ? 'Leader' : 'Member'}
-                </Badge>
+                <Card className="h-full rounded-3xl border-none shadow-none">
+                    <CardHeader className="flex flex-row justify-between items-center">
+                        <CardTitle>{project.name}</CardTitle>
+                        <Badge
+                            className={`${
+                                isLeader
+                                    ? 'from-paletteVioletMain to-paletteDarkerIndigo'
+                                    : 'from-paletteAmber to-paletteLighterRed'
+                            } bg-gradient-to-r pointer-events-none `}
+                        >
+                            {isLeader ? 'Leader' : 'Member'}
+                        </Badge>
+                    </CardHeader>
+                    <CardContent>
+                        <CardDescription>{project.description}</CardDescription>
+                    </CardContent>
+                    <ProjectBadge withId badge={badge} withoutAnimation />
+                </Card>
             </motion.div>
         </Link>
     );
