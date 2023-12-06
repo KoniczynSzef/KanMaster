@@ -104,3 +104,7 @@ export const sortByName = (projects: Project[], asc: boolean) => {
 export function getRemainingCount(length: number, page: number) {
     return length - page * 6;
 }
+
+export const getProjectsWhereLeader = (projects: Project[], userId: string) => {
+    return projects.filter((project) => project.teamLeaderId === userId);
+};

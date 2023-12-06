@@ -10,7 +10,10 @@ const Skeletons: FC<Props> = ({ projects }) => {
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-12">
             {projects.map((project) => (
-                <Skeleton key={project.id} className="max-w-sm w-full h-32" />
+                <Skeleton
+                    key={project.id}
+                    className="max-w-sm w-full h-48 rounded-3xl"
+                />
             ))}
         </div>
     );

@@ -2,7 +2,7 @@
 
 import { db } from '@/db';
 import { getUser } from './user-functions';
-import { Project } from '@prisma/client';
+import { CreatedProject } from '@/types/project';
 
 export async function getProjects(
     userEmail: string | null | undefined,
@@ -22,7 +22,7 @@ export async function getProjects(
     });
 
     const projectsAsMember = await db.project.findMany({
-        where: { memberEmails: { has: user.email } },
+        where: { memberEmailsVerified: { has: user.email } },
         orderBy: { createdAt: 'desc' },
         skip: (page - 1) * 6,
         take: 6,
@@ -55,10 +55,7 @@ export async function getProjectsLength(userEmail: string | null | undefined) {
 }
 
 export async function createProject(
-    project: Omit<
-        Project,
-        'id' | 'teamLeaderId' | 'createdAt' | 'memberEmails'
-    >,
+    project: CreatedProject,
     userEmail: string | null | undefined
 ) {
     const user = await getUser(userEmail);
@@ -71,11 +68,18 @@ export async function createProject(
         data: {
             ...project,
             teamLeaderId: user.id,
-            memberEmails: [],
         },
     });
 
     return newProject;
+}
+
+export async function getProject(id: string) {
+    const project = await db.project.findUnique({
+        where: { id },
+    });
+
+    return project;
 }
 
 export async function deleteProject(

@@ -44,8 +44,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   
-  projectIDs   String[] 
-  projects     Project[] @relation(fields: [projectIDs], references: [id])
+  projects     Project[]
 
   badges      ProjectBadge[]
   notifications Notification[]
@@ -63,17 +62,18 @@ model Project {
   id            String    @id @default(cuid()) @map("_id")  
   name String
   description String?
-  teamLeaderId String 
 
   deadline DateTime
   createdAt DateTime @default(now())
 
-  memberIDs String[] 
-  memberEmails String[]
-  members User[] @relation(fields: [memberIDs], references: [id])
+  memberEmails String[] 
+  memberEmailsVerified String[]
 
   tasks Task[]
   notifications Notification[]
+
+  teamLeaderId String 
+  user User @relation(fields: [teamLeaderId], references: [id], onDelete: Cascade)
 
   badge ProjectBadge?
 }

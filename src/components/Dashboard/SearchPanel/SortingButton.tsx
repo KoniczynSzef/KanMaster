@@ -8,8 +8,8 @@ interface Props {
 
 const SortingButton: FC<Props> = ({ onClick, text }) => {
     return (
-        <Button variant={'outline'} onClick={onClick}>
-            Sort projects by <span className="font-bold ml-1">{text}</span>
+        <Button variant={'outline'} onClick={onClick} size={'lg'}>
+            {text}
         </Button>
     );
 };
