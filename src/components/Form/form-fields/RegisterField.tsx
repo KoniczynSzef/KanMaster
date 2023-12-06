@@ -37,7 +37,7 @@ const RegisterField: FC<Props> = ({ form, prop, type, customLabel }) => {
                     <FormControl>
                         <Input
                             type={type}
-                            placeholder="Type your username..."
+                            placeholder={`Type your ${prop}...`}
                             {...field}
                         />
                     </FormControl>
