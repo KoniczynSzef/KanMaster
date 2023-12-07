@@ -40,7 +40,11 @@ const ForgotPasswordField: FC<Props> = ({ form, prop, type, customLabel }) => {
                     <FormControl>
                         <Input
                             type={type}
-                            placeholder={`Type your ${prop}...`}
+                            placeholder={`${
+                                prop === 'confirmPassword'
+                                    ? 'Confirm your password'
+                                    : 'Type your ' + prop
+                            }..`}
                             {...field}
                         />
                     </FormControl>

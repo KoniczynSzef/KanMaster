@@ -1,11 +1,16 @@
 'use server';
 
 import { db } from '@/db';
-import { signInSchema } from '@/types/form-schema';
+import {
+    forgotPasswordSchema,
+    forgotPasswordSchemaType,
+} from '@/types/form-schema';
 import { hash } from 'bcryptjs';
 
-export async function resetPassword(data: signInSchema) {
-    signInSchema.parse(data);
+export async function resetPassword(data: forgotPasswordSchemaType) {
+    if (!forgotPasswordSchema.parse(data)) {
+        throw new Error('Invalid data');
+    }
 
     const user = await db.user.findUnique({
         where: {
