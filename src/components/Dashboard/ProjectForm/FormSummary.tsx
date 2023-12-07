@@ -6,7 +6,7 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { resetStore, useProjectFormStore } from '@/context/project-form-store';
 import { useRouter } from 'next/navigation';
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import Badge from '../Projects/Badge';
 import { getUser } from '@/controllers/user-functions';
@@ -26,6 +26,9 @@ interface Props {
 
 const FormSummary: FC<Props> = ({ user }) => {
     const router = useRouter();
+
+    const [disabled, setDisabled] = useState(false);
+
     const { title, description, members, badge, deadline, step } =
         useProjectFormStore();
     const { setBadges, badges, setProjects, projects, setRemainingProjects } =
@@ -54,6 +57,7 @@ const FormSummary: FC<Props> = ({ user }) => {
 
         try {
             toast.info('Creating project...');
+            setDisabled(true);
 
             const project: CreatedProject = {
                 name: title,
@@ -155,7 +159,7 @@ const FormSummary: FC<Props> = ({ user }) => {
                         Cancel
                     </Button>
 
-                    <Button onClick={handleCreateProject}>
+                    <Button onClick={handleCreateProject} disabled={disabled}>
                         Create Project
                     </Button>
                 </div>

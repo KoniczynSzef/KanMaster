@@ -14,10 +14,14 @@ import Field from './form-fields/Field';
 import { signInSchema } from '@/types/form-schema';
 import Link from 'next/link';
 import { handleError } from '@/auth/error-handlers';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { useRouter } from 'next/navigation';
 
 interface Props {}
 
 const SignIn: FC<Props> = () => {
+    const router = useRouter();
+    const { setValue: setStoredEmail } = useLocalStorage<string>('email');
     const form = useForm<signInSchema>({
         mode: 'all',
         resolver: zodResolver(signInSchema),
@@ -53,6 +57,19 @@ const SignIn: FC<Props> = () => {
         }
     };
 
+    const handleForgotPassword = () => {
+        try {
+            if (!signInSchema.parse(form.getValues())) {
+                return;
+            }
+
+            setStoredEmail(form.getValues('email'));
+            router.push('/forgot-password');
+        } catch (error) {
+            toast.error('Please field both fields');
+        }
+    };
+
     return (
         <section className="max-w-3xl w-full flex flex-col gap-4 border border-muted-background p-8 rounded mx-8">
             <article>
@@ -76,12 +93,16 @@ const SignIn: FC<Props> = () => {
                     <Field form={form} prop={'password'} type="password" />
 
                     <div className="flex justify-between items-center">
-                        <Link
-                            href="/forgot-password"
-                            className="text-muted-foreground hover:text-foreground transition"
+                        <Button
+                            type="button"
+                            onClick={handleForgotPassword}
+                            role="link"
+                            aria-label="Forgot password?"
+                            variant={'link'}
+                            className="text-purple-600 hover:text-purple-700 dark:hover:text-purple-500 transition duration-150 px-0"
                         >
                             Forgot password?
-                        </Link>
+                        </Button>
                         <Button type="submit" className="ml-auto">
                             Sign in
                         </Button>

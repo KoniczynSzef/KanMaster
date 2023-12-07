@@ -3,10 +3,14 @@
 import React, { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { Form } from '../ui/form';
-import { forgotPasswordSchemaType, signInSchema } from '@/types/form-schema';
+import {
+    forgotPasswordSchema,
+    forgotPasswordSchemaType,
+    signInSchema,
+} from '@/types/form-schema';
 import { Button } from '../ui/button';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { resetPassword } from '@/auth/reset-password';
+import { resetPassword, sendResetPasswordEmail } from '@/auth/reset-password';
 import { toast } from 'sonner';
 import { redirect } from 'next/navigation';
 import ForgotPasswordField from './form-fields/ForgotPasswordField';
@@ -16,7 +20,7 @@ interface Props {}
 const ForgotPassword: FC<Props> = () => {
     const form = useForm<forgotPasswordSchemaType>({
         mode: 'all',
-        resolver: zodResolver(signInSchema),
+        resolver: zodResolver(forgotPasswordSchema),
         defaultValues: {
             email: '',
             password: '',
@@ -26,7 +30,8 @@ const ForgotPassword: FC<Props> = () => {
 
     const onSubmit = async (data: signInSchema) => {
         try {
-            await resetPassword(data);
+            await sendResetPasswordEmail(data.email);
+            // await resetPassword(data);
             toast.success('Successfully reset password!');
 
             setTimeout(() => {
@@ -63,6 +68,7 @@ const ForgotPassword: FC<Props> = () => {
                         form={form}
                         prop={'confirmPassword'}
                         type="password"
+                        customLabel="Confirm Password"
                     />
 
                     <div className="flex justify-between items-center">
