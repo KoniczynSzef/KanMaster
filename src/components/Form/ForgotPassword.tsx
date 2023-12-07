@@ -6,18 +6,20 @@ import { Form } from '../ui/form';
 import {
     forgotPasswordSchema,
     forgotPasswordSchemaType,
-    signInSchema,
 } from '@/types/form-schema';
 import { Button } from '../ui/button';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { resetPassword, sendResetPasswordEmail } from '@/auth/reset-password';
+import { resetPassword } from '@/auth/reset-password';
 import { toast } from 'sonner';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import ForgotPasswordField from './form-fields/ForgotPasswordField';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 interface Props {}
 
 const ForgotPassword: FC<Props> = () => {
+    const router = useRouter();
+    const { storedValue } = useLocalStorage<string>('email');
     const form = useForm<forgotPasswordSchemaType>({
         mode: 'all',
         resolver: zodResolver(forgotPasswordSchema),
@@ -28,18 +30,23 @@ const ForgotPassword: FC<Props> = () => {
         },
     });
 
-    const onSubmit = async (data: signInSchema) => {
+    const onSubmit = async (data: forgotPasswordSchemaType) => {
         try {
-            await sendResetPasswordEmail(data.email);
-            // await resetPassword(data);
+            if (data.email !== storedValue) {
+                toast.error(
+                    'Email does not match the one you provided earlier!'
+                );
+                return;
+            }
+
+            await resetPassword(data);
+
             toast.success('Successfully reset password!');
 
-            setTimeout(() => {
-                redirect('/sign-in');
-            }, 150);
+            router.push('/sign-in');
         } catch (error) {
             toast.error('Failed to reset password!');
-            window.location.reload();
+            form.reset();
         }
     };
 

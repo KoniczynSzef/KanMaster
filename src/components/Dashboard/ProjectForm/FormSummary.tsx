@@ -15,6 +15,7 @@ import { createProject } from '@/controllers/project-functions';
 import { ProjectBadge } from '@prisma/client';
 import { sendNotification } from '@/controllers/notification-functions';
 import { CreatedProject } from '@/types/project';
+import { Loader2 } from 'lucide-react';
 
 const f = new Intl.DateTimeFormat('en', {
     dateStyle: 'full',
@@ -160,7 +161,11 @@ const FormSummary: FC<Props> = ({ user }) => {
                     </Button>
 
                     <Button onClick={handleCreateProject} disabled={disabled}>
-                        Create Project
+                        {disabled ? (
+                            <Loader2 className="animate-spin" />
+                        ) : (
+                            'Create'
+                        )}
                     </Button>
                 </div>
             </CardContent>
