@@ -57,12 +57,13 @@ const StepTwo: FC<Props> = () => {
                 {members.map((member) => (
                     <li
                         key={member}
-                        className="border border-muted px-4 py-2 rounded flex justify-between items-center"
+                        className="border border-muted px-4 py-2 rounded flex justify-between items-center overflow-x-auto sm:overflow-x-hidden gap-4"
                     >
                         <span className="font-medium">{member}</span>
                         <Button
                             size={'icon'}
                             variant={'destructive'}
+                            className="self-end w-full max-w-[2.5rem]"
                             onClick={() => removeMember(member)}
                         >
                             <X />

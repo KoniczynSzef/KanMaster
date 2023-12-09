@@ -25,15 +25,14 @@ export const forgotPasswordSchema = z
             .string()
             .min(8, { message: 'Password must be at least 8 characters' }),
     })
-    .superRefine((data) => {
+    .superRefine((data, ctx) => {
         if (data.password !== data.confirmPassword) {
-            return {
+            ctx.addIssue({
+                code: 'custom',
                 message: 'Passwords do not match',
                 path: ['confirmPassword'],
-            };
+            });
         }
-
-        return true;
     });
 
 export type forgotPasswordSchemaType = z.infer<typeof forgotPasswordSchema>;

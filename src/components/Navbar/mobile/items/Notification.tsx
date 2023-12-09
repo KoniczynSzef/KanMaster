@@ -28,7 +28,7 @@ const Notification: FC<Props> = async ({ user }) => {
                 <Button className="bg-transparent rounded-full px-2 transition duration-300">
                     {notifications.length > 0 ? (
                         <div className="relative">
-                            <BellRing className="text-foreground"/>
+                            <BellRing className="text-foreground" />
                             <span className="sr-only">
                                 Notifications remaining: {notifications.length}
                             </span>
@@ -40,8 +40,7 @@ const Notification: FC<Props> = async ({ user }) => {
                             </div>
                         </div>
                     ) : (
-                        <Bell className="text-foreground"
- />
+                        <Bell className="text-black md:text-white dark:text-white" />
                     )}
                 </Button>
             </DropdownMenuTrigger>

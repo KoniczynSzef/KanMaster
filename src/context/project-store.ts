@@ -1,12 +1,10 @@
+import { sortedByPerson, sorting, sortingDirection } from '@/types/project';
 import { Project, ProjectBadge } from '@prisma/client';
 import { create } from 'zustand';
 
 export type projectType = Omit<Project, 'id' | 'createdAt'> & {
     id?: string;
 };
-
-type sorting = 'deadline' | 'name';
-type sortingDirection = 'asc' | 'desc';
 
 type ProjectStore = {
     projects: projectType[] | Project[];
@@ -27,6 +25,9 @@ type ProjectStore = {
     setSorting: (sorting: sorting) => void;
     sortingDirection: sortingDirection;
     setSortingDirection: (sortingDirection: sortingDirection) => void;
+
+    sortedPerson: sortedByPerson;
+    setSortedPerson: (sortedByPerson: sortedByPerson) => void;
 };
 
 export const useProjectStore = create<ProjectStore>((set) => ({
@@ -78,6 +79,13 @@ export const useProjectStore = create<ProjectStore>((set) => ({
             sortingDirection,
         }));
     },
+
+    sortedPerson: 'all',
+    setSortedPerson(sortedPerson) {
+        set(() => ({
+            sortedPerson,
+        }));
+    },
 }));
 
 export const filterProjects = (projects: Project[], filter: string) => {
@@ -105,6 +113,30 @@ export function getRemainingCount(length: number, page: number) {
     return length - page * 6;
 }
 
-export const getProjectsWhereLeader = (projects: Project[], userId: string) => {
+export const getProjectsWhereLeader = (
+    projects: Project[],
+    userId: string,
+    person: sortedByPerson
+) => {
+    switch (person) {
+        case 'all':
+            return projects;
+        case 'member':
+            return projects.filter(
+                (project) => project.teamLeaderId !== userId
+            );
+    }
+
     return projects.filter((project) => project.teamLeaderId === userId);
 };
+
+export function getSortedPerson(person: sortedByPerson) {
+    switch (person) {
+        case 'all':
+            return 'leader';
+        case 'leader':
+            return 'member';
+        case 'member':
+            return 'all';
+    }
+}
