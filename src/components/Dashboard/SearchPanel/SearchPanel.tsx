@@ -11,12 +11,12 @@ import {
     sortByName,
     useProjectStore,
     getProjectsWhereLeader,
+    getSortedPerson,
 } from '@/context/project-store';
 import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover';
 import Link from 'next/link';
 import SortingButton from './SortingButton';
 import { useUserStore } from '@/context/user-store';
-import { Separator } from '@/components/ui/separator';
 
 interface Props {
     projects: Project[];
@@ -25,8 +25,13 @@ interface Props {
 const SearchPanel: FC<Props> = ({ projects }) => {
     const { user } = useUserStore();
     const [search, setSearch] = useState('');
-    const { setProjects, sortingDirection, setSortingDirection } =
-        useProjectStore();
+    const {
+        setProjects,
+        sortingDirection,
+        setSortingDirection,
+        sortedPerson,
+        setSortedPerson,
+    } = useProjectStore();
 
     const handleType = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearch(e.target.value);
@@ -46,7 +51,12 @@ const SearchPanel: FC<Props> = ({ projects }) => {
     };
 
     const handleSortWhereLeader = () => {
-        setProjects(getProjectsWhereLeader(projects, user?.id as string));
+        const person = getSortedPerson(sortedPerson);
+        setSortedPerson(person);
+
+        setProjects(
+            getProjectsWhereLeader(projects, user?.id as string, person)
+        );
     };
 
     return (
@@ -60,17 +70,15 @@ const SearchPanel: FC<Props> = ({ projects }) => {
 
             <Popover>
                 <PopoverTrigger asChild>
-                    <Button size={'icon'} className="h-10 aspect-square">
+                    <Button
+                        size={'icon'}
+                        className="h-10 aspect-square"
+                        variant={'outline'}
+                    >
                         <Menu />
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent className="flex flex-col gap-4 mr-8 lg:mr-8 2xl:mr-2">
-                    <Link href={'/dashboard/create'} className="self-start">
-                        <Button className="self-start">New Project</Button>
-                    </Link>
-
-                    <Separator className="my-2" />
-
                     <SortingButton
                         onClick={handleSortByDeadline}
                         text="Sort projects by deadline"
@@ -83,9 +91,14 @@ const SearchPanel: FC<Props> = ({ projects }) => {
                     />
                     <SortingButton
                         onClick={handleSortWhereLeader}
-                        text={'Sort projects as leader'}
+                        text={`${
+                            sortedPerson === 'all'
+                                ? 'Show projects as leader'
+                                : sortedPerson === 'leader'
+                                ? 'Show projects as member'
+                                : 'Show all projects'
+                        }`}
                     />
-
                     {/* <Button variant={'outline'} onClick={handleSortByDeadline}>
                         Sort projects by{' '}
                         <span className="font-bold ml-1">deadline</span>
@@ -106,6 +119,10 @@ const SearchPanel: FC<Props> = ({ projects }) => {
                     </Button> */}
                 </PopoverContent>
             </Popover>
+
+            <Link href={'/dashboard/create'} className="self-start">
+                <Button className="self-start">Create</Button>
+            </Link>
         </div>
     );
 };
