@@ -70,3 +70,26 @@ html {
         @apply bg-background text-foreground;
     }
 }
+
+.custom-gradient {
+    border-bottom-left-radius: 1000px;
+    background: linear-gradient(
+        to bottom right,
+        #fff 60%,
+        #e595c2 70%,
+        #fff 77.5%
+    );
+    opacity: 0.1;
+    width: 100%;
+}
+
+.dark .custom-gradient {
+    background: linear-gradient(
+        to bottom right,
+        #030712 60%,
+        #6f1a96 70%,
+        #030712 77.5%
+    );
+
+    opacity: 0.1;
+}
