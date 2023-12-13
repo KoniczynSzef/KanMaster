@@ -13,7 +13,10 @@ const Navbar: FC<Props> = async () => {
     return (
         <header className="py-6 bg-paletteVioletMain dark:bg-darkPaletteVioletMain">
             <nav className="container mx-auto flex items-center justify-between">
-                <Link href={'/'} className="group">
+                <Link
+                    href={'/'}
+                    className="group px-4 py-1 focus-visible:outline outline-white transition-all duration-200 rounded"
+                >
                     <h1 className="text-4xl md:text-5xl font-bold text-violet-100 group-hover:text-white transition">
                         KanMaster
                     </h1>
