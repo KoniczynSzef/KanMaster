@@ -14,6 +14,7 @@ import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import ForgotPasswordField from './form-fields/ForgotPasswordField';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
+import FormDescription from './FormDescription';
 
 interface Props {}
 
@@ -52,10 +53,12 @@ const ForgotPassword: FC<Props> = () => {
 
     return (
         <section className="max-w-2xl w-full flex flex-col gap-4 border border-muted-background p-8 rounded">
-            <h3 className="text-3xl font-bold">Forgot password?</h3>
-            <p className="text-muted-foreground">
-                Enter your email address for checking if you have an account
-            </p>
+            <FormDescription
+                title="Forgot Password?"
+                quickDescription="Don't have an account yet?"
+                link="Sign up"
+                href="/register"
+            />
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(onSubmit)}

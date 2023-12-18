@@ -12,10 +12,10 @@ import { Separator } from '../ui/separator';
 import { provider } from '@/auth';
 import Field from './form-fields/Field';
 import { signInSchema } from '@/types/form-schema';
-import Link from 'next/link';
 import { handleError } from '@/auth/error-handlers';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { useRouter } from 'next/navigation';
+import FormDescription from './FormDescription';
 
 interface Props {}
 
@@ -72,18 +72,12 @@ const SignIn: FC<Props> = () => {
 
     return (
         <section className="max-w-3xl w-full flex flex-col gap-4 border border-muted-background p-8 rounded mx-8">
-            <article>
-                <h3 className="text-3xl font-bold">Sign In</h3>
-                <p className="text-muted-foreground mt-2">
-                    Don&apos;t have an account?{' '}
-                    <Link
-                        href="/register"
-                        className="text-purple-600 hover:text-purple-700 dark:hover:text-purple-500 transition duration-150"
-                    >
-                        Sign up
-                    </Link>
-                </p>
-            </article>
+            <FormDescription
+                title="Sign In"
+                quickDescription={"Don't have an account?"}
+                link="Sign up"
+                href="/register"
+            />
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(onSubmit)}
