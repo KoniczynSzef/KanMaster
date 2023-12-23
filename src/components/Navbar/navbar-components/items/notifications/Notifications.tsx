@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
     DropdownMenuContent,
-    DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
@@ -21,8 +20,15 @@ interface Props {
 }
 
 const Notifications: FC<Props> = ({ notifications }) => {
-    const {} = useQuery();
-    const {} = useNotificationStore();
+    const { setNotifications, notifications: storedNotifications } =
+        useNotificationStore();
+
+    const { isLoading } = useQuery({
+        queryKey: ['notifications'],
+        queryFn: () => {
+            setNotifications(notifications);
+        },
+    });
 
     return (
         <DropdownMenu>
@@ -44,16 +50,15 @@ const Notifications: FC<Props> = ({ notifications }) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent>
                 <DropdownMenuLabel>Notifications</DropdownMenuLabel>
-                {notifications.length > 0 ? (
-                    notifications.map((notification) => (
+                {isLoading && <p>Loading...</p>}
+
+                {storedNotifications.length > 0 &&
+                    storedNotifications.map((notification) => (
                         <NotificationMenuItem
                             key={notification.id}
                             notification={notification}
                         />
-                    ))
-                ) : (
-                    <DropdownMenuItem>No notifications</DropdownMenuItem>
-                )}
+                    ))}
             </DropdownMenuContent>
         </DropdownMenu>
     );

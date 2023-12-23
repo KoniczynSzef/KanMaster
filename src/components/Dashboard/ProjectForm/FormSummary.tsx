@@ -92,6 +92,8 @@ const FormSummary: FC<Props> = ({ user }) => {
             setProjects([newProject, ...projects]);
             setRemainingProjects(0);
 
+            console.log(members.length);
+
             members.forEach(async (member) => {
                 await sendNotification(
                     {

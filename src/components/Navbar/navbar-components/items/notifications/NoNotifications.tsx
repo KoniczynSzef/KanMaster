@@ -1,6 +1,5 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
 import {
     Tooltip,
     TooltipContent,
@@ -17,9 +16,7 @@ const NoNotifications: FC<Props> = () => {
         <TooltipProvider>
             <Tooltip>
                 <TooltipTrigger>
-                    <Button className="bg-transparent rounded-full px-2 transition duration-300">
-                        <Bell className="text-black md:text-white dark:text-white" />
-                    </Button>
+                    <Bell className="text-black md:text-white dark:text-white" />
                 </TooltipTrigger>
                 <TooltipContent>
                     <p>You don&apos;t have any notifications yet</p>

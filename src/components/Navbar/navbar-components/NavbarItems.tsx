@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Session } from 'next-auth';
 import { SheetTrigger } from '@/components/ui/sheet';
-import { getNotifications } from '@/controllers/notification-functions';
 
 interface Props extends React.ComponentProps<'ul'> {
     className?: string;
@@ -14,15 +13,13 @@ interface Props extends React.ComponentProps<'ul'> {
     mobile: boolean;
 }
 
-const NavbarItems: FC<Props> = async ({ session, className, mobile }) => {
-    const notifications = await getNotifications(session?.user?.email, false);
-
+const NavbarItems: FC<Props> = ({ session, className, mobile }) => {
     return (
         <ul className={`${className} wrapper flex items-center gap-10`}>
             <ToggleTheme />
             {session?.user ? (
                 <>
-                    <Notification notifications={notifications} />
+                    <Notification session={session} />
                     <UserDropdownMenu user={session.user} />
                 </>
             ) : !mobile ? (
