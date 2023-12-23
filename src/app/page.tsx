@@ -79,6 +79,18 @@ export default async function Home() {
                     </h2>
                 </Link>
             </section>
+
+            <footer className="py-6 bg-paletteVioletMain dark:bg-darkPaletteVioletMain">
+                <h3 className="text-xl mx-16 text-white">
+                    Created by{' '}
+                    <Link
+                        href={'https://github.com/KoniczynSzef'}
+                        className="dark:text-violet-400 text-violet-300 dark:hover:text-violet-300 hover:text-violet-200 transition duration-200"
+                    >
+                        KoniczynSzef
+                    </Link>
+                </h3>
+            </footer>
         </main>
     );
 }

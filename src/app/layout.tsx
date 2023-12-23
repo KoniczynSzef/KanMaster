@@ -9,6 +9,7 @@ import SessionProvider from '@/providers/SessionProvider';
 import { Toaster } from 'sonner';
 
 import NextTopLoader from 'nextjs-toploader';
+import QueryProvider from '@/providers/QueryProvider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -24,21 +25,26 @@ export default function RootLayout({
 }) {
     return (
         <SessionProvider>
-            <html lang="en" suppressHydrationWarning>
-                <body className={inter.className}>
-                    <ThemeProvider
-                        attribute="class"
-                        defaultTheme="system"
-                        enableSystem
-                        disableTransitionOnChange
-                    >
-                        <NextTopLoader color="#2563EB" showSpinner={false} />
-                        <Navbar />
-                        {children}
-                        <Toaster richColors />
-                    </ThemeProvider>
-                </body>
-            </html>
+            <QueryProvider>
+                <html lang="en" suppressHydrationWarning>
+                    <body className={inter.className}>
+                        <ThemeProvider
+                            attribute="class"
+                            defaultTheme="system"
+                            enableSystem
+                            disableTransitionOnChange
+                        >
+                            <NextTopLoader
+                                color="#2563EB"
+                                showSpinner={false}
+                            />
+                            <Navbar />
+                            {children}
+                            <Toaster richColors />
+                        </ThemeProvider>
+                    </body>
+                </html>
+            </QueryProvider>
         </SessionProvider>
     );
 }
