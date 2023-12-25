@@ -29,10 +29,10 @@ const Page: FC<Props> = async ({ params }) => {
     }
 
     return (
-        <div className="container mx-auto py-24 flex justify-between gap-10">
-            <pre className="border border-muted rounded p-4">
+        <div className="container mx-auto py-24">
+            {/* <pre className="border border-muted rounded p-4">
                 {JSON.stringify(project, null, 2)}
-            </pre>
+            </pre> */}
 
             <KanbanBoard project={project} user={user} />
 

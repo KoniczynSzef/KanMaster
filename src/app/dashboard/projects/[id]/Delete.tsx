@@ -31,7 +31,11 @@ const Delete: FC<Props> = ({ project, user }) => {
     };
 
     return (
-        <Button variant={'destructive'} onClick={handleDelete}>
+        <Button
+            variant={'destructive'}
+            onClick={handleDelete}
+            className="mt-36"
+        >
             Delete project
         </Button>
     );

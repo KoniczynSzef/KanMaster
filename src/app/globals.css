@@ -118,8 +118,3 @@ html {
 .dark .link-animation::before {
     background-color: #030712;
 }
-
-.dark .link-animation:hover::before {
-    background-color: #fff;
-    width: 100%;
-}
