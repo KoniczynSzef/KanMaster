@@ -72,7 +72,7 @@ html {
 }
 
 .custom-gradient {
-    border-bottom-left-radius: 1000px;
+    border-bottom-left-radius: 3000px;
     background: linear-gradient(
         to bottom right,
         #fff 60%,
@@ -92,4 +92,34 @@ html {
     );
 
     opacity: 0.1;
+}
+
+.link-animation {
+    position: relative;
+    transition: all 2s ease-in-out;
+}
+
+.link-animation::before {
+    content: '';
+    position: absolute;
+    width: 0%;
+    height: 2px;
+    bottom: -10px;
+    left: 0;
+    background-color: #fff;
+    transition: all 0.5s ease-in-out;
+}
+
+.link-animation:hover::before {
+    background-color: #030712;
+    width: 100%;
+}
+
+.dark .link-animation::before {
+    background-color: #030712;
+}
+
+.dark .link-animation:hover::before {
+    background-color: #fff;
+    width: 100%;
 }

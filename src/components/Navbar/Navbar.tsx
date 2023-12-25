@@ -2,8 +2,8 @@ import Link from 'next/link';
 import React, { FC } from 'react';
 import { getServerSession } from 'next-auth';
 import { options } from '@/auth/options';
-import NavbarMenu from './mobile/NavbarMenu';
-import NavbarItems from './mobile/NavbarItems';
+import NavbarMenu from './navbar-components/NavbarMenu';
+import NavbarItems from './navbar-components/NavbarItems';
 
 interface Props {}
 

@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import ToggleTheme from './items/ToggleTheme';
-import Notification from './items/Notification';
+import Notification from './items/notifications/Notification';
 import UserDropdownMenu from './items/UserDropdownMenu';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -19,7 +19,7 @@ const NavbarItems: FC<Props> = ({ session, className, mobile }) => {
             <ToggleTheme />
             {session?.user ? (
                 <>
-                    <Notification user={session.user} />
+                    <Notification session={session} />
                     <UserDropdownMenu user={session.user} />
                 </>
             ) : !mobile ? (
