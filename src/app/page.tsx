@@ -86,6 +86,7 @@ export default async function Home() {
                     <Link
                         href={'https://github.com/KoniczynSzef'}
                         className="dark:text-violet-400 text-violet-300 dark:hover:text-violet-300 hover:text-violet-200 transition duration-200"
+                        target="_blank"
                     >
                         KoniczynSzef
                     </Link>

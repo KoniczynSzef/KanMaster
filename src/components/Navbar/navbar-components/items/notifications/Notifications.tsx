@@ -23,7 +23,7 @@ const Notifications: FC<Props> = ({ notifications }) => {
     const { setNotifications, notifications: storedNotifications } =
         useNotificationStore();
 
-    const { isLoading } = useQuery({
+    useQuery({
         queryKey: ['notifications'],
         queryFn: () => {
             setNotifications(notifications);
@@ -50,7 +50,6 @@ const Notifications: FC<Props> = ({ notifications }) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent>
                 <DropdownMenuLabel>Notifications</DropdownMenuLabel>
-                {isLoading && <p>Loading...</p>}
 
                 {storedNotifications.length > 0 &&
                     storedNotifications.map((notification) => (

@@ -4,6 +4,7 @@ import Delete from './Delete';
 import { getServerSession } from 'next-auth';
 import { options } from '@/auth/options';
 import { getUser } from '@/controllers/user-functions';
+import KanbanBoard from '@/components/Board/KanbanBoard';
 
 interface Props {
     params: {
@@ -32,6 +33,8 @@ const Page: FC<Props> = async ({ params }) => {
             <pre className="border border-muted rounded p-4">
                 {JSON.stringify(project, null, 2)}
             </pre>
+
+            <KanbanBoard project={project} user={user} />
 
             <Delete project={project} user={user} />
         </div>
