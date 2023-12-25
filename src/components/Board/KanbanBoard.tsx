@@ -29,23 +29,30 @@ const KanbanBoard: FC<Props> = (props) => {
     return (
         <section className="board border border-muted rounded max-w-7xl w-full">
             <BoardHeader columns={columns} />
-            <div className="wrapper flex items-center">
-                <div className="e w-1/3 border-x border-x-muted py-6 px-2 items-center flex flex-col">
-                    <CreateTask createTask={createTask} />
+            {isLoading ? (
+                <div className="flex justify-center items-center gap-8 py-4">
+                    <h3 className="text-xl font-bold">
+                        Tasks are being loaded...
+                    </h3>
+                    <Loader2 size={64} className="animate-spin" />
                 </div>
-                <div className="e w-1/3 border-x border-x-muted py-6 px-2 items-center flex flex-col">
-                    {tasks.map((task) => (
-                        <div key={task.id}>{task.title}</div>
-                    ))}
-                    <CreateTask createTask={createTask} />
+            ) : (
+                <div className="wrapper flex items-center">
+                    <div className="e w-1/3 py-6 px-2 items-center flex flex-col">
+                        <CreateTask createTask={createTask} />
+                    </div>
+                    <div className="e w-1/3 py-6 px-2 items-center flex flex-col">
+                        {tasks.map((task) => (
+                            <div key={task.id}>{task.title}</div>
+                        ))}
+                    </div>
+                    <div className="e w-1/3 py-6 px-2 items-center flex flex-col">
+                        {tasks.map((task) => (
+                            <div key={task.id}>{task.title}</div>
+                        ))}
+                    </div>
                 </div>
-                <div className="e w-1/3 border-x border-x-muted py-6 px-2 items-center flex flex-col">
-                    {tasks.map((task) => (
-                        <div key={task.id}>{task.title}</div>
-                    ))}
-                    <CreateTask createTask={createTask} />
-                </div>
-            </div>
+            )}
         </section>
     );
 };

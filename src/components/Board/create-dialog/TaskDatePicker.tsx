@@ -13,9 +13,12 @@ import {
     PopoverTrigger,
 } from '@/components/ui/popover';
 
-export default function TaskDatePicker() {
-    const [date, setDate] = React.useState<Date>();
+interface Props {
+    date: Date | undefined;
+    setDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
+}
 
+const TaskDatePicker: React.FC<Props> = ({ date, setDate }) => {
     return (
         <Popover>
             <PopoverTrigger asChild>
@@ -40,4 +43,6 @@ export default function TaskDatePicker() {
             </PopoverContent>
         </Popover>
     );
-}
+};
+
+export default TaskDatePicker;

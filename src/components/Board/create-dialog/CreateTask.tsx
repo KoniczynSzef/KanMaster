@@ -1,109 +1,85 @@
-import TaskDatePicker from './TaskDatePicker';
 import { Button } from '@/components/ui/button';
 import * as Dialog from '@/components/ui/dialog';
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { TaskSchema, TaskSchemaType } from '@/types/tasks';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Task } from '@prisma/client';
 import React, { FC } from 'react';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+import TaskForm from './TaskForm';
+import MembersAndDeadline from './MembersAndDeadline';
 
 interface Props {
     createTask: () => void;
 }
 
-const schema = z.object({
-    title: z.string().min(3).max(55),
-    description: z.string().min(3).max(255).optional(),
-    deadline: z.date().default(() => new Date(new Date().getTime() + 86400000)),
-});
+const Task: Task = {
+    id: 'placeholder',
+    projectId: 'placeholder',
+
+    title: 'placeholder',
+    description: 'placeholder',
+
+    deadline: new Date(),
+    createdAt: new Date(),
+
+    assignedPeopleEmails: [],
+    category: 'todo',
+    isCompleted: false,
+};
 
 const CreateTask: FC<Props> = () => {
+    const [deadline, setDeadline] = React.useState<Date>();
+    const [openDialog, setOpenDialog] = React.useState(false);
     const [step, setStep] = React.useState(1);
 
-    const form = useForm<z.infer<typeof schema>>({
+    const form = useForm<TaskSchemaType>({
         mode: 'all',
-        resolver: zodResolver(schema),
+        resolver: zodResolver(TaskSchema),
     });
 
-    const handleNextStep = () => {
-        setStep((prev) => prev + 1);
+    const handleSubmit = (data: TaskSchemaType) => {
+        if (step === 1) {
+            Task.title = data.title;
+            Task.description = data.description || null;
+            Task.category = 'todo';
 
-        if (step === 3) {
-            console.log(form.getValues());
+            setStep((prev) => prev + 1);
+            return;
+        } else if (step === 2) {
+            // Task.assignedPeopleEmails = data.assignedPeopleEmails;
+            Task.deadline =
+                deadline ??
+                new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 7);
+            setStep((prev) => prev + 1);
+            return;
+        } else if (step === 3) {
+            console.log('submitting');
+            setOpenDialog(false);
+            return;
         }
     };
 
     return (
-        <Dialog.Dialog>
+        <Dialog.Dialog open={openDialog} onOpenChange={setOpenDialog}>
             <Dialog.DialogTrigger asChild>
-                <Button className="ml-auto">Create Task</Button>
+                <Button className="ml-auto">+</Button>
             </Dialog.DialogTrigger>
 
             <Dialog.DialogContent>
                 <Dialog.DialogHeader>
                     <Dialog.DialogTitle>Create Task</Dialog.DialogTitle>
-                    <Dialog.DialogClose />
+                    <Dialog.DialogDescription>
+                        Create a new task for this project. Step {step} of 3.
+                    </Dialog.DialogDescription>
                 </Dialog.DialogHeader>
 
-                <Form {...form}>
-                    <form action="" className="flex flex-col gap-2">
-                        <FormField
-                            control={form.control}
-                            name="title"
-                            render={(field) => (
-                                <FormItem>
-                                    <FormLabel>Task Title</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="Task title..."
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                {step === 1 ? (
+                    <TaskForm form={form} handleSubmit={handleSubmit} />
+                ) : null}
 
-                        <FormField
-                            control={form.control}
-                            name="description"
-                            render={(field) => (
-                                <FormItem>
-                                    <FormLabel>Task Description</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="Task description..."
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        <div className="flex flex-col mt-4">
-                            <Label htmlFor="Deadline">Set Deadline</Label>
-                            <TaskDatePicker />
-                        </div>
-
-                        <Button
-                            className="self-end"
-                            type="button"
-                            onClick={handleNextStep}
-                        >
-                            Continue
-                        </Button>
-                    </form>
-                </Form>
+                {step === 2 ? (
+                    <MembersAndDeadline date={deadline} setDate={setDeadline} />
+                ) : null}
             </Dialog.DialogContent>
         </Dialog.Dialog>
     );
