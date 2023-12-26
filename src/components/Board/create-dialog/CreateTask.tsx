@@ -6,7 +6,7 @@ import { Task } from '@prisma/client';
 import React, { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import TaskForm from './TaskForm';
-import MembersAndDeadline from './MembersAndDeadline';
+import MembersAndDeadline from './second-step-components/MembersAndDeadline';
 
 interface Props {
     createTask: () => void;

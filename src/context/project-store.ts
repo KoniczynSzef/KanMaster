@@ -10,6 +10,9 @@ type ProjectStore = {
     projects: projectType[] | Project[];
     setProjects: (projects: projectType[] | Project[]) => void;
 
+    setSingleProject: (project: Project) => void;
+    project: Project | undefined;
+
     hasLoaded: boolean;
     setHasLoaded: (value: boolean) => void;
     badges: ProjectBadge[];
@@ -38,6 +41,13 @@ export const useProjectStore = create<ProjectStore>((set) => ({
             projects,
         }));
     },
+    setSingleProject(project) {
+        set(() => ({
+            project,
+        }));
+    },
+    project: undefined,
+
     setHasLoaded(value) {
         set(() => ({
             hasLoaded: value,

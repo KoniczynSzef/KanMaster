@@ -4,8 +4,8 @@ import Delete from './Delete';
 import { getServerSession } from 'next-auth';
 import { options } from '@/auth/options';
 import { getUser } from '@/controllers/user-functions';
-import KanbanBoard from '@/components/Board/KanbanBoard';
 import { getTasks } from '@/controllers/task-actions';
+import ClientContainer from './ClientContainer';
 
 interface Props {
     params: {
@@ -33,7 +33,7 @@ const Page: FC<Props> = async ({ params }) => {
 
     return (
         <div className="container mx-auto py-24">
-            <KanbanBoard project={project} user={user} tasks={tasks} />
+            <ClientContainer project={project} tasks={tasks} user={user} />
 
             <Delete project={project} user={user} />
         </div>
