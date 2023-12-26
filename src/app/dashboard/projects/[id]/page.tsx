@@ -4,6 +4,8 @@ import Delete from './Delete';
 import { getServerSession } from 'next-auth';
 import { options } from '@/auth/options';
 import { getUser } from '@/controllers/user-functions';
+import { getTasks } from '@/controllers/task-actions';
+import ClientContainer from './ClientContainer';
 
 interface Props {
     params: {
@@ -13,11 +15,11 @@ interface Props {
 
 const Page: FC<Props> = async ({ params }) => {
     const { id } = params;
-    const project = await getProject(id);
 
     const session = await getServerSession(options);
 
     const user = await getUser(session?.user?.email);
+    const project = await getProject(id);
 
     if (!project) {
         return <h3 className="font-bold text-2xl">Project not found!</h3>;
@@ -27,11 +29,11 @@ const Page: FC<Props> = async ({ params }) => {
         return <h3 className="font-bold text-2xl">User not found!</h3>;
     }
 
+    const tasks = await getTasks(project.id);
+
     return (
-        <div className="container mx-auto py-24 flex justify-between gap-10">
-            <pre className="border border-muted rounded p-4">
-                {JSON.stringify(project, null, 2)}
-            </pre>
+        <div className="container mx-auto py-24">
+            <ClientContainer project={project} tasks={tasks} user={user} />
 
             <Delete project={project} user={user} />
         </div>

@@ -23,7 +23,7 @@ const Notifications: FC<Props> = ({ notifications }) => {
     const { setNotifications, notifications: storedNotifications } =
         useNotificationStore();
 
-    const { isLoading } = useQuery({
+    useQuery({
         queryKey: ['notifications'],
         queryFn: () => {
             setNotifications(notifications);
@@ -35,7 +35,7 @@ const Notifications: FC<Props> = ({ notifications }) => {
             <DropdownMenuTrigger asChild>
                 <Button className="bg-transparent rounded-full px-2 transition duration-300">
                     <div className="relative">
-                        <BellRing className="text-foreground" />
+                        <BellRing className="text-black md:text-white dark:text-white" />
                         <span className="sr-only">
                             Notifications remaining: {notifications.length}
                         </span>
@@ -50,7 +50,6 @@ const Notifications: FC<Props> = ({ notifications }) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent>
                 <DropdownMenuLabel>Notifications</DropdownMenuLabel>
-                {isLoading && <p>Loading...</p>}
 
                 {storedNotifications.length > 0 &&
                     storedNotifications.map((notification) => (
