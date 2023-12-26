@@ -6,13 +6,27 @@ import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 
 import { AnimatePresence, motion } from 'framer-motion';
+import MembersAndDeadline from './second-step-components/MembersAndDeadline';
 
 interface Props {
     form: UseFormReturn<TaskSchemaType>;
     handleSubmit: (data: TaskSchemaType) => void;
+    step: number;
+    deadline: Date | undefined;
+    setDeadline: React.Dispatch<React.SetStateAction<Date | undefined>>;
+    assignedUsers: string[];
+    setAssignedUsers: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-const TaskForm: FC<Props> = ({ form, handleSubmit }) => {
+const TaskForm: FC<Props> = ({
+    form,
+    handleSubmit,
+    step,
+    deadline,
+    setDeadline,
+    setAssignedUsers,
+    assignedUsers,
+}) => {
     return (
         <AnimatePresence>
             <Form {...form}>
@@ -24,8 +38,21 @@ const TaskForm: FC<Props> = ({ form, handleSubmit }) => {
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.2 }}
                 >
-                    <TaskFormField form={form} prop="title" />
-                    <TaskFormField form={form} prop="description" />
+                    {step === 1 ? (
+                        <>
+                            <TaskFormField form={form} prop="title" />
+                            <TaskFormField form={form} prop="description" />
+                        </>
+                    ) : null}
+
+                    {step === 2 ? (
+                        <MembersAndDeadline
+                            date={deadline}
+                            setDate={setDeadline}
+                            assignedUsers={assignedUsers}
+                            setAssignedUsers={setAssignedUsers}
+                        />
+                    ) : null}
 
                     <Button className="self-end">Continue</Button>
                 </motion.form>

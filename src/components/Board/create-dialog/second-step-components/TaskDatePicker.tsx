@@ -19,6 +19,11 @@ interface Props {
 }
 
 const TaskDatePicker: React.FC<Props> = ({ date, setDate }) => {
+    React.useEffect(() => {
+        if (!date)
+            setDate(new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 7)); // set default date to 7 days from now
+    }, []);
+
     return (
         <Popover>
             <PopoverTrigger asChild>

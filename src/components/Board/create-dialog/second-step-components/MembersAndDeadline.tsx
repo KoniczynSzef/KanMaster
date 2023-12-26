@@ -6,16 +6,17 @@ import { useForm } from 'react-hook-form';
 import { TaskSecondStepSchema, TaskSecondStepSchemaType } from '@/types/tasks';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useProjectStore } from '@/context/project-store';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import UserCard from './UserCard';
 
 interface Props {
     date: Date | undefined;
     setDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
+    assignedUsers: string[];
+    setAssignedUsers: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 const MembersAndDeadline: FC<Props> = (props) => {
-    const [assignedUsers, setAssignedUsers] = React.useState<string[]>([]); // [email, email, email
     const { project } = useProjectStore();
 
     const form = useForm<TaskSecondStepSchemaType>({
@@ -32,19 +33,20 @@ const MembersAndDeadline: FC<Props> = (props) => {
                     <UserCard
                         yourself
                         index={0}
-                        assignedUsers={assignedUsers}
-                        setAssignedUsers={setAssignedUsers}
+                        assignedUsers={props.assignedUsers}
+                        setAssignedUsers={props.setAssignedUsers}
                     />
                 ) : (
-                    <ScrollArea className="grid gap-2">
+                    <ScrollArea className="h-72 grid gap-2 grid-cols-2 border border-muted p-4 rounded">
+                        <ScrollBar orientation="vertical" />
                         {project?.memberEmails.map((email, i) => (
                             <UserCard
                                 key={i}
                                 yourself={false}
                                 email={email}
                                 index={i}
-                                assignedUsers={assignedUsers}
-                                setAssignedUsers={setAssignedUsers}
+                                assignedUsers={props.assignedUsers}
+                                setAssignedUsers={props.setAssignedUsers}
                             />
                         ))}
                     </ScrollArea>
