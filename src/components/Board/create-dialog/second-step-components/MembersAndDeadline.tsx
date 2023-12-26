@@ -15,6 +15,7 @@ interface Props {
 }
 
 const MembersAndDeadline: FC<Props> = (props) => {
+    const [assignedUsers, setAssignedUsers] = React.useState<string[]>([]); // [email, email, email
     const { project } = useProjectStore();
 
     const form = useForm<TaskSecondStepSchemaType>({
@@ -28,11 +29,23 @@ const MembersAndDeadline: FC<Props> = (props) => {
         <Form {...form}>
             <form className="flex flex-col gap-8">
                 {project?.memberEmails.length === 0 ? (
-                    <UserCard yourself />
+                    <UserCard
+                        yourself
+                        index={0}
+                        assignedUsers={assignedUsers}
+                        setAssignedUsers={setAssignedUsers}
+                    />
                 ) : (
-                    <ScrollArea className="flex flex-col gap-2">
+                    <ScrollArea className="grid gap-2">
                         {project?.memberEmails.map((email, i) => (
-                            <UserCard key={i} yourself={false} email={email} />
+                            <UserCard
+                                key={i}
+                                yourself={false}
+                                email={email}
+                                index={i}
+                                assignedUsers={assignedUsers}
+                                setAssignedUsers={setAssignedUsers}
+                            />
                         ))}
                     </ScrollArea>
                 )}
