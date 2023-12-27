@@ -21,25 +21,32 @@ interface Props {
 }
 
 const KanbanBoard: FC<Props> = ({ tasks, project }) => {
-    const createTask = async () => {};
-
     return (
         <section className="board border border-muted rounded max-w-7xl w-full">
             <BoardHeader columns={columns} />
 
             <div className="wrapper flex items-center">
                 <div className="e w-1/3 py-6 px-2 items-center flex flex-col">
-                    <CreateTask createTask={createTask} project={project} />
+                    {tasks
+                        .filter((task) => task.category === 'todo')
+                        .map((task) => (
+                            <div key={task.id}>{task.title}</div>
+                        ))}
+                    <CreateTask project={project} />
                 </div>
                 <div className="e w-1/3 py-6 px-2 items-center flex flex-col">
-                    {tasks.map((task) => (
-                        <div key={task.id}>{task.title}</div>
-                    ))}
+                    {tasks
+                        .filter((task) => task.category === 'inProgress')
+                        .map((task) => (
+                            <div key={task.id}>{task.title}</div>
+                        ))}
                 </div>
                 <div className="e w-1/3 py-6 px-2 items-center flex flex-col">
-                    {tasks.map((task) => (
-                        <div key={task.id}>{task.title}</div>
-                    ))}
+                    {tasks
+                        .filter((task) => task.category === 'done')
+                        .map((task) => (
+                            <div key={task.id}>{task.title}</div>
+                        ))}
                 </div>
             </div>
         </section>

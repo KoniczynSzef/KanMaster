@@ -7,9 +7,10 @@ import React, { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import TaskForm from './TaskForm';
 import { toast } from 'sonner';
+import { createTask } from '@/controllers/task-actions';
+import { useTaskStore } from '@/context/tasks-store';
 
 interface Props {
-    createTask: () => void;
     project: Project;
 }
 
@@ -32,12 +33,16 @@ const CreateTask: FC<Props> = ({ project }) => {
     const [step, setStep] = React.useState(1);
     const [assignedUsers, setAssignedUsers] = React.useState<string[]>([]); // [email, email, email
 
+    const [submitting, setSubmitting] = React.useState(false);
+
+    const { addTask } = useTaskStore();
+
     const form = useForm<TaskSchemaType>({
         mode: 'all',
         resolver: zodResolver(TaskSchema),
     });
 
-    const handleSubmit = (data: TaskSchemaType) => {
+    const handleSubmit = async (data: TaskSchemaType) => {
         if (step === 1) {
             Task.title = data.title;
             Task.description = data.description || null;
@@ -58,8 +63,16 @@ const CreateTask: FC<Props> = ({ project }) => {
             setStep((prev) => prev + 1);
             return;
         } else if (step === 3) {
+            setSubmitting(true);
             Task.projectId = project.id;
-            console.log('submitting');
+
+            const newTask = await createTask(project.id, Task);
+            addTask(newTask);
+
+            setSubmitting(false);
+
+            toast.success('Task created successfully.');
+
             setOpenDialog(false);
             return;
         }
@@ -99,6 +112,7 @@ const CreateTask: FC<Props> = ({ project }) => {
                     assignedUsers={assignedUsers}
                     setAssignedUsers={setAssignedUsers}
                     Task={Task}
+                    submitting={submitting}
                 />
             </Dialog.DialogContent>
         </Dialog.Dialog>

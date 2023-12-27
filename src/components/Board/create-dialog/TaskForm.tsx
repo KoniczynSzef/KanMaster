@@ -8,6 +8,7 @@ import { Form } from '@/components/ui/form';
 import { AnimatePresence, motion } from 'framer-motion';
 import MembersAndDeadline from './second-step-components/MembersAndDeadline';
 import TaskPreview from './third-step-components/TaskPreview';
+import { Loader2 } from 'lucide-react';
 
 interface Props {
     form: UseFormReturn<TaskSchemaType>;
@@ -18,6 +19,7 @@ interface Props {
     assignedUsers: string[];
     setAssignedUsers: React.Dispatch<React.SetStateAction<string[]>>;
     Task: OmittedTask;
+    submitting: boolean;
 }
 
 const TaskForm: FC<Props> = ({
@@ -29,6 +31,7 @@ const TaskForm: FC<Props> = ({
     setAssignedUsers,
     assignedUsers,
     Task,
+    submitting,
 }) => {
     return (
         <AnimatePresence>
@@ -59,7 +62,15 @@ const TaskForm: FC<Props> = ({
 
                     {step === 3 ? <TaskPreview Task={Task} /> : null}
 
-                    <Button className="self-end">Continue</Button>
+                    <Button className={'self-end'} disabled={submitting}>
+                        {step === 3 && !submitting ? (
+                            'Create task'
+                        ) : step === 3 && !submitting ? (
+                            <Loader2 className="animate-spin" />
+                        ) : (
+                            'Continue'
+                        )}
+                    </Button>
                 </motion.form>
             </Form>
         </AnimatePresence>

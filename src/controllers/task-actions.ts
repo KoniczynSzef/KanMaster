@@ -1,6 +1,7 @@
 'use server';
 
 import { db } from '@/db';
+import { OmittedTask } from '@/types/tasks';
 import { Task } from '@prisma/client';
 
 export async function getTasks(projectId: string) {
@@ -25,7 +26,7 @@ export async function getSingleTask(id: string) {
 
 export async function createTask(
     projectId: string,
-    data: Omit<Task, 'projectId'>
+    data: Omit<OmittedTask, 'projectId'>
 ) {
     const task = await db.task.create({
         data: {

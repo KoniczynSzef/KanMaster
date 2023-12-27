@@ -1,6 +1,7 @@
 import * as Card from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { OmittedTask } from '@/types/tasks';
+import Link from 'next/link';
 import React, { FC, useEffect } from 'react';
 
 interface Props {
@@ -34,16 +35,14 @@ const TaskPreview: FC<Props> = ({ Task }) => {
             <ScrollArea className="h-24 border-t border-t-muted p-4">
                 <div>
                     {Task.assignedPeopleEmails.map((email, i) => (
-                        <a
+                        <Link
                             key={i}
                             role="link"
-                            href={`mailto:${email}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                            href={`/profile/${email}`}
                             className="text-blue-500 hover:underline"
                         >
                             {email}
-                        </a>
+                        </Link>
                     ))}
                 </div>
             </ScrollArea>
