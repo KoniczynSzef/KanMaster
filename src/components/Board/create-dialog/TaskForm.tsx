@@ -1,4 +1,4 @@
-import { TaskSchemaType } from '@/types/tasks';
+import { OmittedTask, TaskSchemaType } from '@/types/tasks';
 import React, { FC } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import TaskFormField from './TaskFormField';
@@ -7,6 +7,7 @@ import { Form } from '@/components/ui/form';
 
 import { AnimatePresence, motion } from 'framer-motion';
 import MembersAndDeadline from './second-step-components/MembersAndDeadline';
+import TaskPreview from './third-step-components/TaskPreview';
 
 interface Props {
     form: UseFormReturn<TaskSchemaType>;
@@ -16,6 +17,7 @@ interface Props {
     setDeadline: React.Dispatch<React.SetStateAction<Date | undefined>>;
     assignedUsers: string[];
     setAssignedUsers: React.Dispatch<React.SetStateAction<string[]>>;
+    Task: OmittedTask;
 }
 
 const TaskForm: FC<Props> = ({
@@ -26,6 +28,7 @@ const TaskForm: FC<Props> = ({
     setDeadline,
     setAssignedUsers,
     assignedUsers,
+    Task,
 }) => {
     return (
         <AnimatePresence>
@@ -53,6 +56,8 @@ const TaskForm: FC<Props> = ({
                             setAssignedUsers={setAssignedUsers}
                         />
                     ) : null}
+
+                    {step === 3 ? <TaskPreview Task={Task} /> : null}
 
                     <Button className="self-end">Continue</Button>
                 </motion.form>

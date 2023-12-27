@@ -20,7 +20,7 @@ interface Props {
     ) => Promise<QueryObserverResult<void, unknown>>;
 }
 
-const KanbanBoard: FC<Props> = ({ tasks }) => {
+const KanbanBoard: FC<Props> = ({ tasks, project }) => {
     const createTask = async () => {};
 
     return (
@@ -29,7 +29,7 @@ const KanbanBoard: FC<Props> = ({ tasks }) => {
 
             <div className="wrapper flex items-center">
                 <div className="e w-1/3 py-6 px-2 items-center flex flex-col">
-                    <CreateTask createTask={createTask} />
+                    <CreateTask createTask={createTask} project={project} />
                 </div>
                 <div className="e w-1/3 py-6 px-2 items-center flex flex-col">
                     {tasks.map((task) => (

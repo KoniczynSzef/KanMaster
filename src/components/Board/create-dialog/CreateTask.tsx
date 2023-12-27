@@ -1,8 +1,8 @@
 import { Button } from '@/components/ui/button';
 import * as Dialog from '@/components/ui/dialog';
-import { TaskSchema, TaskSchemaType } from '@/types/tasks';
+import { OmittedTask, TaskSchema, TaskSchemaType } from '@/types/tasks';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Task } from '@prisma/client';
+import { Project } from '@prisma/client';
 import React, { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import TaskForm from './TaskForm';
@@ -10,24 +10,23 @@ import { toast } from 'sonner';
 
 interface Props {
     createTask: () => void;
+    project: Project;
 }
 
-const Task: Task = {
-    id: 'placeholder',
+const Task: OmittedTask = {
     projectId: 'placeholder',
 
     title: 'placeholder',
     description: 'placeholder',
 
     deadline: new Date(),
-    createdAt: new Date(),
 
     assignedPeopleEmails: [],
     category: 'todo',
     isCompleted: false,
 };
 
-const CreateTask: FC<Props> = () => {
+const CreateTask: FC<Props> = ({ project }) => {
     const [deadline, setDeadline] = React.useState<Date>();
     const [openDialog, setOpenDialog] = React.useState(false);
     const [step, setStep] = React.useState(1);
@@ -59,6 +58,7 @@ const CreateTask: FC<Props> = () => {
             setStep((prev) => prev + 1);
             return;
         } else if (step === 3) {
+            Task.projectId = project.id;
             console.log('submitting');
             setOpenDialog(false);
             return;
@@ -98,6 +98,7 @@ const CreateTask: FC<Props> = () => {
                     setDeadline={setDeadline}
                     assignedUsers={assignedUsers}
                     setAssignedUsers={setAssignedUsers}
+                    Task={Task}
                 />
             </Dialog.DialogContent>
         </Dialog.Dialog>
