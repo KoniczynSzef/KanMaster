@@ -10,6 +10,7 @@ import {
     RefetchQueryFilters,
 } from 'react-query';
 import CreateTask from './create-dialog/CreateTask';
+import TaskComponent from './TaskComponent';
 
 interface Props {
     project: Project;
@@ -30,7 +31,7 @@ const KanbanBoard: FC<Props> = ({ tasks, project }) => {
                     {tasks
                         .filter((task) => task.category === 'todo')
                         .map((task) => (
-                            <div key={task.id}>{task.title}</div>
+                            <TaskComponent key={task.id} task={task} />
                         ))}
                     <CreateTask project={project} />
                 </div>

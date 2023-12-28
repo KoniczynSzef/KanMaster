@@ -9,6 +9,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import MembersAndDeadline from './second-step-components/MembersAndDeadline';
 import TaskPreview from './third-step-components/TaskPreview';
 import { Loader2 } from 'lucide-react';
+import { BadgeColor } from '@/types/badge';
 
 interface Props {
     form: UseFormReturn<TaskSchemaType>;
@@ -20,6 +21,8 @@ interface Props {
     setAssignedUsers: React.Dispatch<React.SetStateAction<string[]>>;
     Task: OmittedTask;
     submitting: boolean;
+
+    setColor: React.Dispatch<React.SetStateAction<BadgeColor>>;
 }
 
 const TaskForm: FC<Props> = ({
@@ -32,6 +35,7 @@ const TaskForm: FC<Props> = ({
     assignedUsers,
     Task,
     submitting,
+    setColor,
 }) => {
     return (
         <AnimatePresence>
@@ -60,7 +64,9 @@ const TaskForm: FC<Props> = ({
                         />
                     ) : null}
 
-                    {step === 3 ? <TaskPreview Task={Task} /> : null}
+                    {step === 3 ? (
+                        <TaskPreview Task={Task} setColor={setColor} />
+                    ) : null}
 
                     <Button className={'self-end'} disabled={submitting}>
                         {step === 3 && !submitting ? (

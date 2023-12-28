@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import * as Dialog from '@/components/ui/dialog';
 import { OmittedTask, TaskSchema, TaskSchemaType } from '@/types/tasks';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Project } from '@prisma/client';
+import { BadgeColors, Project } from '@prisma/client';
 import React, { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import TaskForm from './TaskForm';
@@ -21,6 +21,7 @@ const Task: OmittedTask = {
     description: 'placeholder',
 
     deadline: new Date(),
+    markColor: 'blue',
 
     assignedPeopleEmails: [],
     category: 'todo',
@@ -32,6 +33,8 @@ const CreateTask: FC<Props> = ({ project }) => {
     const [openDialog, setOpenDialog] = React.useState(false);
     const [step, setStep] = React.useState(1);
     const [assignedUsers, setAssignedUsers] = React.useState<string[]>([]); // [email, email, email
+
+    const [color, setColor] = React.useState<BadgeColors>('blue');
 
     const [submitting, setSubmitting] = React.useState(false);
 
@@ -65,6 +68,7 @@ const CreateTask: FC<Props> = ({ project }) => {
         } else if (step === 3) {
             setSubmitting(true);
             Task.projectId = project.id;
+            Task.markColor = color;
 
             const newTask = await createTask(project.id, Task);
             addTask(newTask);
@@ -99,7 +103,7 @@ const CreateTask: FC<Props> = ({ project }) => {
                             : step === 2
                             ? 'Select people you want to assign task to.'
                             : 'Create task'}{' '}
-                        Step <span className="text-white">{step}</span> of 3.
+                        Step <span className="tPext-white">{step}</span> of 3.
                     </Dialog.DialogDescription>
                 </Dialog.DialogHeader>
 
@@ -113,6 +117,7 @@ const CreateTask: FC<Props> = ({ project }) => {
                     setAssignedUsers={setAssignedUsers}
                     Task={Task}
                     submitting={submitting}
+                    setColor={setColor}
                 />
             </Dialog.DialogContent>
         </Dialog.Dialog>
