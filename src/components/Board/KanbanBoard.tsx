@@ -22,6 +22,8 @@ interface Props {
 }
 
 const KanbanBoard: FC<Props> = ({ tasks, project }) => {
+    const [selectedTaskId, setSelectedTaskId] = React.useState<string>('');
+
     return (
         <section className="board border border-muted rounded max-w-7xl w-full">
             <BoardHeader columns={columns} />
@@ -31,7 +33,11 @@ const KanbanBoard: FC<Props> = ({ tasks, project }) => {
                     {tasks
                         .filter((task) => task.category === 'todo')
                         .map((task) => (
-                            <TaskComponent key={task.id} task={task} />
+                            <TaskComponent
+                                key={task.id}
+                                task={task}
+                                setSelectedTaskId={setSelectedTaskId}
+                            />
                         ))}
                     <CreateTask project={project} />
                 </div>

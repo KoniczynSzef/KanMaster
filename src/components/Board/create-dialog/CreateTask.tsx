@@ -45,6 +45,13 @@ const CreateTask: FC<Props> = ({ project }) => {
         resolver: zodResolver(TaskSchema),
     });
 
+    const resetState = () => {
+        setStep(1);
+        setDeadline(undefined);
+        setAssignedUsers([]);
+        setColor('blue');
+    };
+
     const handleSubmit = async (data: TaskSchemaType) => {
         if (step === 1) {
             Task.title = data.title;
@@ -73,11 +80,11 @@ const CreateTask: FC<Props> = ({ project }) => {
             const newTask = await createTask(project.id, Task);
             addTask(newTask);
 
-            setSubmitting(false);
-
             toast.success('Task created successfully.');
 
             setOpenDialog(false);
+            setSubmitting(false);
+            resetState();
             return;
         }
     };
