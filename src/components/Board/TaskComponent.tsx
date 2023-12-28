@@ -6,10 +6,14 @@ import { getBorder } from '@/helpers/badge-helpers';
 
 interface Props {
     task: Task;
-    setSelectedTaskId: React.Dispatch<React.SetStateAction<string>>;
+    handleDragStart: (
+        e: React.DragEvent<HTMLDivElement>,
+        taskId: string
+    ) => void;
+    handleOnDrop: (e: React.DragEvent<HTMLDivElement>) => void;
 }
 
-const TaskComponent: FC<Props> = ({ task, setSelectedTaskId }) => {
+const TaskComponent: FC<Props> = ({ task, handleDragStart, handleOnDrop }) => {
     const [open, setOpen] = React.useState(false);
     console.log(task);
 
@@ -24,8 +28,7 @@ const TaskComponent: FC<Props> = ({ task, setSelectedTaskId }) => {
                     className={`${getBorder(task.markColor)} border`}
                     onClick={() => setOpen(true)}
                     aria-label="Task that can be either dragged or selected"
-                    onDrag={() => setSelectedTaskId(task.id)}
-                    onDrop={() => setSelectedTaskId('')}
+                    onDragStart={(e) => handleDragStart(e, task.id)}
                 >
                     <Card.CardHeader>
                         <Card.CardTitle>{task.title}</Card.CardTitle>
