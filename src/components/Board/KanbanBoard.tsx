@@ -1,7 +1,7 @@
 'use client';
 
 import { columns } from '@/assets/columns';
-import { Project, Task, User } from '@prisma/client';
+import { Project, Task, TaskCategories, User } from '@prisma/client';
 import React, { FC } from 'react';
 import BoardHeader from './header/BoardHeader';
 import {
@@ -9,8 +9,8 @@ import {
     RefetchOptions,
     RefetchQueryFilters,
 } from 'react-query';
-import CreateTask from './create-dialog/CreateTask';
-import TaskComponent from './TaskComponent';
+import { useTaskStore } from '@/context/tasks-store';
+import TaskSection from './tasks/TaskSection';
 
 interface Props {
     project: Project;
@@ -23,22 +23,35 @@ interface Props {
 
 const KanbanBoard: FC<Props> = ({ tasks, project }) => {
     const [selectedTaskId, setSelectedTaskId] = React.useState<string>('');
+    const { changeTaskCategory } = useTaskStore();
+
+    const tasksTodo = tasks.filter((task) => task.category === 'todo');
+    const tasksInProgress = tasks.filter(
+        (task) => task.category === 'inProgress'
+    );
+    const tasksDone = tasks.filter((task) => task.category === 'done');
 
     const handleDragStart = (
         e: React.DragEvent<HTMLDivElement>,
         taskId: string
     ) => {
         // setSelectedTaskId(taskId);
-        console.log(taskId);
 
         e.dataTransfer.setData('widgetType', taskId);
     };
 
-    const handleOnDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    const handleOnDrop = (
+        e: React.DragEvent<HTMLElement>,
+        category: TaskCategories
+    ) => {
         e.preventDefault();
 
         const taskId = e.dataTransfer.getData('widgetType');
-        console.log(taskId);
+        const task = tasks.find((task) => task.id === taskId);
+
+        if (!task) return;
+
+        changeTaskCategory(taskId, category);
     };
 
     const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
@@ -50,37 +63,33 @@ const KanbanBoard: FC<Props> = ({ tasks, project }) => {
             <BoardHeader columns={columns} />
 
             <div className="wrapper flex items-center">
-                <div className="e w-1/3 py-6 px-2 items-center flex flex-col">
-                    {tasks
-                        .filter((task) => task.category === 'todo')
-                        .map((task) => (
-                            <TaskComponent
-                                key={task.id}
-                                task={task}
-                                handleDragStart={handleDragStart}
-                                handleOnDrop={handleOnDrop}
-                            />
-                        ))}
-                    <CreateTask project={project} />
-                </div>
-                <div
-                    className="e w-1/3 py-6 px-2 items-center flex flex-col"
-                    onDrop={handleOnDrop}
-                    onDragOver={handleDragOver}
-                >
-                    {tasks
-                        .filter((task) => task.category === 'inProgress')
-                        .map((task) => (
-                            <div key={task.id}>{task.title}</div>
-                        ))}
-                </div>
-                <div className="e w-1/3 py-6 px-2 items-center flex flex-col">
-                    {tasks
-                        .filter((task) => task.category === 'done')
-                        .map((task) => (
-                            <div key={task.id}>{task.title}</div>
-                        ))}
-                </div>
+                <TaskSection
+                    areTaskTodo
+                    project={project}
+                    array={tasksTodo}
+                    category="todo"
+                    handleDragOver={handleDragOver}
+                    handleDragStart={handleDragStart}
+                    handleOnDrop={handleOnDrop}
+                />
+
+                <TaskSection
+                    areTaskTodo={false}
+                    array={tasksInProgress}
+                    category="inProgress"
+                    handleDragOver={handleDragOver}
+                    handleDragStart={handleDragStart}
+                    handleOnDrop={handleOnDrop}
+                />
+
+                <TaskSection
+                    areTaskTodo={false}
+                    array={tasksDone}
+                    category="done"
+                    handleDragOver={handleDragOver}
+                    handleDragStart={handleDragStart}
+                    handleOnDrop={handleOnDrop}
+                />
             </div>
         </section>
     );

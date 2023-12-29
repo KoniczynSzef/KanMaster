@@ -1,7 +1,7 @@
 import { Task } from '@prisma/client';
 import React, { FC } from 'react';
-import * as Dialog from '../ui/dialog';
-import * as Card from '../ui/card';
+import * as Dialog from '../../ui/dialog';
+import * as Card from '../../ui/card';
 import { getBorder } from '@/helpers/badge-helpers';
 
 interface Props {
