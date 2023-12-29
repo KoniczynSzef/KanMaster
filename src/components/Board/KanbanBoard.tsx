@@ -50,15 +50,13 @@ const KanbanBoard: FC<Props> = ({ project, user, refetch }) => {
                 project.teamLeaderId === user.id ||
                 task?.assignedPeopleEmails.includes(user.email)
             ) {
-                console.log("I'm here");
-
                 changeTaskCategory(taskId, category);
                 setTasks(getTasks());
 
                 await changeTaskCategoryAsync(taskId, category);
                 await refetch();
 
-                toast.success('Task moved successfully');
+                return toast.success('Task moved successfully');
             }
 
             toast.error('You are not allowed to move this task');
@@ -84,6 +82,7 @@ const KanbanBoard: FC<Props> = ({ project, user, refetch }) => {
                     handleDragOver={handleDragOver}
                     handleDragStart={handleDragStart}
                     handleOnDrop={handleOnDrop}
+                    refetch={refetch}
                 />
 
                 <TaskSection

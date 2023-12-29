@@ -6,7 +6,7 @@ import './globals.css';
 import { ThemeProvider } from '@/providers/ThemeProvider';
 import Navbar from '@/components/Navbar/Navbar';
 import SessionProvider from '@/providers/SessionProvider';
-import { Toaster } from 'sonner';
+import { Toaster } from '@/components/ui/sonner';
 
 import NextTopLoader from 'nextjs-toploader';
 import QueryProvider from '@/providers/QueryProvider';

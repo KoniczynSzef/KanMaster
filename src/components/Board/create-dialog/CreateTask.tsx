@@ -10,9 +10,17 @@ import { toast } from 'sonner';
 import { createTask } from '@/controllers/task-actions';
 import { useTaskStore } from '@/context/tasks-store';
 import { Plus } from 'lucide-react';
+import {
+    QueryObserverResult,
+    RefetchOptions,
+    RefetchQueryFilters,
+} from 'react-query';
 
 interface Props {
     project: Project;
+    refetch: <TPageData>(
+        options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
+    ) => Promise<QueryObserverResult<void, unknown>>;
 }
 
 const Task: OmittedTask = {
@@ -29,7 +37,7 @@ const Task: OmittedTask = {
     isCompleted: false,
 };
 
-const CreateTask: FC<Props> = ({ project }) => {
+const CreateTask: FC<Props> = ({ project, refetch }) => {
     const [deadline, setDeadline] = React.useState<Date>();
     const [openDialog, setOpenDialog] = React.useState(false);
     const [step, setStep] = React.useState(1);
@@ -82,6 +90,7 @@ const CreateTask: FC<Props> = ({ project }) => {
             addTask(newTask);
 
             toast.success('Task created successfully.');
+            await refetch();
 
             setOpenDialog(false);
             setSubmitting(false);

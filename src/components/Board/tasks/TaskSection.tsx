@@ -2,6 +2,11 @@ import { Project, Task, TaskCategories } from '@prisma/client';
 import React, { FC } from 'react';
 import TaskComponent from './TaskComponent';
 import CreateTask from '../create-dialog/CreateTask';
+import {
+    QueryObserverResult,
+    RefetchOptions,
+    RefetchQueryFilters,
+} from 'react-query';
 
 type Props = {
     array: Task[];
@@ -21,6 +26,11 @@ type Props = {
     | {
           areTaskTodo: true;
           project: Project;
+          refetch: <TPageData>(
+              options?:
+                  | (RefetchOptions & RefetchQueryFilters<TPageData>)
+                  | undefined
+          ) => Promise<QueryObserverResult<void, unknown>>;
       }
     | {
           areTaskTodo: false;
@@ -41,7 +51,9 @@ const TaskSection: FC<Props> = (props) => {
                     handleDragStart={props.handleDragStart}
                 />
             ))}
-            {props.areTaskTodo ? <CreateTask project={props.project} /> : null}
+            {props.areTaskTodo ? (
+                <CreateTask project={props.project} refetch={props.refetch} />
+            ) : null}
         </section>
     );
 };
