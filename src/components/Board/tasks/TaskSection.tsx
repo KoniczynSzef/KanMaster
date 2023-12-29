@@ -30,7 +30,7 @@ type Props = {
 const TaskSection: FC<Props> = (props) => {
     return (
         <section
-            className="py-6 px-2 h-full"
+            className="py-4 px-2 h-full border-x border-x-secondary flex flex-col gap-2"
             onDrop={(e) => props.handleOnDrop(e, props.category)}
             onDragOver={props.handleDragOver}
         >

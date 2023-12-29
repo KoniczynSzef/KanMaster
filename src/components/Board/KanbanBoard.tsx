@@ -23,14 +23,8 @@ interface Props {
     ) => Promise<QueryObserverResult<void, unknown>>;
 }
 
-const KanbanBoard: FC<Props> = ({ tasks, project, user, refetch }) => {
-    const { changeTaskCategory } = useTaskStore();
-
-    const tasksTodo = tasks.filter((task) => task.category === 'todo');
-    const tasksInProgress = tasks.filter(
-        (task) => task.category === 'inProgress'
-    );
-    const tasksDone = tasks.filter((task) => task.category === 'done');
+const KanbanBoard: FC<Props> = ({ project, user, refetch }) => {
+    const { changeTaskCategory, getTasks, setTasks, tasks } = useTaskStore();
 
     const handleDragStart = (
         e: React.DragEvent<HTMLDivElement>,
@@ -44,26 +38,33 @@ const KanbanBoard: FC<Props> = ({ tasks, project, user, refetch }) => {
         category: TaskCategories
     ) => {
         e.preventDefault();
+        try {
+            const taskId = e.dataTransfer.getData('widgetType');
+            const task = tasks.find((task) => task.id === taskId);
 
-        const taskId = e.dataTransfer.getData('widgetType');
-        const task = tasks.find((task) => task.id === taskId);
-        toast.success('Task moved successfully');
+            if (!task) return toast.error('Task not found');
 
-        if (!task) return toast.error('Task not found');
+            if (!user.email) return toast.error('User email not found');
 
-        if (!user.email) return toast.error('User email not found');
+            if (
+                project.teamLeaderId === user.id ||
+                task?.assignedPeopleEmails.includes(user.email)
+            ) {
+                console.log("I'm here");
 
-        if (
-            project.teamLeaderId === user.id ||
-            task?.assignedPeopleEmails.includes(user.email)
-        ) {
-            changeTaskCategory(taskId, category);
-            await changeTaskCategoryAsync(taskId, category);
+                changeTaskCategory(taskId, category);
+                setTasks(getTasks());
 
-            await refetch();
+                await changeTaskCategoryAsync(taskId, category);
+                await refetch();
+
+                toast.success('Task moved successfully');
+            }
+
+            toast.error('You are not allowed to move this task');
+        } catch (error) {
+            toast.error('Something went wrong');
         }
-
-        toast.error('You are not allowed to move this task');
     };
 
     const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
@@ -74,11 +75,11 @@ const KanbanBoard: FC<Props> = ({ tasks, project, user, refetch }) => {
         <section className="board border border-muted rounded max-w-7xl w-full">
             <BoardHeader columns={columns} />
 
-            <div className="wrapper grid grid-cols-3 w-full gap-4">
+            <div className="wrapper grid grid-cols-3 w-full">
                 <TaskSection
                     areTaskTodo
                     project={project}
-                    array={tasksTodo}
+                    array={tasks.filter((task) => task.category === 'todo')}
                     category="todo"
                     handleDragOver={handleDragOver}
                     handleDragStart={handleDragStart}
@@ -87,7 +88,9 @@ const KanbanBoard: FC<Props> = ({ tasks, project, user, refetch }) => {
 
                 <TaskSection
                     areTaskTodo={false}
-                    array={tasksInProgress}
+                    array={tasks.filter(
+                        (task) => task.category === 'inProgress'
+                    )}
                     category="inProgress"
                     handleDragOver={handleDragOver}
                     handleDragStart={handleDragStart}
@@ -96,7 +99,7 @@ const KanbanBoard: FC<Props> = ({ tasks, project, user, refetch }) => {
 
                 <TaskSection
                     areTaskTodo={false}
-                    array={tasksDone}
+                    array={tasks.filter((task) => task.category === 'done')}
                     category="done"
                     handleDragOver={handleDragOver}
                     handleDragStart={handleDragStart}

@@ -93,7 +93,7 @@ const CreateTask: FC<Props> = ({ project }) => {
     return (
         <Dialog.Dialog open={openDialog} onOpenChange={setOpenDialog}>
             <Dialog.DialogTrigger asChild>
-                <Button className="mt-2 ml-[22.5rem]" size={'icon'}>
+                <Button className="mt-4 ml-[23rem]" size={'icon'}>
                     <Plus />
                 </Button>
             </Dialog.DialogTrigger>
