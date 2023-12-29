@@ -36,6 +36,7 @@ const KanbanBoard: FC<Props> = ({ tasks, project }) => {
 
     const handleOnDrop = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
+
         const taskId = e.dataTransfer.getData('widgetType');
         console.log(taskId);
     };

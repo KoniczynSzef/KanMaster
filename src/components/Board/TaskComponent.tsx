@@ -10,12 +10,10 @@ interface Props {
         e: React.DragEvent<HTMLDivElement>,
         taskId: string
     ) => void;
-    handleOnDrop: (e: React.DragEvent<HTMLDivElement>) => void;
 }
 
-const TaskComponent: FC<Props> = ({ task, handleDragStart, handleOnDrop }) => {
+const TaskComponent: FC<Props> = ({ task, handleDragStart }) => {
     const [open, setOpen] = React.useState(false);
-    console.log(task);
 
     return (
         <Dialog.Dialog open={open} onOpenChange={setOpen}>

@@ -32,10 +32,6 @@ const UserCard: FC<Props> = (props) => {
     const [clicked, setClicked] = React.useState(false);
     const { user: storedUser } = useUserStore();
 
-    React.useEffect(() => {
-        console.log(props.assignedUsers);
-    }, [props.assignedUsers]);
-
     const { isLoading, data: user } = useQuery({
         queryKey: ['user'],
         queryFn: async () => {
@@ -73,7 +69,6 @@ const UserCard: FC<Props> = (props) => {
         }
 
         setClicked((prev) => !prev);
-        console.log(props.assignedUsers);
     };
 
     return (
