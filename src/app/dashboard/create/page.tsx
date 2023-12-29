@@ -15,6 +15,11 @@ const page: FC<Props> = async () => {
     }
 
     const user = await getUser(session.user?.email);
+
+    if (!user) {
+        return redirect('/sign-in');
+    }
+
     return <FormWrapper user={user} />;
 };
 
