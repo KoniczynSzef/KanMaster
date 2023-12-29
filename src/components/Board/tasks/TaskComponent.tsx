@@ -23,7 +23,9 @@ const TaskComponent: FC<Props> = ({ task, handleDragStart }) => {
                 aria-label="Task card component that triggers dialog"
             >
                 <Card.Card
-                    className={`${getBorder(task.markColor)} border`}
+                    className={`${getBorder(
+                        task.markColor
+                    )} border cursor-pointer hover:bg-secondary transition-colors duration-300 ease-in-out`}
                     onClick={() => setOpen(true)}
                     aria-label="Task that can be either dragged or selected"
                     onDragStart={(e) => handleDragStart(e, task.id)}

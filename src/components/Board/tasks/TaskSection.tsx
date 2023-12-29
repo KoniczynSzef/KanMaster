@@ -30,7 +30,7 @@ type Props = {
 const TaskSection: FC<Props> = (props) => {
     return (
         <section
-            className="e w-1/3 py-6 px-2 items-center flex flex-col"
+            className="py-6 px-2 h-full"
             onDrop={(e) => props.handleOnDrop(e, props.category)}
             onDragOver={props.handleDragOver}
         >
@@ -41,7 +41,6 @@ const TaskSection: FC<Props> = (props) => {
                     handleDragStart={props.handleDragStart}
                 />
             ))}
-
             {props.areTaskTodo ? <CreateTask project={props.project} /> : null}
         </section>
     );

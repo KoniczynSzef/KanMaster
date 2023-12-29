@@ -11,6 +11,8 @@ import {
 } from 'react-query';
 import { useTaskStore } from '@/context/tasks-store';
 import TaskSection from './tasks/TaskSection';
+import { toast } from 'sonner';
+import { changeTaskCategoryAsync } from '@/controllers/task-actions';
 
 interface Props {
     project: Project;
@@ -21,8 +23,7 @@ interface Props {
     ) => Promise<QueryObserverResult<void, unknown>>;
 }
 
-const KanbanBoard: FC<Props> = ({ tasks, project }) => {
-    const [selectedTaskId, setSelectedTaskId] = React.useState<string>('');
+const KanbanBoard: FC<Props> = ({ tasks, project, user, refetch }) => {
     const { changeTaskCategory } = useTaskStore();
 
     const tasksTodo = tasks.filter((task) => task.category === 'todo');
@@ -35,12 +36,10 @@ const KanbanBoard: FC<Props> = ({ tasks, project }) => {
         e: React.DragEvent<HTMLDivElement>,
         taskId: string
     ) => {
-        // setSelectedTaskId(taskId);
-
         e.dataTransfer.setData('widgetType', taskId);
     };
 
-    const handleOnDrop = (
+    const handleOnDrop = async (
         e: React.DragEvent<HTMLElement>,
         category: TaskCategories
     ) => {
@@ -48,10 +47,23 @@ const KanbanBoard: FC<Props> = ({ tasks, project }) => {
 
         const taskId = e.dataTransfer.getData('widgetType');
         const task = tasks.find((task) => task.id === taskId);
+        toast.success('Task moved successfully');
 
-        if (!task) return;
+        if (!task) return toast.error('Task not found');
 
-        changeTaskCategory(taskId, category);
+        if (!user.email) return toast.error('User email not found');
+
+        if (
+            project.teamLeaderId === user.id ||
+            task?.assignedPeopleEmails.includes(user.email)
+        ) {
+            changeTaskCategory(taskId, category);
+            await changeTaskCategoryAsync(taskId, category);
+
+            await refetch();
+        }
+
+        toast.error('You are not allowed to move this task');
     };
 
     const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
@@ -62,7 +74,7 @@ const KanbanBoard: FC<Props> = ({ tasks, project }) => {
         <section className="board border border-muted rounded max-w-7xl w-full">
             <BoardHeader columns={columns} />
 
-            <div className="wrapper flex items-center">
+            <div className="wrapper grid grid-cols-3 w-full gap-4">
                 <TaskSection
                     areTaskTodo
                     project={project}

@@ -9,6 +9,7 @@ import TaskForm from './TaskForm';
 import { toast } from 'sonner';
 import { createTask } from '@/controllers/task-actions';
 import { useTaskStore } from '@/context/tasks-store';
+import { Plus } from 'lucide-react';
 
 interface Props {
     project: Project;
@@ -92,7 +93,9 @@ const CreateTask: FC<Props> = ({ project }) => {
     return (
         <Dialog.Dialog open={openDialog} onOpenChange={setOpenDialog}>
             <Dialog.DialogTrigger asChild>
-                <Button className="ml-auto">+</Button>
+                <Button className="mt-2 ml-[22.5rem]" size={'icon'}>
+                    <Plus />
+                </Button>
             </Dialog.DialogTrigger>
 
             <Dialog.DialogContent>
