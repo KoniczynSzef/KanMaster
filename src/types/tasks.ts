@@ -1,4 +1,4 @@
-import { TaskCategories } from '@prisma/client';
+import { Task, TaskCategories } from '@prisma/client';
 import { z } from 'zod';
 
 export const TaskCategoriesSchema = z.union([
@@ -28,3 +28,5 @@ export const TaskSecondStepSchema = z.object({
 });
 
 export type TaskSecondStepSchemaType = z.infer<typeof TaskSecondStepSchema>;
+
+export type OmittedTask = Omit<Task, 'id' | 'createdAt'>;

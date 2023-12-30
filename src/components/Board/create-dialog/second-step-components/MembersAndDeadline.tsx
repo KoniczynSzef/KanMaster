@@ -24,8 +24,6 @@ const MembersAndDeadline: FC<Props> = (props) => {
         resolver: zodResolver(TaskSecondStepSchema),
     });
 
-    // const handleSubmit = (data: TaskSecondStepSchemaType) => {};
-
     return (
         <Form {...form}>
             <form className="flex flex-col gap-8">

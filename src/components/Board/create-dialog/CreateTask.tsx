@@ -1,44 +1,67 @@
 import { Button } from '@/components/ui/button';
 import * as Dialog from '@/components/ui/dialog';
-import { TaskSchema, TaskSchemaType } from '@/types/tasks';
+import { OmittedTask, TaskSchema, TaskSchemaType } from '@/types/tasks';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Task } from '@prisma/client';
+import { BadgeColors, Project } from '@prisma/client';
 import React, { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import TaskForm from './TaskForm';
 import { toast } from 'sonner';
+import { createTask } from '@/controllers/task-actions';
+import { useTaskStore } from '@/context/tasks-store';
+import { Plus } from 'lucide-react';
+import {
+    QueryObserverResult,
+    RefetchOptions,
+    RefetchQueryFilters,
+} from 'react-query';
 
 interface Props {
-    createTask: () => void;
+    project: Project;
+    refetch: <TPageData>(
+        options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
+    ) => Promise<QueryObserverResult<void, unknown>>;
 }
 
-const Task: Task = {
-    id: 'placeholder',
+const Task: OmittedTask = {
     projectId: 'placeholder',
 
     title: 'placeholder',
     description: 'placeholder',
 
     deadline: new Date(),
-    createdAt: new Date(),
+    markColor: 'blue',
 
     assignedPeopleEmails: [],
     category: 'todo',
     isCompleted: false,
 };
 
-const CreateTask: FC<Props> = () => {
+const CreateTask: FC<Props> = ({ project, refetch }) => {
     const [deadline, setDeadline] = React.useState<Date>();
     const [openDialog, setOpenDialog] = React.useState(false);
     const [step, setStep] = React.useState(1);
     const [assignedUsers, setAssignedUsers] = React.useState<string[]>([]); // [email, email, email
+
+    const [color, setColor] = React.useState<BadgeColors>('blue');
+
+    const [submitting, setSubmitting] = React.useState(false);
+
+    const { addTask } = useTaskStore();
 
     const form = useForm<TaskSchemaType>({
         mode: 'all',
         resolver: zodResolver(TaskSchema),
     });
 
-    const handleSubmit = (data: TaskSchemaType) => {
+    const resetState = () => {
+        setStep(1);
+        setDeadline(undefined);
+        setAssignedUsers([]);
+        setColor('blue');
+    };
+
+    const handleSubmit = async (data: TaskSchemaType) => {
         if (step === 1) {
             Task.title = data.title;
             Task.description = data.description || null;
@@ -59,8 +82,19 @@ const CreateTask: FC<Props> = () => {
             setStep((prev) => prev + 1);
             return;
         } else if (step === 3) {
-            console.log('submitting');
+            setSubmitting(true);
+            Task.projectId = project.id;
+            Task.markColor = color;
+
+            const newTask = await createTask(project.id, Task);
+            addTask(newTask);
+
+            toast.success('Task created successfully.');
+            await refetch();
+
             setOpenDialog(false);
+            setSubmitting(false);
+            resetState();
             return;
         }
     };
@@ -68,7 +102,9 @@ const CreateTask: FC<Props> = () => {
     return (
         <Dialog.Dialog open={openDialog} onOpenChange={setOpenDialog}>
             <Dialog.DialogTrigger asChild>
-                <Button className="ml-auto">+</Button>
+                <Button className="mt-4 ml-[23rem]" size={'icon'}>
+                    <Plus />
+                </Button>
             </Dialog.DialogTrigger>
 
             <Dialog.DialogContent>
@@ -86,7 +122,7 @@ const CreateTask: FC<Props> = () => {
                             : step === 2
                             ? 'Select people you want to assign task to.'
                             : 'Create task'}{' '}
-                        Step <span className="text-white">{step}</span> of 3.
+                        Step <span className="tPext-white">{step}</span> of 3.
                     </Dialog.DialogDescription>
                 </Dialog.DialogHeader>
 
@@ -98,6 +134,9 @@ const CreateTask: FC<Props> = () => {
                     setDeadline={setDeadline}
                     assignedUsers={assignedUsers}
                     setAssignedUsers={setAssignedUsers}
+                    Task={Task}
+                    submitting={submitting}
+                    setColor={setColor}
                 />
             </Dialog.DialogContent>
         </Dialog.Dialog>

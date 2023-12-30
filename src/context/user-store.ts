@@ -6,7 +6,7 @@ import { getUser } from '@/controllers/user-functions';
 
 type UserStore = {
     user: User | null;
-    setUser: (user: UserType | null) => void;
+    setUser: (user: User | null) => void;
 };
 
 export type UserType = Omit<SessionUser, 'id'>;

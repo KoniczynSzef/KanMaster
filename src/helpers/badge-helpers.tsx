@@ -122,3 +122,23 @@ export function checkForBadgeColor(
 
     return false;
 }
+
+export function getBorder(color: BadgeColor): string {
+    switch (color) {
+        case 'blue':
+            return 'border-paletteBlue';
+        case 'green':
+            return 'border-paletteGreen';
+        case 'orange':
+            return 'border-paletteAmber';
+        case 'red':
+            return 'border-paletteLighterRed';
+        case 'grey':
+            return 'border-paletteGrey';
+        case 'indigo':
+            return 'border-paletteDarkerIndigo';
+
+        default:
+            return 'border-paletteLighterRed';
+    }
+}

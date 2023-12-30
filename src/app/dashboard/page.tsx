@@ -31,6 +31,10 @@ const DashboardPage: FC<Props> = async () => {
     const badgesArr = await getBadges(session?.user?.email, projects);
     const user = await getUser(session?.user?.email);
 
+    if (!user) {
+        return redirect('/');
+    }
+
     return (
         <div className="container relative mx-auto py-24 flex flex-col gap-12">
             <Projects projects={projects} user={user} badges={badgesArr} />

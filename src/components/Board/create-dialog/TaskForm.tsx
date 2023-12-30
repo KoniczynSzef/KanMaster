@@ -1,4 +1,4 @@
-import { TaskSchemaType } from '@/types/tasks';
+import { OmittedTask, TaskSchemaType } from '@/types/tasks';
 import React, { FC } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import TaskFormField from './TaskFormField';
@@ -7,6 +7,9 @@ import { Form } from '@/components/ui/form';
 
 import { AnimatePresence, motion } from 'framer-motion';
 import MembersAndDeadline from './second-step-components/MembersAndDeadline';
+import TaskPreview from './third-step-components/TaskPreview';
+import { Loader2 } from 'lucide-react';
+import { BadgeColor } from '@/types/badge';
 
 interface Props {
     form: UseFormReturn<TaskSchemaType>;
@@ -16,6 +19,10 @@ interface Props {
     setDeadline: React.Dispatch<React.SetStateAction<Date | undefined>>;
     assignedUsers: string[];
     setAssignedUsers: React.Dispatch<React.SetStateAction<string[]>>;
+    Task: OmittedTask;
+    submitting: boolean;
+
+    setColor: React.Dispatch<React.SetStateAction<BadgeColor>>;
 }
 
 const TaskForm: FC<Props> = ({
@@ -26,6 +33,9 @@ const TaskForm: FC<Props> = ({
     setDeadline,
     setAssignedUsers,
     assignedUsers,
+    Task,
+    submitting,
+    setColor,
 }) => {
     return (
         <AnimatePresence>
@@ -54,7 +64,19 @@ const TaskForm: FC<Props> = ({
                         />
                     ) : null}
 
-                    <Button className="self-end">Continue</Button>
+                    {step === 3 ? (
+                        <TaskPreview Task={Task} setColor={setColor} />
+                    ) : null}
+
+                    <Button className={'self-end'} disabled={submitting}>
+                        {step === 3 && !submitting ? (
+                            'Create task'
+                        ) : step === 3 && !submitting ? (
+                            <Loader2 className="animate-spin" />
+                        ) : (
+                            'Continue'
+                        )}
+                    </Button>
                 </motion.form>
             </Form>
         </AnimatePresence>

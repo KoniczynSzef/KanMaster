@@ -1,7 +1,8 @@
 'use server';
 
 import { db } from '@/db';
-import { Task } from '@prisma/client';
+import { OmittedTask } from '@/types/tasks';
+import { Task, TaskCategories } from '@prisma/client';
 
 export async function getTasks(projectId: string) {
     const tasks = await db.task.findMany({
@@ -25,7 +26,7 @@ export async function getSingleTask(id: string) {
 
 export async function createTask(
     projectId: string,
-    data: Omit<Task, 'projectId'>
+    data: Omit<OmittedTask, 'projectId'>
 ) {
     const task = await db.task.create({
         data: {
@@ -43,6 +44,22 @@ export async function updateTask(id: string, data: Partial<Task>) {
             id,
         },
         data,
+    });
+
+    return task;
+}
+
+export async function changeTaskCategoryAsync(
+    taskId: string,
+    category: TaskCategories
+) {
+    const task = await db.task.update({
+        where: {
+            id: taskId,
+        },
+        data: {
+            category,
+        },
     });
 
     return task;

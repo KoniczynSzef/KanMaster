@@ -85,6 +85,8 @@ model Task {
 
   assignedPeopleEmails String[]
 
+  markColor BadgeColors
+
   createdAt DateTime @default(now())
   deadline DateTime
   category TaskCategories

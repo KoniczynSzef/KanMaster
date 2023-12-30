@@ -69,7 +69,6 @@ const UserCard: FC<Props> = (props) => {
         }
 
         setClicked((prev) => !prev);
-        console.log(props.assignedUsers);
     };
 
     return (
