@@ -7,15 +7,15 @@ import {
 } from '@/components/ui/sheet';
 import React, { FC } from 'react';
 import NavbarItems from './NavbarItems';
-import { Session } from 'next-auth';
 import { Button } from '@/components/ui/button';
 import { Menu } from 'lucide-react';
+import { User } from '@prisma/client';
 
 interface Props {
-    session: Session | null;
+    user: User | null
 }
 
-const NavbarMenu: FC<Props> = ({ session }) => {
+const NavbarMenu: FC<Props> = ({ user }) => {
     return (
         <Sheet>
             <SheetTrigger asChild>
@@ -30,7 +30,7 @@ const NavbarMenu: FC<Props> = ({ session }) => {
                     </SheetTitle>
                 </SheetHeader>
                 <NavbarItems
-                    session={session}
+                user={user}
                     className="flex-col mt-16"
                     mobile
                 />

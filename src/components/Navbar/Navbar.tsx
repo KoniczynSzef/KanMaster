@@ -26,11 +26,10 @@ const Navbar: FC<Props> = async () => {
                 </Link>
 
                 <div className="md:hidden">
-                    <NavbarMenu session={session} />
+                    <NavbarMenu user={user} />
                 </div>
 
                 <NavbarItems
-                    session={session}
                     className="hidden md:flex"
                     mobile={false}
                     user={user}

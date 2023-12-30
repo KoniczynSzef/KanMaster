@@ -4,25 +4,23 @@ import Notification from './items/notifications/Notification';
 import UserDropdownMenu from './items/UserDropdownMenu';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { Session } from 'next-auth';
 import { SheetTrigger } from '@/components/ui/sheet';
 import { User } from '@prisma/client';
 
 interface Props extends React.ComponentProps<'ul'> {
     className?: string;
-    session: Session | null;
     mobile: boolean;
     user: User | null;
 }
 
-const NavbarItems: FC<Props> = ({ session, className, mobile, user }) => {
+const NavbarItems: FC<Props> = ({ className, mobile, user }) => {
     return (
         <ul className={`${className} wrapper flex items-center gap-10`}>
             <ToggleTheme />
-            {session?.user ? (
+            {user ? (
                 <>
                     <Notification user={user} />
-                    <UserDropdownMenu user={session.user} />
+                    <UserDropdownMenu user={user} />
                 </>
             ) : !mobile ? (
                 <>
