@@ -5,7 +5,6 @@ import { BadgeColors } from '@prisma/client';
 import React, { FC } from 'react';
 
 interface Props {
-    setBorderColor: React.Dispatch<React.SetStateAction<BadgeColors>>;
     setColor: React.Dispatch<React.SetStateAction<BadgeColors>>;
 
     Task: OmittedTask;
@@ -20,9 +19,8 @@ const array: BadgeColors[] = [
     'orange',
 ];
 
-const Colors: FC<Props> = ({ setBorderColor, Task, setColor }) => {
+const Colors: FC<Props> = ({ Task, setColor }) => {
     const handleClick = (value: BadgeColors) => {
-        setBorderColor(value);
         Task.markColor = value;
         setColor(value);
     };

@@ -66,7 +66,7 @@ const CreateTask: FC<Props> = ({ project, refetch }) => {
     };
 
     const handleCheckForProjectsCount = () => {
-        if (getTaskCount() >= 5) {
+        if (getTaskCount() >= 25) {
             return false;
         }
 
@@ -98,7 +98,7 @@ const CreateTask: FC<Props> = ({ project, refetch }) => {
             const canCreate = handleCheckForProjectsCount();
 
             if (!canCreate) {
-                toast.error('You can only create 5 tasks per project.');
+                toast.error('You can only create 25 tasks per project.');
                 return;
             }
 

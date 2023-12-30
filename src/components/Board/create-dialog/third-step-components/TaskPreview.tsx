@@ -5,7 +5,7 @@ import Link from 'next/link';
 import React, { FC } from 'react';
 import Colors from './Colors';
 import { BadgeColor } from '@/types/badge';
-import { getBorder } from '@/helpers/badge-helpers';
+import TaskBadge from '../../tasks/TaskBadge';
 
 interface Props {
     Task: OmittedTask;
@@ -20,14 +20,17 @@ const f = new Intl.DateTimeFormat('en-US', {
 });
 
 const TaskPreview: FC<Props> = ({ Task, setColor }) => {
-    const [borderColor, setBorderColor] = React.useState<BadgeColor>('blue');
-
     return (
-        <Card.Card className={`${getBorder(borderColor)}`}>
+        <Card.Card>
             <Card.CardHeader>
-                <Card.CardTitle>{Task.title}</Card.CardTitle>
+                <Card.CardTitle className="flex items-center gap-4">
+                    <TaskBadge task={Task} />
+                    {Task.title}
+                </Card.CardTitle>
+
                 <Card.CardDescription>{Task.description}</Card.CardDescription>
             </Card.CardHeader>
+
             <Card.CardContent className="flex gap-8">
                 <p className="text-muted-foreground text-sm">
                     {f.format(Task.deadline)}
@@ -49,11 +52,7 @@ const TaskPreview: FC<Props> = ({ Task, setColor }) => {
                 </div>
             </ScrollArea>
 
-            <Colors
-                setBorderColor={setBorderColor}
-                Task={Task}
-                setColor={setColor}
-            />
+            <Colors Task={Task} setColor={setColor} />
         </Card.Card>
     );
 };
