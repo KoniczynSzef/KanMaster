@@ -11,25 +11,12 @@ import { BellRing } from 'lucide-react';
 import React, { FC } from 'react';
 import NotificationMenuItem from './NotificationMenuItem';
 import { Notification } from '@prisma/client';
-import { useNotificationStore } from '@/context/notification-store';
-
-import { useQuery } from 'react-query';
 
 interface Props {
     notifications: Notification[];
 }
 
 const Notifications: FC<Props> = ({ notifications }) => {
-    const { setNotifications, notifications: storedNotifications } =
-        useNotificationStore();
-
-    useQuery({
-        queryKey: ['notifications'],
-        queryFn: () => {
-            setNotifications(notifications);
-        },
-    });
-
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -51,8 +38,8 @@ const Notifications: FC<Props> = ({ notifications }) => {
             <DropdownMenuContent>
                 <DropdownMenuLabel>Notifications</DropdownMenuLabel>
 
-                {storedNotifications.length > 0 &&
-                    storedNotifications.map((notification) => (
+                {notifications.length > 0 &&
+                    notifications.map((notification) => (
                         <NotificationMenuItem
                             key={notification.id}
                             notification={notification}
