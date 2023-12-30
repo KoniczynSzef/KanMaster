@@ -47,7 +47,7 @@ const CreateTask: FC<Props> = ({ project, refetch }) => {
 
     const [submitting, setSubmitting] = React.useState(false);
 
-    const { addTask } = useTaskStore();
+    const { addTask, getTaskCount } = useTaskStore();
 
     const form = useForm<TaskSchemaType>({
         mode: 'all',
@@ -65,6 +65,14 @@ const CreateTask: FC<Props> = ({ project, refetch }) => {
         setColor('blue');
     };
 
+    const handleCheckForProjectsCount = () => {
+        if (getTaskCount() >= 5) {
+            return false;
+        }
+
+        return true;
+    };
+
     const handleSubmit = async (data: TaskSchemaType) => {
         if (step === 1) {
             Task.title = data.title;
@@ -78,6 +86,7 @@ const CreateTask: FC<Props> = ({ project, refetch }) => {
                 toast.error('Please assign task to at least one person.');
                 return;
             }
+
             Task.assignedPeopleEmails = assignedUsers;
             Task.deadline =
                 deadline ??
@@ -86,6 +95,13 @@ const CreateTask: FC<Props> = ({ project, refetch }) => {
             setStep((prev) => (prev += 1));
             return;
         } else if (step === 3) {
+            const canCreate = handleCheckForProjectsCount();
+
+            if (!canCreate) {
+                toast.error('You can only create 5 tasks per project.');
+                return;
+            }
+
             setSubmitting(true);
             Task.projectId = project.id;
             Task.markColor = color;
