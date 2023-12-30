@@ -58,11 +58,11 @@ const KanbanBoard: FC<Props> = ({ project, user, refetch }) => {
                 task?.assignedPeopleEmails.includes(user.email)
             ) {
                 changeTaskCategory(taskId, category);
-                setTasks(getTasks());
 
                 await changeTaskCategoryAsync(taskId, category);
                 await refetch();
 
+                setTasks(getTasks());
                 return toast.success('Task moved successfully');
             }
 

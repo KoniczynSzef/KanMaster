@@ -55,8 +55,12 @@ const CreateTask: FC<Props> = ({ project, refetch }) => {
     });
 
     const resetState = () => {
+        setOpenDialog(false);
+        setSubmitting(false);
+
         setStep(1);
         setDeadline(undefined);
+
         setAssignedUsers([]);
         setColor('blue');
     };
@@ -67,7 +71,7 @@ const CreateTask: FC<Props> = ({ project, refetch }) => {
             Task.description = data.description || null;
             Task.category = 'todo';
 
-            setStep((prev) => prev + 1);
+            setStep((prev) => (prev += 1));
             return;
         } else if (step === 2) {
             if (assignedUsers.length === 0) {
@@ -79,7 +83,7 @@ const CreateTask: FC<Props> = ({ project, refetch }) => {
                 deadline ??
                 new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 7);
 
-            setStep((prev) => prev + 1);
+            setStep((prev) => (prev += 1));
             return;
         } else if (step === 3) {
             setSubmitting(true);
@@ -90,11 +94,10 @@ const CreateTask: FC<Props> = ({ project, refetch }) => {
             addTask(newTask);
 
             toast.success('Task created successfully.');
-            await refetch();
 
-            setOpenDialog(false);
-            setSubmitting(false);
             resetState();
+
+            await refetch();
             return;
         }
     };
