@@ -2,7 +2,7 @@ import { Task } from '@prisma/client';
 import React, { FC } from 'react';
 import * as Dialog from '../../ui/dialog';
 import * as Card from '../../ui/card';
-import { getBadgeColorClass } from '@/helpers/badge-helpers';
+import TaskBadge from './TaskBadge';
 
 interface Props {
     task: Task;
@@ -30,12 +30,7 @@ const TaskComponent: FC<Props> = ({ task, handleDragStart }) => {
                 >
                     <Card.CardHeader>
                         <Card.CardTitle className="flex items-center gap-4">
-                            <div
-                                role="img"
-                                className={`${getBadgeColorClass(
-                                    task.markColor
-                                )} h-8 w-1 rounded`}
-                            />
+                            <TaskBadge task={task} />
                             {task.title}
                         </Card.CardTitle>
                     </Card.CardHeader>

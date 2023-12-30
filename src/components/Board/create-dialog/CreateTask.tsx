@@ -47,7 +47,7 @@ const CreateTask: FC<Props> = ({ project, refetch }) => {
 
     const [submitting, setSubmitting] = React.useState(false);
 
-    const { addTask } = useTaskStore();
+    const { addTask, getTaskCount } = useTaskStore();
 
     const form = useForm<TaskSchemaType>({
         mode: 'all',
@@ -55,10 +55,22 @@ const CreateTask: FC<Props> = ({ project, refetch }) => {
     });
 
     const resetState = () => {
+        setOpenDialog(false);
+        setSubmitting(false);
+
         setStep(1);
         setDeadline(undefined);
+
         setAssignedUsers([]);
         setColor('blue');
+    };
+
+    const handleCheckForProjectsCount = () => {
+        if (getTaskCount() >= 25) {
+            return false;
+        }
+
+        return true;
     };
 
     const handleSubmit = async (data: TaskSchemaType) => {
@@ -67,21 +79,29 @@ const CreateTask: FC<Props> = ({ project, refetch }) => {
             Task.description = data.description || null;
             Task.category = 'todo';
 
-            setStep((prev) => prev + 1);
+            setStep((prev) => (prev += 1));
             return;
         } else if (step === 2) {
             if (assignedUsers.length === 0) {
                 toast.error('Please assign task to at least one person.');
                 return;
             }
+
             Task.assignedPeopleEmails = assignedUsers;
             Task.deadline =
                 deadline ??
                 new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 7);
 
-            setStep((prev) => prev + 1);
+            setStep((prev) => (prev += 1));
             return;
         } else if (step === 3) {
+            const canCreate = handleCheckForProjectsCount();
+
+            if (!canCreate) {
+                toast.error('You can only create 25 tasks per project.');
+                return;
+            }
+
             setSubmitting(true);
             Task.projectId = project.id;
             Task.markColor = color;
@@ -90,11 +110,10 @@ const CreateTask: FC<Props> = ({ project, refetch }) => {
             addTask(newTask);
 
             toast.success('Task created successfully.');
-            await refetch();
 
-            setOpenDialog(false);
-            setSubmitting(false);
             resetState();
+
+            await refetch();
             return;
         }
     };

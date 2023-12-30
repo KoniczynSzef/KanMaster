@@ -38,6 +38,7 @@ const KanbanBoard: FC<Props> = ({ project, user, refetch }) => {
         category: TaskCategories
     ) => {
         e.preventDefault();
+
         try {
             const taskId = e.dataTransfer.getData('widgetType');
             const task = tasks.find((task) => task.id === taskId);
@@ -46,16 +47,22 @@ const KanbanBoard: FC<Props> = ({ project, user, refetch }) => {
 
             if (!user.email) return toast.error('User email not found');
 
+            if (task.category === category) {
+                console.log('Task already in this category');
+
+                return toast.error('Task already in this category');
+            }
+
             if (
                 project.teamLeaderId === user.id ||
                 task?.assignedPeopleEmails.includes(user.email)
             ) {
                 changeTaskCategory(taskId, category);
-                setTasks(getTasks());
 
                 await changeTaskCategoryAsync(taskId, category);
                 await refetch();
 
+                setTasks(getTasks());
                 return toast.success('Task moved successfully');
             }
 

@@ -4,11 +4,14 @@ import { getServerSession } from 'next-auth';
 import { options } from '@/auth/options';
 import NavbarMenu from './navbar-components/NavbarMenu';
 import NavbarItems from './navbar-components/NavbarItems';
+import { getUser } from '@/controllers/user-functions';
 
 interface Props {}
 
 const Navbar: FC<Props> = async () => {
     const session = await getServerSession(options);
+
+    const user = await getUser(session?.user?.email as string);
 
     return (
         <header className="py-6 bg-paletteVioletMain dark:bg-darkPaletteVioletMain">
@@ -30,6 +33,7 @@ const Navbar: FC<Props> = async () => {
                     session={session}
                     className="hidden md:flex"
                     mobile={false}
+                    user={user}
                 />
             </nav>
         </header>
