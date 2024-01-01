@@ -48,8 +48,6 @@ const KanbanBoard: FC<Props> = ({ project, user, refetch }) => {
             if (!user.email) return toast.error('User email not found');
 
             if (task.category === category) {
-                console.log('Task already in this category');
-
                 return toast.error('Task already in this category');
             }
 

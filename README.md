@@ -1,4 +1,4 @@
-# Podzial funkcjonalnosci #
+# Podzial funkcjonalnosci
 
 **Najważniejsze, kluczowe:**
 
