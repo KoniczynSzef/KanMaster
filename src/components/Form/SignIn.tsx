@@ -13,7 +13,6 @@ import { provider } from '@/auth';
 import Field from './form-fields/Field';
 import { signInSchema } from '@/types/form-schema';
 import { handleError } from '@/auth/error-handlers';
-import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { useRouter } from 'next/navigation';
 import FormDescription from './FormDescription';
 import { z } from 'zod';
@@ -28,11 +27,8 @@ const EmailSchema = z.object({
     email: z.string().email(),
 });
 
-// type EmailSchemaType = z.infer<typeof EmailSchema>;
-
 const SignIn: FC<Props> = () => {
     const router = useRouter();
-    const { setValue: setSecretToStorage } = useLocalStorage<string>('secret');
     const form = useForm<signInSchema>({
         mode: 'all',
         resolver: zodResolver(signInSchema),
@@ -90,8 +86,11 @@ const SignIn: FC<Props> = () => {
 
             const randomLink = await hash(user.secret, 10);
 
-            setStoredEmail(user.secret);
-            router.push(`/forgot-password/${randomLink}`);
+            localStorage.setItem('secret', randomLink);
+
+            router.push(
+                `/forgot-password/${user.secret}?hashedSecret=${randomLink}`
+            );
         } catch (error) {
             toast.error('Please enter a valid email!');
         }
