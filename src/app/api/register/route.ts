@@ -15,11 +15,15 @@ export async function POST(req: Request) {
         );
     }
 
+    const secret = crypto.getRandomValues(new Uint8Array(32));
+    const secretBase64 = btoa(String.fromCharCode(...secret));
+
     const user = await db.user.create({
         data: {
             name: username,
             email,
             hashedPassword: await hash(password, 10),
+            secret: secretBase64,
         },
     });
 

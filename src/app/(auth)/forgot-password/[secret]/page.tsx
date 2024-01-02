@@ -1,23 +1,15 @@
-import ForgotPassword from '@/components/Form/ForgotPassword';
-import { getSession } from '@/auth';
 import React, { FC } from 'react';
 
 interface Props {
-    searchParams: {
+    params: {
         secret: string;
     };
 }
 
-const page: FC<Props> = async ({ searchParams }) => {
-    const params = searchParams;
+const page: FC<Props> = async ({ params }) => {
+    const { secret } = params;
 
-    await getSession();
-
-    return (
-        <section className="mt-36 flex justify-center items-center">
-            <ForgotPassword />
-        </section>
-    );
+    return <div className="text-white">{secret}</div>;
 };
 
 export default page;
