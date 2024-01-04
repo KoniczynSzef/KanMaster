@@ -13,15 +13,22 @@ import { provider } from '@/auth';
 import Field from './form-fields/Field';
 import { signInSchema } from '@/types/form-schema';
 import { handleError } from '@/auth/error-handlers';
-import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { useRouter } from 'next/navigation';
 import FormDescription from './FormDescription';
+import { z } from 'zod';
+import { getUser } from '@/controllers/user-functions';
+import { Loader2 } from 'lucide-react';
+
+import { hash } from 'bcryptjs';
 
 interface Props {}
 
+const EmailSchema = z.object({
+    email: z.string().email(),
+});
+
 const SignIn: FC<Props> = () => {
     const router = useRouter();
-    const { setValue: setStoredEmail } = useLocalStorage<string>('email');
     const form = useForm<signInSchema>({
         mode: 'all',
         resolver: zodResolver(signInSchema),
@@ -57,16 +64,35 @@ const SignIn: FC<Props> = () => {
         }
     };
 
-    const handleForgotPassword = () => {
+    const handleForgotPassword = async () => {
         try {
-            if (!signInSchema.parse(form.getValues())) {
+            if (!EmailSchema.parse(form.getValues())) {
                 return;
             }
 
-            setStoredEmail(form.getValues('email'));
-            router.push('/forgot-password');
+            const { email } = form.getValues();
+
+            const user = await getUser(email);
+
+            if (!user) {
+                toast.error('No user with that email found');
+                return;
+            }
+
+            if (!user.secret) {
+                toast.error('You are not allowed to reset your password');
+                return;
+            }
+
+            const randomLink = await hash(user.secret, 10);
+
+            localStorage.setItem('hashedSecret', randomLink);
+
+            router.push(
+                `/forgot-password/${user.secret}?hashedSecret=${randomLink}`
+            );
         } catch (error) {
-            toast.error('Please field both fields');
+            toast.error('Please enter a valid email!');
         }
     };
 
@@ -97,8 +123,17 @@ const SignIn: FC<Props> = () => {
                         >
                             Forgot password?
                         </Button>
-                        <Button type="submit" className="ml-auto">
-                            Sign in
+
+                        <Button
+                            type="submit"
+                            className="ml-auto"
+                            disabled={form.formState.isSubmitting}
+                        >
+                            {form.formState.isSubmitting ? (
+                                <Loader2 className="animate-spin" />
+                            ) : (
+                                'Sign in'
+                            )}
                         </Button>
                     </div>
                 </form>

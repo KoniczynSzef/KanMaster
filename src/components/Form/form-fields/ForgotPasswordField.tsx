@@ -10,17 +10,11 @@ import {
 } from '../../ui/form';
 import { Input } from '../../ui/input';
 import { UseFormReturn } from 'react-hook-form';
+import { forgotPasswordSchemaType } from '@/types/form-schema';
 
 interface Props {
-    form: UseFormReturn<
-        {
-            password: string;
-            email: string;
-            confirmPassword: string;
-        },
-        undefined
-    >;
-    prop: 'email' | 'password' | 'confirmPassword';
+    form: UseFormReturn<forgotPasswordSchemaType>;
+    prop: keyof forgotPasswordSchemaType;
     type: React.HTMLInputTypeAttribute;
     customLabel?: string;
 }

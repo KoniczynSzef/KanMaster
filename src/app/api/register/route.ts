@@ -14,12 +14,14 @@ export async function POST(req: Request) {
             JSON.stringify({ error: 'User already exists. Please try again.' })
         );
     }
+    const secret = crypto.randomUUID();
 
     const user = await db.user.create({
         data: {
             name: username,
             email,
             hashedPassword: await hash(password, 10),
+            secret,
         },
     });
 

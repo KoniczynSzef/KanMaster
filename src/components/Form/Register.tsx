@@ -12,6 +12,7 @@ import { schema, schemaType } from '@/types/form-schema';
 import { Separator } from '../ui/separator';
 import RegisterField from './form-fields/RegisterField';
 import FormDescription from './FormDescription';
+import { Loader2 } from 'lucide-react';
 
 interface Props {}
 
@@ -79,8 +80,16 @@ const Register: FC<Props> = () => {
 
                     <Separator className="my-8" />
 
-                    <Button type="submit" className="ml-auto">
-                        Register
+                    <Button
+                        type="submit"
+                        className="ml-auto"
+                        disabled={form.formState.isSubmitting}
+                    >
+                        {form.formState.isSubmitting ? (
+                            <Loader2 className="animate-spin" />
+                        ) : (
+                            'Register'
+                        )}
                     </Button>
                 </form>
             </Form>

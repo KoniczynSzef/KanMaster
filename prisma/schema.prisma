@@ -43,8 +43,11 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  secret        String?   @unique
   
   projects     Project[]
+
+  resetPasswordAttempts Int? @default(0)
 
   badges      ProjectBadge[]
   notifications Notification[]

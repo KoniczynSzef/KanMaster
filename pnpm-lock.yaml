@@ -14,6 +14,9 @@ dependencies:
   '@hookform/resolvers':
     specifier: ^3.3.3
     version: 3.3.3(react-hook-form@7.49.2)
+  '@prisma/client':
+    specifier: ^5.7.1
+    version: 5.7.1(prisma@5.7.1)
   '@radix-ui/react-avatar':
     specifier: ^1.0.4
     version: 1.0.4(@types/react-dom@18.2.18)(@types/react@18.2.46)(react-dom@18.2.0)(react@18.2.0)
@@ -106,9 +109,6 @@ dependencies:
     version: 4.4.7(@types/react@18.2.46)(react@18.2.0)
 
 devDependencies:
-  '@prisma/client':
-    specifier: ^5.7.1
-    version: 5.7.1(prisma@5.7.1)
   '@types/bcrypt':
     specifier: ^5.0.2
     version: 5.0.2
@@ -686,6 +686,7 @@ packages:
         optional: true
     dependencies:
       prisma: 5.7.1
+    dev: false
 
   /@prisma/debug@5.7.1:
     resolution: {integrity: sha512-yrVSO/YZOxdeIxcBtZ5BaNqUfPrZkNsAKQIQg36cJKMxj/VYK3Vk5jMKkI+gQLl0KReo1YvX8GWKfV788SELjw==}
