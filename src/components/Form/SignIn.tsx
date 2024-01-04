@@ -86,7 +86,7 @@ const SignIn: FC<Props> = () => {
 
             const randomLink = await hash(user.secret, 10);
 
-            localStorage.setItem('secret', randomLink);
+            localStorage.setItem('hashedSecret', randomLink);
 
             router.push(
                 `/forgot-password/${user.secret}?hashedSecret=${randomLink}`

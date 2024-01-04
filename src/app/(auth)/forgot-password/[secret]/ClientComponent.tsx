@@ -1,5 +1,6 @@
 'use client';
 
+import ForgotPassword from '@/components/Form/ForgotPassword';
 import { getUserByUniqueProp } from '@/controllers/user-functions';
 import { compare } from 'bcryptjs';
 import { Loader2 } from 'lucide-react';
@@ -8,54 +9,46 @@ import { useQuery } from 'react-query';
 
 interface Props {
     secret: string;
-    hashedSecret: string;
 }
 
-const ClientComponent: FC<Props> = ({ secret, hashedSecret }) => {
-    const storedValue = localStorage.getItem('secret');
+const ClientComponent: FC<Props> = ({ secret }) => {
+    const hashedSecret = localStorage.getItem('hashedSecret');
 
     const { data: user, isLoading } = useQuery({
         queryKey: ['user-by-secret'],
 
         queryFn: async () => {
-            console.log(hashedSecret, storedValue);
-            console.log(hashedSecret === storedValue);
-
-            if (!storedValue) {
-                return;
-            }
-
-            if (hashedSecret !== storedValue) {
+            if (!hashedSecret) {
                 return;
             }
 
             const areSecretsEqual = await compare(secret, hashedSecret);
-            console.log(areSecretsEqual);
 
             if (!areSecretsEqual) {
                 return;
             }
 
+            localStorage.removeItem('hashedSecret');
+            localStorage.removeItem('secret');
+
             return await getUserByUniqueProp('secret', secret);
         },
-
-        enabled: !!secret,
     });
 
     if (!user) {
         return (
-            <div className="text-xl font-bold">
+            <div className="text-xl font-bold container relative flex justify-center py-24">
                 There is no user with this secret!
             </div>
         );
     }
 
     return (
-        <div>
+        <div className="container relative flex justify-center py-24">
             {isLoading ? (
                 <Loader2 className="animate-spin" />
             ) : (
-                <div className="text-xl font-bold">{user.name}</div>
+                <ForgotPassword secret={user.secret} />
             )}
         </div>
     );

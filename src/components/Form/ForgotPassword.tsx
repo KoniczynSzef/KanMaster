@@ -13,19 +13,18 @@ import { resetPassword } from '@/auth/reset-password';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import ForgotPasswordField from './form-fields/ForgotPasswordField';
-import { useLocalStorage } from '@/hooks/useLocalStorage';
 import FormDescription from './FormDescription';
 
-interface Props {}
+interface Props {
+    secret: string | null;
+}
 
-const ForgotPassword: FC<Props> = () => {
+const ForgotPassword: FC<Props> = ({ secret }) => {
     const router = useRouter();
-    const { storedValue } = useLocalStorage<string>('email');
     const form = useForm<forgotPasswordSchemaType>({
         mode: 'all',
         resolver: zodResolver(forgotPasswordSchema),
         defaultValues: {
-            email: '',
             password: '',
             confirmPassword: '',
         },
@@ -33,14 +32,11 @@ const ForgotPassword: FC<Props> = () => {
 
     const onSubmit = async (data: forgotPasswordSchemaType) => {
         try {
-            if (data.email !== storedValue) {
-                toast.error(
-                    'Email does not match the one you provided earlier!'
-                );
-                return;
+            if (!secret) {
+                throw new Error('You are not allowed to change your password!');
             }
 
-            await resetPassword(data);
+            await resetPassword(data, secret);
 
             toast.success('Successfully reset password!');
 
@@ -53,27 +49,18 @@ const ForgotPassword: FC<Props> = () => {
 
     return (
         <section className="max-w-2xl w-full flex flex-col gap-4 border border-muted-background p-8 rounded">
-            <FormDescription
-                title="Forgot Password?"
-                quickDescription="Don't have an account yet?"
-                link="Sign up"
-                href="/register"
-            />
+            <FormDescription title="Forgot Password?" href="/register" />
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(onSubmit)}
-                    className="space-y-6 flex flex-col mt-6"
+                    className="space-y-6 flex flex-col mt-4"
                 >
-                    <ForgotPasswordField
-                        form={form}
-                        prop={'email'}
-                        type="email"
-                    />
                     <ForgotPasswordField
                         form={form}
                         prop={'password'}
                         type="password"
                     />
+
                     <ForgotPasswordField
                         form={form}
                         prop={'confirmPassword'}

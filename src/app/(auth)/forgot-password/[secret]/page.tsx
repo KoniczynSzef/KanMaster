@@ -5,19 +5,12 @@ interface Props {
     params: {
         secret: string;
     };
-
-    searchParams: {
-        hashedSecret: string;
-    };
 }
 
-const page: FC<Props> = async ({ params, searchParams }) => {
+const page: FC<Props> = async ({ params }) => {
     return (
         <div className="text-white">
-            <ClientComponent
-                secret={params.secret}
-                hashedSecret={searchParams.hashedSecret}
-            />
+            <ClientComponent secret={params.secret} />
         </div>
     );
 };

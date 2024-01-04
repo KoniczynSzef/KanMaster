@@ -14,16 +14,14 @@ export async function POST(req: Request) {
             JSON.stringify({ error: 'User already exists. Please try again.' })
         );
     }
-
-    const secret = crypto.getRandomValues(new Uint8Array(32));
-    const secretBase64 = btoa(String.fromCharCode(...secret));
+    const secret = crypto.randomUUID();
 
     const user = await db.user.create({
         data: {
             name: username,
             email,
             hashedPassword: await hash(password, 10),
-            secret: secretBase64,
+            secret,
         },
     });
 
