@@ -13,6 +13,7 @@ import { useTaskStore } from '@/context/tasks-store';
 import TaskSection from './tasks/TaskSection';
 import { toast } from 'sonner';
 import { changeTaskCategoryAsync } from '@/controllers/task-actions';
+import { ScrollArea, ScrollBar } from '../ui/scroll-area';
 
 interface Props {
     project: Project;
@@ -75,42 +76,48 @@ const KanbanBoard: FC<Props> = ({ project, user, refetch }) => {
     };
 
     return (
-        <section className="board border border-muted rounded max-w-7xl w-full">
-            <BoardHeader columns={columns} />
+        <ScrollArea>
+            <ScrollBar
+                orientation="horizontal"
+                aria-label="Horizontal scrollbar to see whole content"
+            />
+            <section className="board border border-muted rounded w-[80rem]">
+                <BoardHeader columns={columns} />
 
-            <div className="wrapper grid grid-cols-3 w-full">
-                <TaskSection
-                    areTaskTodo
-                    project={project}
-                    array={tasks.filter((task) => task.category === 'todo')}
-                    category="todo"
-                    handleDragOver={handleDragOver}
-                    handleDragStart={handleDragStart}
-                    handleOnDrop={handleOnDrop}
-                    refetch={refetch}
-                />
+                <div className="wrapper grid grid-cols-3 w-full">
+                    <TaskSection
+                        areTaskTodo
+                        project={project}
+                        array={tasks.filter((task) => task.category === 'todo')}
+                        category="todo"
+                        handleDragOver={handleDragOver}
+                        handleDragStart={handleDragStart}
+                        handleOnDrop={handleOnDrop}
+                        refetch={refetch}
+                    />
 
-                <TaskSection
-                    areTaskTodo={false}
-                    array={tasks.filter(
-                        (task) => task.category === 'inProgress'
-                    )}
-                    category="inProgress"
-                    handleDragOver={handleDragOver}
-                    handleDragStart={handleDragStart}
-                    handleOnDrop={handleOnDrop}
-                />
+                    <TaskSection
+                        areTaskTodo={false}
+                        array={tasks.filter(
+                            (task) => task.category === 'inProgress'
+                        )}
+                        category="inProgress"
+                        handleDragOver={handleDragOver}
+                        handleDragStart={handleDragStart}
+                        handleOnDrop={handleOnDrop}
+                    />
 
-                <TaskSection
-                    areTaskTodo={false}
-                    array={tasks.filter((task) => task.category === 'done')}
-                    category="done"
-                    handleDragOver={handleDragOver}
-                    handleDragStart={handleDragStart}
-                    handleOnDrop={handleOnDrop}
-                />
-            </div>
-        </section>
+                    <TaskSection
+                        areTaskTodo={false}
+                        array={tasks.filter((task) => task.category === 'done')}
+                        category="done"
+                        handleDragOver={handleDragOver}
+                        handleDragStart={handleDragStart}
+                        handleOnDrop={handleOnDrop}
+                    />
+                </div>
+            </section>
+        </ScrollArea>
     );
 };
 
