@@ -4,6 +4,7 @@ import * as Dialog from '../../../ui/dialog';
 import * as Card from '../../../ui/card';
 import TaskBadge from '../TaskBadge';
 import EditTask from './EditTask';
+import { TaskViewingMode } from '@/types/tasks';
 
 interface Props {
     task: Task;
@@ -19,6 +20,8 @@ const f = new Intl.DateTimeFormat('en', {
 
 const TaskComponent: FC<Props> = ({ task, handleDragStart }) => {
     const [open, setOpen] = React.useState(false);
+    const [viewingMode, setViewingMode] =
+        React.useState<TaskViewingMode>('view');
 
     return (
         <Dialog.Dialog open={open} onOpenChange={setOpen}>
@@ -51,7 +54,12 @@ const TaskComponent: FC<Props> = ({ task, handleDragStart }) => {
                     </Card.CardContent>
                 </Card.Card>
             </Dialog.DialogTrigger>
-            <EditTask task={task} setOpen={setOpen} />
+            <EditTask
+                task={task}
+                setOpen={setOpen}
+                viewingMode={viewingMode}
+                setViewingMode={setViewingMode}
+            />
         </Dialog.Dialog>
     );
 };

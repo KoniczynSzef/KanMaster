@@ -30,3 +30,5 @@ export const TaskSecondStepSchema = z.object({
 export type TaskSecondStepSchemaType = z.infer<typeof TaskSecondStepSchema>;
 
 export type OmittedTask = Omit<Task, 'id' | 'createdAt'>;
+
+export type TaskViewingMode = 'edit' | 'view';
