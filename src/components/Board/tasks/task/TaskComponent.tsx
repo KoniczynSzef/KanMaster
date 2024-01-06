@@ -1,8 +1,10 @@
 import { Task } from '@prisma/client';
 import React, { FC } from 'react';
-import * as Dialog from '../../ui/dialog';
-import * as Card from '../../ui/card';
-import TaskBadge from './TaskBadge';
+import * as Dialog from '../../../ui/dialog';
+import * as Card from '../../../ui/card';
+import TaskBadge from '../TaskBadge';
+import EditTask from './EditTask';
+import { TaskViewingMode } from '@/types/tasks';
 
 interface Props {
     task: Task;
@@ -12,8 +14,14 @@ interface Props {
     ) => void;
 }
 
+const f = new Intl.DateTimeFormat('en', {
+    dateStyle: 'medium',
+});
+
 const TaskComponent: FC<Props> = ({ task, handleDragStart }) => {
     const [open, setOpen] = React.useState(false);
+    const [viewingMode, setViewingMode] =
+        React.useState<TaskViewingMode>('view');
 
     return (
         <Dialog.Dialog open={open} onOpenChange={setOpen}>
@@ -23,7 +31,9 @@ const TaskComponent: FC<Props> = ({ task, handleDragStart }) => {
                 aria-label="Task card component that triggers dialog"
             >
                 <Card.Card
-                    className={`cursor-pointer hover:bg-secondary transition-colors duration-300 ease-in-out relative`}
+                    className={`cursor-pointer hover:bg-secondary transition-colors duration-300 ease-in-out relative ${
+                        task.isCompleted ? 'opacity-75 pointer-events-none' : ''
+                    }`}
                     onClick={() => setOpen(true)}
                     aria-label="Task that can be either dragged or selected"
                     onDragStart={(e) => handleDragStart(e, task.id)}
@@ -35,18 +45,21 @@ const TaskComponent: FC<Props> = ({ task, handleDragStart }) => {
                         </Card.CardTitle>
                     </Card.CardHeader>
                     <Card.CardContent>
-                        <Card.CardDescription>
-                            {task.description}
+                        <Card.CardDescription className="flex items-center justify-between w-full">
+                            <span>{task.description}</span>
+                            <span className="text-destructive">
+                                {f.format(task.deadline)}
+                            </span>
                         </Card.CardDescription>
                     </Card.CardContent>
                 </Card.Card>
             </Dialog.DialogTrigger>
-            <Dialog.DialogContent>
-                <Dialog.DialogTitle>{task.title}</Dialog.DialogTitle>
-                <Dialog.DialogDescription>
-                    {task.description}
-                </Dialog.DialogDescription>
-            </Dialog.DialogContent>
+            <EditTask
+                task={task}
+                setOpen={setOpen}
+                viewingMode={viewingMode}
+                setViewingMode={setViewingMode}
+            />
         </Dialog.Dialog>
     );
 };

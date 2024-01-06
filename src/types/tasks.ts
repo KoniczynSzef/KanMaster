@@ -30,3 +30,14 @@ export const TaskSecondStepSchema = z.object({
 export type TaskSecondStepSchemaType = z.infer<typeof TaskSecondStepSchema>;
 
 export type OmittedTask = Omit<Task, 'id' | 'createdAt'>;
+
+export type TaskViewingMode = 'edit' | 'view';
+
+export const TaskEditionSchema = z.object({
+    title: z.string().min(3, 'Task Title must be 3 characters minimum').max(55),
+    description: z.string().min(3).max(255).optional(),
+    assignedPeopleEmails: z.array(z.string().email()),
+    deadline: z.date(),
+});
+
+export type TaskEditionSchemaType = z.infer<typeof TaskEditionSchema>;

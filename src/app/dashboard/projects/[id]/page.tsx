@@ -35,7 +35,7 @@ const Page: FC<Props> = async ({ params }) => {
         <div className="container mx-auto py-24">
             <ClientContainer project={project} tasks={tasks} user={user} />
 
-            <Delete project={project} user={user} />
+            <Delete project={project} user={user} tasks={tasks} />
         </div>
     );
 };

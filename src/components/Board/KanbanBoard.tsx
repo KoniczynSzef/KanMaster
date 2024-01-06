@@ -105,6 +105,7 @@ const KanbanBoard: FC<Props> = ({ project, user, refetch }) => {
                         handleDragOver={handleDragOver}
                         handleDragStart={handleDragStart}
                         handleOnDrop={handleOnDrop}
+                        refetch={refetch}
                     />
 
                     <TaskSection
@@ -114,6 +115,7 @@ const KanbanBoard: FC<Props> = ({ project, user, refetch }) => {
                         handleDragOver={handleDragOver}
                         handleDragStart={handleDragStart}
                         handleOnDrop={handleOnDrop}
+                        refetch={refetch}
                     />
                 </div>
             </section>
