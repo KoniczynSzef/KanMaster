@@ -1,14 +1,15 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import * as Dialog from '@/components/ui/dialog';
 import { Task } from '@prisma/client';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import { completeTask, getTasks } from '@/controllers/task-actions';
+import { completeTask, getTasks, updateTask } from '@/controllers/task-actions';
 import { toast } from 'sonner';
 import { useTaskStore } from '@/context/tasks-store';
 import { useProjectStore } from '@/context/project-store';
-import { TaskViewingMode } from '@/types/tasks';
-import { Input } from '@/components/ui/input';
+import { TaskEditionSchemaType, TaskViewingMode } from '@/types/tasks';
+import EditForm from './EditForm';
+import { useForm } from 'react-hook-form';
+import { Form } from '@/components/ui/form';
+import EditFormFooter from './EditFormFooter';
 
 interface Props {
     task: Task;
@@ -23,10 +24,19 @@ const EditTask: FC<Props> = ({
     viewingMode,
     setViewingMode,
 }) => {
-    const TASK = { ...task };
+    const [TASK, setTASK] = useState<Task>(task);
+
+    const form = useForm<TaskEditionSchemaType>({
+        defaultValues: {
+            title: TASK.title,
+            description: TASK.description ?? '',
+            assignedPeopleEmails: TASK.assignedPeopleEmails,
+            deadline: TASK.deadline,
+        },
+    });
 
     const { project } = useProjectStore();
-    const { setTasks } = useTaskStore();
+    const { setTasks, updateTask: updateTaskSync } = useTaskStore();
     const handleCompleteTask = async () => {
         try {
             await completeTask(task.id);
@@ -47,38 +57,51 @@ const EditTask: FC<Props> = ({
         }
     };
 
-    const handleToggleViewingMode = () => {
+    const handleSubmit = async (data: TaskEditionSchemaType) => {
         if (viewingMode === 'view') {
             setViewingMode('edit');
-        } else {
-            setViewingMode('view');
+            return;
         }
+
+        try {
+            const newTask = await updateTask(task.id, data);
+            updateTaskSync(task.id, newTask);
+
+            toast.success('Task updated!');
+            setOpen(false);
+        } catch (error) {
+            toast.error("Couldn't update task");
+        }
+
+        setViewingMode('view');
     };
 
     return (
-        <Dialog.DialogContent
-            className={viewingMode === 'edit' ? 'bg-red-800' : ''}
-        >
-            <Dialog.DialogHeader>
-                <Dialog.DialogTitle className="text-2xl font-bold">
-                    {task.title}
-                </Dialog.DialogTitle>
-            </Dialog.DialogHeader>
+        <Dialog.DialogContent>
+            <Form {...form}>
+                <form action="" onSubmit={form.handleSubmit(handleSubmit)}>
+                    {viewingMode === 'edit' ? (
+                        <EditForm TASK={TASK} setTASK={setTASK} form={form} />
+                    ) : (
+                        <>
+                            <Dialog.DialogHeader>
+                                <Dialog.DialogTitle className="text-2xl font-bold">
+                                    {task.title}
+                                </Dialog.DialogTitle>
+                            </Dialog.DialogHeader>
 
-            <Dialog.DialogDescription>
-                {task.description}
-            </Dialog.DialogDescription>
+                            <Dialog.DialogDescription>
+                                {task.description}
+                            </Dialog.DialogDescription>
+                        </>
+                    )}
 
-            <Dialog.DialogFooter className="flex justify-between items-center">
-                <Button
-                    variant={'secondary'}
-                    onClick={handleToggleViewingMode}
-                    className="mr-auto"
-                >
-                    {viewingMode === 'view' ? 'Edit' : 'Save'}
-                </Button>
-                <Button onClick={handleCompleteTask}>Complete task</Button>
-            </Dialog.DialogFooter>
+                    <EditFormFooter
+                        handleCompleteTask={handleCompleteTask}
+                        viewingMode={viewingMode}
+                    />
+                </form>
+            </Form>
         </Dialog.DialogContent>
     );
 };

@@ -46,6 +46,8 @@ export async function updateTask(id: string, data: Partial<Task>) {
         data,
     });
 
+    revalidatePath(`/dashboard/projects/${task.projectId}`);
+
     return task;
 }
 
@@ -89,4 +91,17 @@ export async function completeTask(id: string) {
     revalidatePath(`/dashboard/projects/${task.projectId}`);
 
     return task;
+}
+
+export async function deleteCompletedTasks(projectId: string) {
+    const tasks = await db.task.deleteMany({
+        where: {
+            projectId,
+            isCompleted: true,
+        },
+    });
+
+    revalidatePath(`/dashboard/projects/${projectId}`);
+
+    return tasks;
 }
