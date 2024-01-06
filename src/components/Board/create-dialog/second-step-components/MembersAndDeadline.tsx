@@ -35,18 +35,20 @@ const MembersAndDeadline: FC<Props> = (props) => {
                         setAssignedUsers={props.setAssignedUsers}
                     />
                 ) : (
-                    <ScrollArea className="h-72 grid gap-2 grid-cols-2 border border-muted p-4 rounded">
+                    <ScrollArea className="h-72 border border-muted p-4 rounded">
                         <ScrollBar orientation="vertical" />
-                        {project?.memberEmails.map((email, i) => (
-                            <UserCard
-                                key={i}
-                                yourself={false}
-                                email={email}
-                                index={i}
-                                assignedUsers={props.assignedUsers}
-                                setAssignedUsers={props.setAssignedUsers}
-                            />
-                        ))}
+                        <div className="grid grid-cols-2 place-items-center">
+                            {project?.memberEmails.map((email, i) => (
+                                <UserCard
+                                    key={i}
+                                    yourself={false}
+                                    email={email}
+                                    index={i}
+                                    assignedUsers={props.assignedUsers}
+                                    setAssignedUsers={props.setAssignedUsers}
+                                />
+                            ))}
+                        </div>
                     </ScrollArea>
                 )}
 

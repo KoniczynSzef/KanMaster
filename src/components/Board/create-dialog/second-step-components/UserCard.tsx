@@ -33,25 +33,17 @@ const UserCard: FC<Props> = (props) => {
     const { user: storedUser } = useUserStore();
 
     const { isLoading, data: user } = useQuery({
-        queryKey: ['user'],
+        queryKey: ['user', !props.yourself && props.email],
         queryFn: async () => {
             if (props.yourself) {
                 return storedUser;
             }
 
             const a = await getUserByEmail(props.email);
+
             return a;
         },
     });
-
-    if (isLoading) {
-        return (
-            <div>
-                <Skeleton className="w-20 h-20 rounded-full" />
-                <Skeleton className="w-20 h-4" />
-            </div>
-        );
-    }
 
     const handleSetSelected = () => {
         if (clicked) {
@@ -71,9 +63,18 @@ const UserCard: FC<Props> = (props) => {
         setClicked((prev) => !prev);
     };
 
+    if (isLoading) {
+        return (
+            <div>
+                <Skeleton className="w-20 h-20 rounded-full" />
+                <Skeleton className="w-20 h-4" />
+            </div>
+        );
+    }
+
     return (
         <Card
-            className={`p-2 max-w-[8rem] hover:bg-secondary cursor-pointer transition duration-200 ${
+            className={`p-2 w-32 hover:bg-secondary cursor-pointer transition duration-200 ${
                 clicked ? 'bg-secondary' : ''
             }`}
             role="button"
@@ -88,7 +89,10 @@ const UserCard: FC<Props> = (props) => {
                                 props.email.slice(0, 2).toLocaleUpperCase()}
                         </AvatarFallback>
                     </Avatar>
-                    <Badge>{!props.yourself && props.email}</Badge>
+                    <Badge>
+                        {!props.yourself &&
+                            props.email.slice(0, props.email.lastIndexOf('@'))}
+                    </Badge>
                 </>
             ) : (
                 <>
