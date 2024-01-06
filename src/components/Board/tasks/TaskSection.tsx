@@ -1,6 +1,6 @@
 import { Project, Task, TaskCategories } from '@prisma/client';
 import React, { FC } from 'react';
-import TaskComponent from './TaskComponent';
+import TaskComponent from './task/TaskComponent';
 import CreateTask from '../create-dialog/CreateTask';
 import {
     QueryObserverResult,
@@ -22,15 +22,13 @@ type Props = {
     handleDragOver: (e: React.DragEvent<HTMLDivElement>) => void;
 
     areTaskTodo: boolean;
+    refetch: <TPageData>(
+        options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
+    ) => Promise<QueryObserverResult<void, unknown>>;
 } & (
     | {
           areTaskTodo: true;
           project: Project;
-          refetch: <TPageData>(
-              options?:
-                  | (RefetchOptions & RefetchQueryFilters<TPageData>)
-                  | undefined
-          ) => Promise<QueryObserverResult<void, unknown>>;
       }
     | {
           areTaskTodo: false;

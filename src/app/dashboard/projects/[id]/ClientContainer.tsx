@@ -33,7 +33,7 @@ const ClientContainer: FC<Props> = (props) => {
     const { setTasks, tasks } = useTaskStore();
     const { isLoading } = useQuery({
         queryKey: ['tasks'],
-        queryFn: () => {
+        queryFn: async () => {
             setTasks(props.tasks);
         },
     });
