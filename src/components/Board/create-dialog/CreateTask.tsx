@@ -35,13 +35,16 @@ const Task: OmittedTask = {
     assignedPeopleEmails: [],
     category: 'todo',
     isCompleted: false,
+    priority: 1,
 };
 
 const CreateTask: FC<Props> = ({ project, refetch }) => {
     const [deadline, setDeadline] = React.useState<Date>();
     const [openDialog, setOpenDialog] = React.useState(false);
     const [step, setStep] = React.useState(1);
-    const [assignedUsers, setAssignedUsers] = React.useState<string[]>([]); // [email, email, email
+    const [assignedUsers, setAssignedUsers] = React.useState<string[]>([]);
+
+    const [priority, setPriority] = React.useState<1 | 2 | 3>(1);
 
     const [color, setColor] = React.useState<BadgeColors>('blue');
 
@@ -105,6 +108,7 @@ const CreateTask: FC<Props> = ({ project, refetch }) => {
             setSubmitting(true);
             Task.projectId = project.id;
             Task.markColor = color;
+            Task.priority = priority;
 
             const newTask = await createTask(project.id, Task);
             addTask(newTask);
@@ -156,6 +160,8 @@ const CreateTask: FC<Props> = ({ project, refetch }) => {
                     Task={Task}
                     submitting={submitting}
                     setColor={setColor}
+                    setPriority={setPriority}
+                    priority={priority}
                 />
             </Dialog.DialogContent>
         </Dialog.Dialog>

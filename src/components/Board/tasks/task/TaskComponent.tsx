@@ -5,6 +5,8 @@ import * as Card from '../../../ui/card';
 import TaskBadge from '../TaskBadge';
 import EditTask from './EditTask';
 import { TaskViewingMode } from '@/types/tasks';
+import { differenceInDays } from 'date-fns';
+import { Badge } from '@/components/ui/badge';
 
 interface Props {
     task: Task;
@@ -42,12 +44,28 @@ const TaskComponent: FC<Props> = ({ task, handleDragStart }) => {
                         <Card.CardTitle className="flex items-center gap-4">
                             <TaskBadge task={task} />
                             {task.title}
+                            <Badge className="ml-auto tracking-wide">
+                                {task.priority === 1
+                                    ? 'Low'
+                                    : task.priority === 2
+                                    ? 'Medium'
+                                    : 'High'}
+                            </Badge>
                         </Card.CardTitle>
                     </Card.CardHeader>
                     <Card.CardContent>
                         <Card.CardDescription className="flex items-center justify-between w-full">
                             <span>{task.description}</span>
-                            <span className="text-destructive">
+                            <span
+                                className={`${
+                                    differenceInDays(
+                                        new Date(task.deadline),
+                                        new Date()
+                                    ) <= 7
+                                        ? 'text-destructive'
+                                        : ''
+                                }`}
+                            >
                                 {f.format(task.deadline)}
                             </span>
                         </Card.CardDescription>

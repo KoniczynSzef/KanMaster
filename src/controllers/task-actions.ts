@@ -64,6 +64,8 @@ export async function changeTaskCategoryAsync(
         },
     });
 
+    revalidatePath(`/dashboard/projects/${task.projectId}`);
+
     return task;
 }
 

@@ -6,10 +6,13 @@ import React, { FC } from 'react';
 import Colors from './Colors';
 import { BadgeColor } from '@/types/badge';
 import TaskBadge from '../../tasks/TaskBadge';
+import TaskPriority from './TaskPriority';
 
 interface Props {
     Task: OmittedTask;
     setColor: React.Dispatch<React.SetStateAction<BadgeColor>>;
+    setPriority: React.Dispatch<React.SetStateAction<1 | 2 | 3>>;
+    priority: 1 | 2 | 3;
 }
 
 const f = new Intl.DateTimeFormat('en-US', {
@@ -19,7 +22,7 @@ const f = new Intl.DateTimeFormat('en-US', {
     day: 'numeric',
 });
 
-const TaskPreview: FC<Props> = ({ Task, setColor }) => {
+const TaskPreview: FC<Props> = ({ Task, setColor, setPriority, priority }) => {
     return (
         <Card.Card>
             <Card.CardHeader>
@@ -51,8 +54,14 @@ const TaskPreview: FC<Props> = ({ Task, setColor }) => {
                     ))}
                 </div>
             </ScrollArea>
+            <div className="p-4">
+                <h2 className="text-muted-foreground font-bold">
+                    Select priority and mark color
+                </h2>
+                <TaskPriority setPriority={setPriority} priority={priority} />
 
-            <Colors Task={Task} setColor={setColor} />
+                <Colors Task={Task} setColor={setColor} />
+            </div>
         </Card.Card>
     );
 };
