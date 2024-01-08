@@ -7,6 +7,7 @@ import EditTask from './EditTask';
 import { TaskViewingMode } from '@/types/tasks';
 import { differenceInDays } from 'date-fns';
 import { Badge } from '@/components/ui/badge';
+import { useTaskStore } from '@/context/tasks-store';
 
 interface Props {
     task: Task;
@@ -21,9 +22,16 @@ const f = new Intl.DateTimeFormat('en', {
 });
 
 const TaskComponent: FC<Props> = ({ task, handleDragStart }) => {
+    const { setTasks, sortByPriority } = useTaskStore();
     const [open, setOpen] = React.useState(false);
     const [viewingMode, setViewingMode] =
         React.useState<TaskViewingMode>('view');
+
+    const handleSortByPriority = (priority: number) => {
+        setOpen(false);
+        const sortedTasks = sortByPriority(priority);
+        setTasks(sortedTasks);
+    };
 
     return (
         <Dialog.Dialog open={open} onOpenChange={setOpen}>
@@ -44,7 +52,23 @@ const TaskComponent: FC<Props> = ({ task, handleDragStart }) => {
                         <Card.CardTitle className="flex items-center gap-4">
                             <TaskBadge task={task} />
                             {task.title}
-                            <Badge className="ml-auto tracking-wide">
+                            <Badge
+                                className={`ml-auto tracking-wide ${
+                                    task.priority === 1
+                                        ? 'bg-emerald-700 hover:bg-emerald-800'
+                                        : ''
+                                }`}
+                                // onClick={() =>
+                                //     handleSortByPriority(task.priority)
+                                // }
+                                variant={
+                                    task.priority === 1
+                                        ? 'default'
+                                        : task.priority === 2
+                                        ? 'default'
+                                        : 'destructive'
+                                }
+                            >
                                 {task.priority === 1
                                     ? 'Low'
                                     : task.priority === 2

@@ -25,7 +25,8 @@ interface Props {
 }
 
 const KanbanBoard: FC<Props> = ({ project, user, refetch }) => {
-    const { changeTaskCategory, getTasks, setTasks, tasks } = useTaskStore();
+    const { changeTaskCategory, getTasks, setTasks, tasks, getSingleTask } =
+        useTaskStore();
 
     const handleDragStart = (
         e: React.DragEvent<HTMLDivElement>,
@@ -42,14 +43,23 @@ const KanbanBoard: FC<Props> = ({ project, user, refetch }) => {
 
         try {
             const taskId = e.dataTransfer.getData('widgetType');
-            const task = tasks.find((task) => task.id === taskId);
+            const task = getSingleTask(taskId);
 
             if (!task) return toast.error('Task not found');
 
             if (!user.email) return toast.error('User email not found');
 
             if (task.category === category) {
-                return toast.error('Task already in this category');
+                const prevIdx = tasks.findIndex((t) => t.id === taskId);
+                changeTaskCategory(taskId, category);
+
+                const newIdx = tasks.findIndex((t) => t.id === taskId);
+
+                if (prevIdx === newIdx) {
+                    return toast.error('Task already in this category');
+                }
+
+                await changeTaskCategoryAsync(taskId, category);
             }
 
             if (

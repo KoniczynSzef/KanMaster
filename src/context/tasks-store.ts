@@ -19,6 +19,8 @@ export type TaskStore = {
     getTasksByCategory: (category: TaskCategories) => Task[];
     changeTaskCategory: (id: string, category: TaskCategories) => void;
 
+    sortByPriority: (priority: number) => Task[];
+
     getTaskCount: () => number;
 };
 
@@ -61,6 +63,14 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
                 task.id === id ? { ...task, category } : task
             ),
         }));
+    },
+
+    sortByPriority(priority) {
+        set((state) => ({
+            tasks: state.tasks.filter((task) => task.priority === priority),
+        }));
+
+        return get().tasks;
     },
 
     getTaskCount: () => get().tasks.length,
