@@ -26,7 +26,7 @@ const Colors: FC<Props> = ({ Task, setColor }) => {
     };
 
     return (
-        <div className="flex flex-wrap justify-between my-4 mx-8">
+        <div className="flex flex-wrap justify-between my-4 mt-8">
             {array.map((color, idx) => (
                 <Button
                     type="button"

@@ -23,55 +23,54 @@ interface Props {
     submitting: boolean;
 
     setColor: React.Dispatch<React.SetStateAction<BadgeColor>>;
+    priority: 1 | 2 | 3;
+    setPriority: React.Dispatch<React.SetStateAction<1 | 2 | 3>>;
 }
 
-const TaskForm: FC<Props> = ({
-    form,
-    handleSubmit,
-    step,
-    deadline,
-    setDeadline,
-    setAssignedUsers,
-    assignedUsers,
-    Task,
-    submitting,
-    setColor,
-}) => {
+const TaskForm: FC<Props> = (props) => {
     return (
         <AnimatePresence>
-            <Form {...form}>
+            <Form {...props.form}>
                 <motion.form
                     className="flex flex-col gap-2"
-                    onSubmit={form.handleSubmit(handleSubmit)}
+                    onSubmit={props.form.handleSubmit(props.handleSubmit)}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.2 }}
                 >
-                    {step === 1 ? (
+                    {props.step === 1 ? (
                         <>
-                            <TaskFormField form={form} prop="title" />
-                            <TaskFormField form={form} prop="description" />
+                            <TaskFormField form={props.form} prop="title" />
+                            <TaskFormField
+                                form={props.form}
+                                prop="description"
+                            />
                         </>
                     ) : null}
 
-                    {step === 2 ? (
+                    {props.step === 2 ? (
                         <MembersAndDeadline
-                            date={deadline}
-                            setDate={setDeadline}
-                            assignedUsers={assignedUsers}
-                            setAssignedUsers={setAssignedUsers}
+                            date={props.deadline}
+                            setDate={props.setDeadline}
+                            assignedUsers={props.assignedUsers}
+                            setAssignedUsers={props.setAssignedUsers}
                         />
                     ) : null}
 
-                    {step === 3 ? (
-                        <TaskPreview Task={Task} setColor={setColor} />
+                    {props.step === 3 ? (
+                        <TaskPreview
+                            Task={props.Task}
+                            setColor={props.setColor}
+                            setPriority={props.setPriority}
+                            priority={props.priority}
+                        />
                     ) : null}
 
-                    <Button className={'self-end'} disabled={submitting}>
-                        {step === 3 && !submitting ? (
+                    <Button className={'self-end'} disabled={props.submitting}>
+                        {props.step === 3 && !props.submitting ? (
                             'Create task'
-                        ) : step === 3 && !submitting ? (
+                        ) : props.step === 3 && !props.submitting ? (
                             <Loader2 className="animate-spin" />
                         ) : (
                             'Continue'

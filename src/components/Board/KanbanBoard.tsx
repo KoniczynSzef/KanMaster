@@ -59,7 +59,7 @@ const KanbanBoard: FC<Props> = ({ project, user, refetch }) => {
                 changeTaskCategory(taskId, category);
 
                 await changeTaskCategoryAsync(taskId, category);
-                await refetch();
+                // await refetch();
 
                 setTasks(getTasks());
                 return toast.success('Task moved successfully');
