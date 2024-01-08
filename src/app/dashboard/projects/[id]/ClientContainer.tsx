@@ -8,6 +8,8 @@ import { useUserStore } from '@/context/user-store';
 import { Project, Task, User } from '@prisma/client';
 import React, { FC } from 'react';
 import { useQuery } from 'react-query';
+import Delete from './Delete';
+import { getTasks } from '@/controllers/task-actions';
 
 interface Props {
     project: Project;
@@ -31,10 +33,11 @@ const ClientContainer: FC<Props> = (props) => {
     });
 
     const { setTasks, tasks } = useTaskStore();
-    const { isLoading } = useQuery({
+    const { isLoading, refetch: fetchTasks } = useQuery({
         queryKey: ['tasks'],
         queryFn: async () => {
-            setTasks(props.tasks);
+            const t = await getTasks(props.project.id);
+            setTasks(t);
         },
     });
 
@@ -46,17 +49,23 @@ const ClientContainer: FC<Props> = (props) => {
         );
     }
 
-    if (!storedProject || !tasks) {
+    if (!storedProject || !tasks || !user) {
         return <div>Data was not found!</div>;
     }
 
     return (
-        <div>
+        <div className="flex flex-col">
             <KanbanBoard
                 project={storedProject}
                 tasks={tasks}
                 user={props.user}
                 refetch={refetch}
+            />
+
+            <Delete
+                project={storedProject}
+                user={user}
+                fetchTasks={fetchTasks}
             />
         </div>
     );

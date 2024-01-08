@@ -36,6 +36,8 @@ const Task: OmittedTask = {
     category: 'todo',
     isCompleted: false,
     priority: 1,
+
+    indexPosition: 0,
 };
 
 const CreateTask: FC<Props> = ({ project, refetch }) => {
@@ -50,7 +52,7 @@ const CreateTask: FC<Props> = ({ project, refetch }) => {
 
     const [submitting, setSubmitting] = React.useState(false);
 
-    const { addTask, getTaskCount } = useTaskStore();
+    const { addTask, getTaskCount, getTasksByCategory } = useTaskStore();
 
     const form = useForm<TaskSchemaType>({
         mode: 'all',
@@ -109,6 +111,7 @@ const CreateTask: FC<Props> = ({ project, refetch }) => {
             Task.projectId = project.id;
             Task.markColor = color;
             Task.priority = priority;
+            Task.indexPosition = getTasksByCategory('todo').length;
 
             const newTask = await createTask(project.id, Task);
             addTask(newTask);

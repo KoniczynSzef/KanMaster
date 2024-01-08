@@ -81,7 +81,7 @@ const KanbanBoard: FC<Props> = ({ project, user, refetch }) => {
                 orientation="horizontal"
                 aria-label="Horizontal scrollbar to see whole content"
             />
-            <section className="board border border-muted rounded w-[80rem]">
+            <section className="board border border-muted rounded w-[83.5rem]">
                 <BoardHeader columns={columns} />
 
                 <div className="wrapper grid grid-cols-3 w-full">
