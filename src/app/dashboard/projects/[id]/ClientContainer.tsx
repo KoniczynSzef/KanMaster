@@ -8,10 +8,11 @@ import { useUserStore } from '@/context/user-store';
 import { Project, Task, User } from '@prisma/client';
 import React, { FC } from 'react';
 import { useQuery } from 'react-query';
-import Delete from './Delete';
+// import Delete from './Delete';
 import { getTasks } from '@/controllers/task-actions';
-import { Button } from '@/components/ui/button';
-import { ArrowDown, ArrowUp } from 'lucide-react';
+// import { Button } from '@/components/ui/button';
+// import { ArrowDown, ArrowUp } from 'lucide-react';
+import Sidebar from '@/components/Dashboard/Sidebar';
 
 interface Props {
     project: Project;
@@ -21,7 +22,7 @@ interface Props {
 
 const ClientContainer: FC<Props> = (props) => {
     const { user, setUser } = useUserStore();
-    const [asc, setAsc] = React.useState<boolean>(true);
+    // const [asc, setAsc] = React.useState<boolean>(true);
 
     if (!user) {
         setUser(props.user);
@@ -35,7 +36,7 @@ const ClientContainer: FC<Props> = (props) => {
         },
     });
 
-    const { setTasks, tasks, sortByPriority } = useTaskStore();
+    const { setTasks, tasks } = useTaskStore();
     const { isLoading, refetch: fetchTasks } = useQuery({
         queryKey: ['tasks'],
         queryFn: async () => {
@@ -56,33 +57,29 @@ const ClientContainer: FC<Props> = (props) => {
         return <div>Data was not found!</div>;
     }
 
-    const handleSortByPriority = () => {
-        const newTasks = sortByPriority(asc);
-        setTasks(newTasks);
+    // const handleSortByPriority = () => {
+    //     const newTasks = sortByPriority(asc);
+    //     setTasks(newTasks);
 
-        setAsc((prev) => !prev);
-    };
+    //     setAsc((prev) => !prev);
+    // };
 
     return (
-        <div className="flex flex-col">
+        <div className="flex border border-muted rounded p-4 gap-4">
+            <Sidebar project={storedProject} />
+
             <KanbanBoard
                 project={storedProject}
                 tasks={tasks}
                 user={props.user}
                 refetch={fetchTasks}
             />
-            <Button
-                onClick={handleSortByPriority}
-                className="self-start flex gap-2 hidden"
-            >
-                Priority {asc ? <ArrowUp /> : <ArrowDown />}
-            </Button>
 
-            <Delete
+            {/* <Delete
                 project={storedProject}
                 user={user}
                 fetchTasks={fetchTasks}
-            />
+            /> */}
         </div>
     );
 };

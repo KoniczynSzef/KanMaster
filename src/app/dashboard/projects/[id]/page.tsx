@@ -31,7 +31,7 @@ const Page: FC<Props> = async ({ params }) => {
     const tasks = await getTasks(project.id);
 
     return (
-        <div className="container mx-auto py-24">
+        <div className="p-24">
             <ClientContainer project={project} tasks={tasks} user={user} />
         </div>
     );
