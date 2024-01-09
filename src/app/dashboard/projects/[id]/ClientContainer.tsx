@@ -12,7 +12,7 @@ import { useQuery } from 'react-query';
 import { getTasks } from '@/controllers/task-actions';
 // import { Button } from '@/components/ui/button';
 // import { ArrowDown, ArrowUp } from 'lucide-react';
-import Sidebar from '@/components/Dashboard/Sidebar';
+import Sidebar from '@/components/Dashboard/Sidebar/Sidebar';
 
 interface Props {
     project: Project;
