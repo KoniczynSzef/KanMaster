@@ -73,7 +73,7 @@ const ClientContainer: FC<Props> = (props) => {
             />
             <Button
                 onClick={handleSortByPriority}
-                className="self-start flex gap-2"
+                className="self-start flex gap-2 hidden"
             >
                 Priority {asc ? <ArrowUp /> : <ArrowDown />}
             </Button>

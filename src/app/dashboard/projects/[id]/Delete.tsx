@@ -30,15 +30,15 @@ const Delete: FC<Props> = ({ project, user, fetchTasks }) => {
     const { mutate } = useMutation({
         mutationFn: async () => {
             await deleteCompletedTasks(project.id);
-            toast.info('Deleting completed tasks...');
         },
         onSuccess: async () => {
             toast.success('Project deleted!');
 
             await fetchTasks();
         },
-        onError: () => {
+        onError: async () => {
             toast.error('Something went wrong while deleting the project!');
+            await fetchTasks();
         },
     });
 
