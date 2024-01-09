@@ -12,7 +12,10 @@ import {
 import { useTaskStore } from '@/context/tasks-store';
 import TaskSection from './tasks/TaskSection';
 import { toast } from 'sonner';
-import { changeTaskCategoryAsync } from '@/controllers/task-actions';
+import {
+    changeTaskCategoryAsync,
+    changeTaskIndexPosition,
+} from '@/controllers/task-actions';
 import { ScrollArea, ScrollBar } from '../ui/scroll-area';
 
 interface Props {
@@ -25,8 +28,15 @@ interface Props {
 }
 
 const KanbanBoard: FC<Props> = ({ project, user, refetch }) => {
-    const { changeTaskCategory, getTasks, setTasks, tasks, getSingleTask } =
-        useTaskStore();
+    const {
+        changeTaskCategory,
+        getTasks,
+        setTasks,
+        tasks,
+        getSingleTask,
+        getTasksByCategory,
+        moveTask,
+    } = useTaskStore();
 
     const handleDragStart = (
         e: React.DragEvent<HTMLDivElement>,
@@ -37,7 +47,8 @@ const KanbanBoard: FC<Props> = ({ project, user, refetch }) => {
 
     const handleOnDrop = async (
         e: React.DragEvent<HTMLElement>,
-        category: TaskCategories
+        category: TaskCategories,
+        newIdx: number
     ) => {
         e.preventDefault();
 
@@ -50,16 +61,19 @@ const KanbanBoard: FC<Props> = ({ project, user, refetch }) => {
             if (!user.email) return toast.error('User email not found');
 
             if (task.category === category) {
-                const prevIdx = tasks.findIndex((t) => t.id === taskId);
-                changeTaskCategory(taskId, category);
+                const { indexPosition } = task;
 
-                const newIdx = tasks.findIndex((t) => t.id === taskId);
-
-                if (prevIdx === newIdx) {
+                if (indexPosition === newIdx) {
                     return toast.error('Task already in this category');
                 }
 
+                moveTask(taskId, newIdx);
+                await changeTaskIndexPosition(taskId, newIdx);
+
                 await changeTaskCategoryAsync(taskId, category);
+                await refetch();
+
+                return toast.success('Task moved successfully');
             }
 
             if (
@@ -69,9 +83,17 @@ const KanbanBoard: FC<Props> = ({ project, user, refetch }) => {
                 changeTaskCategory(taskId, category);
 
                 await changeTaskCategoryAsync(taskId, category);
-                // await refetch();
 
                 setTasks(getTasks());
+
+                const index = getTasksByCategory(category).findIndex(
+                    (t) => t.id === taskId
+                );
+
+                await changeTaskIndexPosition(taskId, index);
+
+                await refetch();
+
                 return toast.success('Task moved successfully');
             }
 

@@ -9,6 +9,9 @@ export async function getTasks(projectId: string) {
         where: {
             projectId,
         },
+        orderBy: {
+            indexPosition: 'asc',
+        },
     });
 
     return tasks;
@@ -106,4 +109,22 @@ export async function deleteCompletedTasks(projectId: string) {
     revalidatePath(`/dashboard/projects/${projectId}`);
 
     return tasks;
+}
+
+export async function changeTaskIndexPosition(
+    taskId: string,
+    indexPosition: number
+) {
+    const task = await db.task.update({
+        where: {
+            id: taskId,
+        },
+        data: {
+            indexPosition,
+        },
+    });
+
+    revalidatePath(`/dashboard/projects/${task.projectId}`);
+
+    return task;
 }

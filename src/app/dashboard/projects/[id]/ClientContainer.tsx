@@ -10,6 +10,8 @@ import React, { FC } from 'react';
 import { useQuery } from 'react-query';
 import Delete from './Delete';
 import { getTasks } from '@/controllers/task-actions';
+import { Button } from '@/components/ui/button';
+import { ArrowDown, ArrowUp } from 'lucide-react';
 
 interface Props {
     project: Project;
@@ -19,20 +21,21 @@ interface Props {
 
 const ClientContainer: FC<Props> = (props) => {
     const { user, setUser } = useUserStore();
+    const [asc, setAsc] = React.useState<boolean>(true);
 
     if (!user) {
         setUser(props.user);
     }
 
     const { setSingleProject, project: storedProject } = useProjectStore();
-    const { refetch } = useQuery({
+    useQuery({
         queryKey: ['project'],
         queryFn: () => {
             setSingleProject(props.project);
         },
     });
 
-    const { setTasks, tasks } = useTaskStore();
+    const { setTasks, tasks, sortByPriority } = useTaskStore();
     const { isLoading, refetch: fetchTasks } = useQuery({
         queryKey: ['tasks'],
         queryFn: async () => {
@@ -53,14 +56,27 @@ const ClientContainer: FC<Props> = (props) => {
         return <div>Data was not found!</div>;
     }
 
+    const handleSortByPriority = () => {
+        const newTasks = sortByPriority(asc);
+        setTasks(newTasks);
+
+        setAsc((prev) => !prev);
+    };
+
     return (
         <div className="flex flex-col">
             <KanbanBoard
                 project={storedProject}
                 tasks={tasks}
                 user={props.user}
-                refetch={refetch}
+                refetch={fetchTasks}
             />
+            <Button
+                onClick={handleSortByPriority}
+                className="self-start flex gap-2"
+            >
+                Priority {asc ? <ArrowUp /> : <ArrowDown />}
+            </Button>
 
             <Delete
                 project={storedProject}

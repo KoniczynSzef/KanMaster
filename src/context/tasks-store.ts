@@ -19,7 +19,8 @@ export type TaskStore = {
     getTasksByCategory: (category: TaskCategories) => Task[];
     changeTaskCategory: (id: string, category: TaskCategories) => void;
 
-    sortByPriority: (priority: number) => Task[];
+    sortByPriority: (asc: boolean) => Task[];
+    moveTask: (id: string, index: number) => void;
 
     getTaskCount: () => number;
 };
@@ -65,12 +66,50 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
         }));
     },
 
-    sortByPriority(priority) {
+    sortByPriority(asc) {
         set((state) => ({
-            tasks: state.tasks.filter((task) => task.priority === priority),
+            tasks: state.tasks.toSorted((a, b) =>
+                asc ? a.priority - b.priority : b.priority - a.priority
+            ),
         }));
 
         return get().tasks;
+    },
+
+    moveTask(id, index) {
+        const tasks = get().tasks;
+        const task = tasks.find((task) => task.id === id);
+        if (!task) return;
+
+        const taskIndex = tasks.indexOf(task);
+
+        if (taskIndex === index) return;
+
+        const filteredTasks = tasks.filter((task) => task.id !== id);
+
+        if (index === 0) {
+            task.indexPosition = 0;
+            filteredTasks.unshift(task);
+            set({ tasks: filteredTasks });
+            return;
+        }
+
+        if (index === filteredTasks.length) {
+            task.indexPosition = index;
+            filteredTasks.push(task);
+            set({ tasks: filteredTasks });
+            return;
+        }
+
+        const tasksBefore = filteredTasks.slice(0, index);
+        tasksBefore.forEach((task) => {
+            if (task.indexPosition !== 0) task.indexPosition--;
+        });
+
+        const tasksAfter = filteredTasks.slice(index);
+
+        const newTasks = [...tasksBefore, task, ...tasksAfter];
+        set({ tasks: newTasks });
     },
 
     getTaskCount: () => get().tasks.length,
