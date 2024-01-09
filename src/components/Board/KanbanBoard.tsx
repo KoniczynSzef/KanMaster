@@ -108,7 +108,7 @@ const KanbanBoard: FC<Props> = ({ project, user, refetch }) => {
     };
 
     return (
-        <ScrollArea>
+        <ScrollArea className="self-center">
             <ScrollBar
                 orientation="horizontal"
                 aria-label="Horizontal scrollbar to see whole content"

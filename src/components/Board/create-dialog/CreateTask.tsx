@@ -129,7 +129,7 @@ const CreateTask: FC<Props> = ({ project, refetch }) => {
         <Dialog.Dialog open={openDialog} onOpenChange={setOpenDialog}>
             <Dialog.DialogTrigger asChild>
                 <Button className="self-center mt-8">
-                    Create new task <Plus className="ml-2" />
+                    Add new task <Plus className="ml-2" />
                 </Button>
             </Dialog.DialogTrigger>
 
