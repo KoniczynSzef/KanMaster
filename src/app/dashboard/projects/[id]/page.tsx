@@ -1,6 +1,5 @@
 import { getProject } from '@/controllers/project-functions';
 import React, { FC } from 'react';
-import Delete from './Delete';
 import { getServerSession } from 'next-auth';
 import { options } from '@/auth/options';
 import { getUser } from '@/controllers/user-functions';
@@ -34,8 +33,6 @@ const Page: FC<Props> = async ({ params }) => {
     return (
         <div className="container mx-auto py-24">
             <ClientContainer project={project} tasks={tasks} user={user} />
-
-            <Delete project={project} user={user} tasks={tasks} />
         </div>
     );
 };

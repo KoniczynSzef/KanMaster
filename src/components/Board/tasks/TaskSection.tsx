@@ -16,7 +16,8 @@ type Props = {
     ) => void;
     handleOnDrop: (
         e: React.DragEvent<HTMLElement>,
-        category: TaskCategories
+        category: TaskCategories,
+        newIdx: number
     ) => void;
     category: TaskCategories;
     handleDragOver: (e: React.DragEvent<HTMLDivElement>) => void;
@@ -37,22 +38,39 @@ type Props = {
 
 const TaskSection: FC<Props> = (props) => {
     return (
-        <section
-            className="py-4 px-2 h-full border-x border-x-secondary flex flex-col gap-2"
-            onDrop={(e) => props.handleOnDrop(e, props.category)}
+        <div
+            className="border-x border-x-secondary flex flex-col px-2 h-full pb-5"
             onDragOver={props.handleDragOver}
         >
-            {props.array.map((task) => (
-                <TaskComponent
-                    key={task.id}
-                    task={task}
-                    handleDragStart={props.handleDragStart}
+            {props.array.length === 0 ? (
+                <div
+                    onDrop={(e) => props.handleOnDrop(e, props.category, 0)}
+                    className="h-full"
                 />
+            ) : null}
+            {props.array.map((task, idx) => (
+                <div
+                    key={task.id}
+                    onDrop={(e) => props.handleOnDrop(e, props.category, idx)}
+                    className="py-5"
+                >
+                    <TaskComponent
+                        key={task.id}
+                        task={task}
+                        handleDragStart={props.handleDragStart}
+                    />
+                </div>
             ))}
+            <div
+                onDrop={(e) =>
+                    props.handleOnDrop(e, props.category, props.array.length)
+                }
+                className="h-full"
+            />
             {props.areTaskTodo ? (
                 <CreateTask project={props.project} refetch={props.refetch} />
             ) : null}
-        </section>
+        </div>
     );
 };
 

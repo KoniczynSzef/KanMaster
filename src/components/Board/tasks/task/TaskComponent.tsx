@@ -44,7 +44,20 @@ const TaskComponent: FC<Props> = ({ task, handleDragStart }) => {
                         <Card.CardTitle className="flex items-center gap-4">
                             <TaskBadge task={task} />
                             {task.title}
-                            <Badge className="ml-auto tracking-wide">
+                            <Badge
+                                className={`ml-auto tracking-wide ${
+                                    task.priority === 1
+                                        ? 'bg-emerald-700 hover:bg-emerald-800'
+                                        : ''
+                                }`}
+                                variant={
+                                    task.priority === 1
+                                        ? 'default'
+                                        : task.priority === 2
+                                        ? 'default'
+                                        : 'destructive'
+                                }
+                            >
                                 {task.priority === 1
                                     ? 'Low'
                                     : task.priority === 2
