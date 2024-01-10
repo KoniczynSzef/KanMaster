@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import * as Dialog from '@/components/ui/dialog';
 import { OmittedTask, TaskSchema, TaskSchemaType } from '@/types/tasks';
@@ -18,7 +20,7 @@ import {
 
 interface Props {
     project: Project;
-    refetch: <TPageData>(
+    refetch?: <TPageData>(
         options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
     ) => Promise<QueryObserverResult<void, unknown>>;
 }
@@ -120,14 +122,16 @@ const CreateTask: FC<Props> = ({ project, refetch }) => {
 
             resetState();
 
-            await refetch();
+            if (refetch) {
+                await refetch();
+            }
             return;
         }
     };
 
     return (
         <Dialog.Dialog open={openDialog} onOpenChange={setOpenDialog}>
-            <Dialog.DialogTrigger asChild>
+            <Dialog.DialogTrigger asChild className="">
                 <Button className="self-center mt-8">
                     Add new task <Plus className="ml-2" />
                 </Button>

@@ -7,18 +7,15 @@ interface Props {
 
 const BoardHeader: FC<Props> = ({ columns }) => {
     return (
-        <div>
-            <header className="flex items-center border-b border-b-muted text-center">
-                {columns.map((column, i) => (
-                    <div
-                        key={i}
-                        className="todo w-1/3 border-x border-x-muted py-3 odd:bg-secondary"
-                    >
-                        <h4 className="text-2xl font-bold">{column.title}</h4>
-                    </div>
-                ))}
-            </header>
-        </div>
+        <header className="flex items-center border-b border-b-muted text-center">
+            {columns.map((column, i) => (
+                <div key={i} className="todo w-1/3 py-3 bg-slate-950">
+                    <h4 className="text-2xl font-bold text-left px-14">
+                        {column.title}
+                    </h4>
+                </div>
+            ))}
+        </header>
     );
 };
 

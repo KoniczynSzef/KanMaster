@@ -18,7 +18,7 @@ const layout: FC<Props> = async (props) => {
     }
 
     return (
-        <section className="flex border border-muted rounded p-4 gap-4 my-24 mx-16 relative">
+        <section className="flex rounded p-4 gap-4 my-24 mx-16 relative">
             <Sidebar project={project} />
             {props.children}
         </section>

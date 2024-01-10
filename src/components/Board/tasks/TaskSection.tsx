@@ -39,7 +39,7 @@ type Props = {
 const TaskSection: FC<Props> = (props) => {
     return (
         <div
-            className="border-x border-x-secondary flex flex-col px-2 h-full pb-5"
+            className="border-x-secondary flex flex-col px-2 h-full pb-5"
             onDragOver={props.handleDragOver}
         >
             {props.array.length === 0 ? (
