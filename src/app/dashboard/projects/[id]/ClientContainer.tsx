@@ -12,7 +12,6 @@ import { useQuery } from 'react-query';
 import { getTasks } from '@/controllers/task-actions';
 // import { Button } from '@/components/ui/button';
 // import { ArrowDown, ArrowUp } from 'lucide-react';
-import Sidebar from '@/components/Dashboard/Sidebar/Sidebar';
 
 interface Props {
     project: Project;
@@ -65,22 +64,12 @@ const ClientContainer: FC<Props> = (props) => {
     // };
 
     return (
-        <div className="flex border border-muted rounded p-4 gap-4">
-            <Sidebar project={storedProject} />
-
-            <KanbanBoard
-                project={storedProject}
-                tasks={tasks}
-                user={props.user}
-                refetch={fetchTasks}
-            />
-
-            {/* <Delete
-                project={storedProject}
-                user={user}
-                fetchTasks={fetchTasks}
-            /> */}
-        </div>
+        <KanbanBoard
+            project={storedProject}
+            tasks={tasks}
+            user={props.user}
+            refetch={fetchTasks}
+        />
     );
 };
 

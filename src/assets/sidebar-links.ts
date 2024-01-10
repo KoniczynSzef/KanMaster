@@ -8,9 +8,9 @@ export const sidebarLinks: SidebarLink[] = [
         isActive: true,
     },
     {
-        label: 'Project Profile',
+        label: 'Project Settings',
         variant: 'ghost',
-        href: './profile-settings',
+        href: './project-settings',
     },
     {
         label: 'Contact',

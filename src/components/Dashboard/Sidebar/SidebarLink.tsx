@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import { SidebarLink, Variant } from '@/types/sidebar';
 import { Project } from '@prisma/client';
