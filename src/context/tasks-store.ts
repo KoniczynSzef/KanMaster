@@ -23,6 +23,7 @@ export type TaskStore = {
     moveTask: (id: string, index: number) => void;
 
     getTaskCount: () => number;
+    getPartialTaskCount: (category: TaskCategories) => number;
 };
 
 export const useTaskStore = create<TaskStore>((set, get) => ({
@@ -113,4 +114,7 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
     },
 
     getTaskCount: () => get().tasks.length,
+    getPartialTaskCount(category) {
+        return get().tasks.filter((task) => task.category === category).length;
+    },
 }));

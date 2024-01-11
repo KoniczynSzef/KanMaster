@@ -1,7 +1,6 @@
-import { Project, Task, TaskCategories } from '@prisma/client';
+import { Task, TaskCategories } from '@prisma/client';
 import React, { FC } from 'react';
 import TaskComponent from './task/TaskComponent';
-import CreateTask from '../create-dialog/CreateTask';
 import {
     QueryObserverResult,
     RefetchOptions,
@@ -22,24 +21,19 @@ type Props = {
     category: TaskCategories;
     handleDragOver: (e: React.DragEvent<HTMLDivElement>) => void;
 
-    areTaskTodo: boolean;
+    isLast?: boolean;
+
     refetch: <TPageData>(
         options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
     ) => Promise<QueryObserverResult<void, unknown>>;
-} & (
-    | {
-          areTaskTodo: true;
-          project: Project;
-      }
-    | {
-          areTaskTodo: false;
-      }
-);
+};
 
 const TaskSection: FC<Props> = (props) => {
     return (
         <div
-            className="border-x-secondary flex flex-col px-2 h-full pb-5"
+            className={`border-r-secondary flex flex-col px-2 h-full pb-5 ${
+                props.isLast ? '' : 'border-r'
+            }`}
             onDragOver={props.handleDragOver}
         >
             {props.array.length === 0 ? (
@@ -67,9 +61,6 @@ const TaskSection: FC<Props> = (props) => {
                 }
                 className="h-full"
             />
-            {props.areTaskTodo ? (
-                <CreateTask project={props.project} refetch={props.refetch} />
-            ) : null}
         </div>
     );
 };

@@ -10,7 +10,7 @@ interface Props {
 
 const Sidebar: FC<Props> = (props) => {
     return (
-        <div className="w-72 hidden md:block">
+        <div className="w-72 hidden md:flex flex-col">
             {sidebarLinks.map((link, idx) => (
                 <SidebarLink key={idx} link={link} project={props.project} />
             ))}

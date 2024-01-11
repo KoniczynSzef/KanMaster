@@ -118,8 +118,6 @@ const KanbanBoard: FC<Props> = ({ project, user, refetch }) => {
 
                 <div className="wrapper grid grid-cols-3 w-full">
                     <TaskSection
-                        areTaskTodo
-                        project={project}
                         array={tasks.filter((task) => task.category === 'todo')}
                         category="todo"
                         handleDragOver={handleDragOver}
@@ -129,7 +127,6 @@ const KanbanBoard: FC<Props> = ({ project, user, refetch }) => {
                     />
 
                     <TaskSection
-                        areTaskTodo={false}
                         array={tasks.filter(
                             (task) => task.category === 'inProgress'
                         )}
@@ -141,13 +138,13 @@ const KanbanBoard: FC<Props> = ({ project, user, refetch }) => {
                     />
 
                     <TaskSection
-                        areTaskTodo={false}
                         array={tasks.filter((task) => task.category === 'done')}
                         category="done"
                         handleDragOver={handleDragOver}
                         handleDragStart={handleDragStart}
                         handleOnDrop={handleOnDrop}
                         refetch={refetch}
+                        isLast
                     />
                 </div>
             </section>
