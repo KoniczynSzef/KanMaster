@@ -14,7 +14,9 @@ const BoardHeader: FC<Props> = ({ columns }) => {
             {columns.map((column, i) => (
                 <div
                     key={i}
-                    className="todo w-1/3 py-3 bg-slate-950 flex items-center"
+                    className={`todo w-1/3 py-3 bg-slate-950 flex items-center ${
+                        i === columns.length - 1 ? '' : 'border-r'
+                    } border-r-secondary`}
                 >
                     <h4 className="text-2xl font-bold text-left px-14">
                         {column.title}
