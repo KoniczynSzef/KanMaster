@@ -111,9 +111,11 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
             task.indexPosition++;
         });
 
-        const tasksBefore = filteredTasks.slice(0, index);
-
-        const newTasks = [...tasksBefore, task, ...tasksAfter];
+        const newTasks = [
+            ...filteredTasks.slice(0, index),
+            task,
+            ...tasksAfter,
+        ];
         set({ tasks: newTasks });
     },
 

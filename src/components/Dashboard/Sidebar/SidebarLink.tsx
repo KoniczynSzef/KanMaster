@@ -6,12 +6,13 @@ import { Project } from '@prisma/client';
 import Link from 'next/link';
 import React, { FC } from 'react';
 
-interface Props {
+type Props = {
     link: SidebarLink;
     project: Project;
-}
+    isDropdown?: boolean;
+};
 
-const SidebarLink: FC<Props> = ({ link, project }) => {
+const SidebarLink: FC<Props> = (props) => {
     const [variant, setVariant] = React.useState<Variant>('ghost');
 
     return (
@@ -22,15 +23,17 @@ const SidebarLink: FC<Props> = ({ link, project }) => {
             onMouseEnter={() => setVariant('secondary')}
             onMouseLeave={() => setVariant('ghost')}
         >
-            <Link href={`/dashboard/projects/${project.id}/${link.href}`}>
+            <Link
+                href={`/dashboard/projects/${props.project.id}/${props.link.href}`}
+            >
                 <span
                     className={`mr-auto ${
-                        link.isActive
+                        props.link.isActive
                             ? 'font-bold text-foreground'
                             : 'font-normal text-muted-foreground'
                     }`}
                 >
-                    {link.label}
+                    {props.link.label}
                 </span>
             </Link>
         </Button>

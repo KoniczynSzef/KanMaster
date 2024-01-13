@@ -46,9 +46,8 @@ const TaskSection: FC<Props> = (props) => {
                 <div
                     key={task.id}
                     onDrop={(e) => props.handleOnDrop(e, props.category, idx)}
-                    className="pt-5 odd:bg-green-500 even:bg-blue-500"
+                    className="pt-5"
                 >
-                    {idx}
                     <TaskComponent
                         key={task.id}
                         task={task}
@@ -60,7 +59,7 @@ const TaskSection: FC<Props> = (props) => {
                 onDrop={(e) =>
                     props.handleOnDrop(e, props.category, props.array.length)
                 }
-                className="h-full bg-gray-600 py-2"
+                className="h-full py-2"
             />
         </div>
     );
