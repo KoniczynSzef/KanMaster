@@ -51,6 +51,7 @@ const KanbanBoard: FC<Props> = ({ project, user, refetch }) => {
         newIdx: number
     ) => {
         e.preventDefault();
+        console.log(newIdx);
 
         try {
             const taskId = e.dataTransfer.getData('widgetType');
@@ -67,7 +68,7 @@ const KanbanBoard: FC<Props> = ({ project, user, refetch }) => {
                     return toast.error('Task already in this category');
                 }
 
-                moveTask(taskId, newIdx);
+                moveTask(taskId, newIdx, category);
                 await changeTaskIndexPosition(taskId, newIdx);
 
                 await changeTaskCategoryAsync(taskId, category);
