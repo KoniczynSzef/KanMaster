@@ -14,6 +14,8 @@ export async function getTasks(projectId: string) {
         },
     });
 
+    revalidatePath(`/dashboard/projects/${projectId}`);
+
     return tasks;
 }
 

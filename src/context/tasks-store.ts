@@ -124,3 +124,9 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
         return get().tasks.filter((task) => task.category === category).length;
     },
 }));
+
+export const searchTasks = (tasks: Task[], query: string) => {
+    return tasks.filter((task) =>
+        task.title.toLowerCase().startsWith(query.toLowerCase())
+    );
+};

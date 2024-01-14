@@ -51,7 +51,6 @@ const KanbanBoard: FC<Props> = ({ project, user, refetch }) => {
         newIdx: number
     ) => {
         e.preventDefault();
-        console.log(newIdx);
 
         try {
             const taskId = e.dataTransfer.getData('widgetType');

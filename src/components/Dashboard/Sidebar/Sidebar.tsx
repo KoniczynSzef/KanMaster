@@ -3,7 +3,6 @@ import React, { FC } from 'react';
 import { sidebarLinks } from '@/assets/sidebar-links';
 import SidebarLink from './SidebarLink';
 import CreateTask from '@/components/Board/create-dialog/CreateTask';
-import SidebarMenu from './SidebarMenu';
 
 interface Props {
     project: Project;
@@ -16,7 +15,6 @@ const Sidebar: FC<Props> = (props) => {
                 <SidebarLink key={idx} link={link} project={props.project} />
             ))}
 
-            <SidebarMenu />
             <CreateTask project={props.project} />
         </div>
     );
