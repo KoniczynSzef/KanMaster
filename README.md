@@ -23,7 +23,7 @@ KanMaster focuses specifically on Kanban methodology, so we provide many feature
 - Auth.js
 - Vercel (deployment)
 
-I'm using Next.js version 14 and because of that, I can use stable *server actions* and *React Server Components*.
+I'm using Next.js version 14 and because of that, I can use stable **server actions** and **React Server Components**.
 
 ### Podzial funkcjonalnosci
 
