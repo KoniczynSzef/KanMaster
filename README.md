@@ -8,7 +8,7 @@ KanMaster is a powerful solution you need to maximize benefits and improve work 
 
 KanMaster focuses specifically on Kanban methodology, so we provide many features of Kanban such as:
 
-- Kanban Board 
+- Visualizing workflow using **Kanban Board**
 - Adding badges to projects and tasks
 - Assigning team members for specific task
 - Sorting by priority, by date and much more...
