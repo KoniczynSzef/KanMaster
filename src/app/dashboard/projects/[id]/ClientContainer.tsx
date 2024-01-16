@@ -8,11 +8,8 @@ import { useUserStore } from '@/context/user-store';
 import { Project, Task, User } from '@prisma/client';
 import React, { FC } from 'react';
 import { useQuery } from 'react-query';
-// import Delete from './Delete';
 import { getTasks } from '@/controllers/task-actions';
 import Delete from './Delete';
-// import { Button } from '@/components/ui/button';
-// import { ArrowDown, ArrowUp } from 'lucide-react';
 
 interface Props {
     project: Project;
@@ -22,7 +19,6 @@ interface Props {
 
 const ClientContainer: FC<Props> = (props) => {
     const { user, setUser } = useUserStore();
-    // const [asc, setAsc] = React.useState<boolean>(true);
 
     if (!user) {
         setUser(props.user);
@@ -56,13 +52,6 @@ const ClientContainer: FC<Props> = (props) => {
     if (!storedProject || !tasks || !user) {
         return <div>Data was not found!</div>;
     }
-
-    // const handleSortByPriority = () => {
-    //     const newTasks = sortByPriority(asc);
-    //     setTasks(newTasks);
-
-    //     setAsc((prev) => !prev);
-    // };
 
     return (
         <div className="flex flex-col w-full">

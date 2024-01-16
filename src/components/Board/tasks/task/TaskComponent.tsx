@@ -30,7 +30,7 @@ const TaskComponent: FC<Props> = ({ task, handleDragStart }) => {
             <Dialog.DialogTrigger
                 asChild
                 draggable
-                aria-label="Task card component that triggers dialog"
+                aria-label="Task card component that triggers dialog and can be dragged"
             >
                 <Card.Card
                     className={`cursor-pointer hover:bg-secondary transition-colors duration-300 ease-in-out relative max-w-sm mx-auto ${

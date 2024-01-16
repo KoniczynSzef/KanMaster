@@ -33,8 +33,6 @@ const Notification: FC<Props> = ({ user }) => {
                 setNotifications(n);
 
                 return n;
-            } else {
-                console.log('No user found');
             }
         },
     });

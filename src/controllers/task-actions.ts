@@ -134,16 +134,5 @@ export async function changeTaskIndexPosition(taskId: string, idx: number) {
 
     revalidatePath(`/dashboard/projects/${task.projectId}`);
 
-    const tasks = await db.task.findMany({
-        where: {
-            projectId: task.projectId,
-        },
-        orderBy: {
-            indexPosition: 'asc',
-        },
-    });
-
-    console.log(tasks);
-
     return task;
 }
