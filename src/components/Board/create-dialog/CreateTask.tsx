@@ -17,6 +17,7 @@ import {
     RefetchOptions,
     RefetchQueryFilters,
 } from 'react-query';
+import { useRouter } from 'next/navigation';
 
 interface Props {
     project: Project;
@@ -43,6 +44,7 @@ const Task: OmittedTask = {
 };
 
 const CreateTask: FC<Props> = ({ project, refetch }) => {
+    const router = useRouter();
     const [deadline, setDeadline] = React.useState<Date>();
     const [openDialog, setOpenDialog] = React.useState(false);
     const [step, setStep] = React.useState(1);
@@ -130,7 +132,20 @@ const CreateTask: FC<Props> = ({ project, refetch }) => {
     };
 
     return (
-        <Dialog.Dialog open={openDialog} onOpenChange={setOpenDialog}>
+        <Dialog.Dialog
+            open={openDialog}
+            onOpenChange={() => {
+                if (
+                    window.location.href !==
+                    process.env.NEXTAUTH_URL +
+                        '/dashboard/projects/' +
+                        project.id
+                ) {
+                    router.push('/dashboard/projects/' + project.id);
+                }
+                setOpenDialog((prev) => !prev);
+            }}
+        >
             <Dialog.DialogTrigger asChild className="">
                 <Button className="mt-auto">
                     Add new task <Plus className="ml-2" />
