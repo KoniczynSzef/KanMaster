@@ -1,7 +1,6 @@
-import { Project, Task, TaskCategories } from '@prisma/client';
+import { Task, TaskCategories } from '@prisma/client';
 import React, { FC } from 'react';
 import TaskComponent from './task/TaskComponent';
-import CreateTask from '../create-dialog/CreateTask';
 import {
     QueryObserverResult,
     RefetchOptions,
@@ -22,24 +21,19 @@ type Props = {
     category: TaskCategories;
     handleDragOver: (e: React.DragEvent<HTMLDivElement>) => void;
 
-    areTaskTodo: boolean;
+    isLast?: boolean;
+
     refetch: <TPageData>(
         options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
     ) => Promise<QueryObserverResult<void, unknown>>;
-} & (
-    | {
-          areTaskTodo: true;
-          project: Project;
-      }
-    | {
-          areTaskTodo: false;
-      }
-);
+};
 
 const TaskSection: FC<Props> = (props) => {
     return (
         <div
-            className="border-x border-x-secondary flex flex-col px-2 h-full pb-5"
+            className={`border-r-secondary flex flex-col px-2 h-full pb-5 ${
+                props.isLast ? '' : 'border-r'
+            }`}
             onDragOver={props.handleDragOver}
         >
             {props.array.length === 0 ? (
@@ -52,7 +46,7 @@ const TaskSection: FC<Props> = (props) => {
                 <div
                     key={task.id}
                     onDrop={(e) => props.handleOnDrop(e, props.category, idx)}
-                    className="py-5"
+                    className="pt-5"
                 >
                     <TaskComponent
                         key={task.id}
@@ -65,11 +59,8 @@ const TaskSection: FC<Props> = (props) => {
                 onDrop={(e) =>
                     props.handleOnDrop(e, props.category, props.array.length)
                 }
-                className="h-full"
+                className="h-full py-2"
             />
-            {props.areTaskTodo ? (
-                <CreateTask project={props.project} refetch={props.refetch} />
-            ) : null}
         </div>
     );
 };

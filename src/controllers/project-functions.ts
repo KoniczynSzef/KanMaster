@@ -3,6 +3,8 @@
 import { db } from '@/db';
 import { getUser } from './user-functions';
 import { CreatedProject } from '@/types/project';
+import { Project } from '@prisma/client';
+import { revalidatePath } from 'next/cache';
 
 export async function getProjects(
     userEmail: string | null | undefined,
@@ -71,6 +73,12 @@ export async function createProject(
         },
     });
 
+    if (!newProject) {
+        throw new Error('There was an error creating the project');
+    }
+
+    revalidatePath(`/dashboard`);
+
     return newProject;
 }
 
@@ -100,5 +108,25 @@ export async function deleteProject(
         where: { id: projectId },
     });
 
+    revalidatePath(`/dashboard/projects/${projectId}`);
+
     return deletedProject;
+}
+
+export async function updateProject(
+    projectId: string,
+    project: Partial<Project>
+) {
+    const updatedProject = await db.project.update({
+        where: { id: projectId },
+        data: project,
+    });
+
+    if (!updatedProject) {
+        throw new Error('There is no project with that id');
+    }
+
+    revalidatePath(`/dashboard`);
+
+    return updatedProject;
 }

@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import * as Dialog from '@/components/ui/dialog';
 import { OmittedTask, TaskSchema, TaskSchemaType } from '@/types/tasks';
@@ -15,10 +17,11 @@ import {
     RefetchOptions,
     RefetchQueryFilters,
 } from 'react-query';
+import { useRouter } from 'next/navigation';
 
 interface Props {
     project: Project;
-    refetch: <TPageData>(
+    refetch?: <TPageData>(
         options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
     ) => Promise<QueryObserverResult<void, unknown>>;
 }
@@ -41,6 +44,7 @@ const Task: OmittedTask = {
 };
 
 const CreateTask: FC<Props> = ({ project, refetch }) => {
+    const router = useRouter();
     const [deadline, setDeadline] = React.useState<Date>();
     const [openDialog, setOpenDialog] = React.useState(false);
     const [step, setStep] = React.useState(1);
@@ -120,15 +124,30 @@ const CreateTask: FC<Props> = ({ project, refetch }) => {
 
             resetState();
 
-            await refetch();
+            if (refetch) {
+                await refetch();
+            }
             return;
         }
     };
 
     return (
-        <Dialog.Dialog open={openDialog} onOpenChange={setOpenDialog}>
-            <Dialog.DialogTrigger asChild>
-                <Button className="self-center mt-8">
+        <Dialog.Dialog
+            open={openDialog}
+            onOpenChange={() => {
+                if (
+                    window.location.href !==
+                    process.env.NEXTAUTH_URL +
+                        '/dashboard/projects/' +
+                        project.id
+                ) {
+                    router.push('/dashboard/projects/' + project.id);
+                }
+                setOpenDialog((prev) => !prev);
+            }}
+        >
+            <Dialog.DialogTrigger asChild className="">
+                <Button className="mt-auto">
                     Add new task <Plus className="ml-2" />
                 </Button>
             </Dialog.DialogTrigger>

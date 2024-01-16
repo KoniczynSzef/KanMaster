@@ -67,7 +67,7 @@ const KanbanBoard: FC<Props> = ({ project, user, refetch }) => {
                     return toast.error('Task already in this category');
                 }
 
-                moveTask(taskId, newIdx);
+                moveTask(taskId, newIdx, category);
                 await changeTaskIndexPosition(taskId, newIdx);
 
                 await changeTaskCategoryAsync(taskId, category);
@@ -108,18 +108,16 @@ const KanbanBoard: FC<Props> = ({ project, user, refetch }) => {
     };
 
     return (
-        <ScrollArea className="self-center">
+        <ScrollArea className="w-full">
             <ScrollBar
                 orientation="horizontal"
                 aria-label="Horizontal scrollbar to see whole content"
             />
-            <section className="board border border-muted rounded w-[83.5rem]">
+            <section className="board border border-muted rounded w-[83rem] md:w-full">
                 <BoardHeader columns={columns} />
 
                 <div className="wrapper grid grid-cols-3 w-full">
                     <TaskSection
-                        areTaskTodo
-                        project={project}
                         array={tasks.filter((task) => task.category === 'todo')}
                         category="todo"
                         handleDragOver={handleDragOver}
@@ -129,7 +127,6 @@ const KanbanBoard: FC<Props> = ({ project, user, refetch }) => {
                     />
 
                     <TaskSection
-                        areTaskTodo={false}
                         array={tasks.filter(
                             (task) => task.category === 'inProgress'
                         )}
@@ -141,13 +138,13 @@ const KanbanBoard: FC<Props> = ({ project, user, refetch }) => {
                     />
 
                     <TaskSection
-                        areTaskTodo={false}
                         array={tasks.filter((task) => task.category === 'done')}
                         category="done"
                         handleDragOver={handleDragOver}
                         handleDragStart={handleDragStart}
                         handleOnDrop={handleOnDrop}
                         refetch={refetch}
+                        isLast
                     />
                 </div>
             </section>

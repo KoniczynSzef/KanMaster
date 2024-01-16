@@ -14,6 +14,8 @@ export async function getTasks(projectId: string) {
         },
     });
 
+    revalidatePath(`/dashboard/projects/${projectId}`);
+
     return tasks;
 }
 
@@ -124,7 +126,7 @@ export async function changeTaskIndexPosition(
         },
     });
 
-    revalidatePath(`/dashboard/projects/${task.projectId}`);
+    revalidatePath(`/dashboard`);
 
     return task;
 }

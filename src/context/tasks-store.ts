@@ -20,9 +20,10 @@ export type TaskStore = {
     changeTaskCategory: (id: string, category: TaskCategories) => void;
 
     sortByPriority: (asc: boolean) => Task[];
-    moveTask: (id: string, index: number) => void;
+    moveTask: (id: string, index: number, category: TaskCategories) => void;
 
     getTaskCount: () => number;
+    getPartialTaskCount: (category: TaskCategories) => number;
 };
 
 export const useTaskStore = create<TaskStore>((set, get) => ({
@@ -76,8 +77,8 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
         return get().tasks;
     },
 
-    moveTask(id, index) {
-        const tasks = get().tasks;
+    moveTask(id, index, category) {
+        const tasks = this.getTasksByCategory(category);
         const task = tasks.find((task) => task.id === id);
         if (!task) return;
 
@@ -91,6 +92,9 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
             task.indexPosition = 0;
             filteredTasks.unshift(task);
             set({ tasks: filteredTasks });
+
+            console.log(filteredTasks);
+
             return;
         }
 
@@ -98,19 +102,31 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
             task.indexPosition = index;
             filteredTasks.push(task);
             set({ tasks: filteredTasks });
+
             return;
         }
 
-        const tasksBefore = filteredTasks.slice(0, index);
-        tasksBefore.forEach((task) => {
-            if (task.indexPosition !== 0) task.indexPosition--;
+        const tasksAfter = filteredTasks.slice(index);
+        tasksAfter.forEach((task) => {
+            task.indexPosition++;
         });
 
-        const tasksAfter = filteredTasks.slice(index);
-
-        const newTasks = [...tasksBefore, task, ...tasksAfter];
+        const newTasks = [
+            ...filteredTasks.slice(0, index),
+            task,
+            ...tasksAfter,
+        ];
         set({ tasks: newTasks });
     },
 
     getTaskCount: () => get().tasks.length,
+    getPartialTaskCount(category) {
+        return get().tasks.filter((task) => task.category === category).length;
+    },
 }));
+
+export const searchTasks = (tasks: Task[], query: string) => {
+    return tasks.filter((task) =>
+        task.title.toLowerCase().startsWith(query.toLowerCase())
+    );
+};

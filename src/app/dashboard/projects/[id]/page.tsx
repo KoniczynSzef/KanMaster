@@ -30,11 +30,7 @@ const Page: FC<Props> = async ({ params }) => {
 
     const tasks = await getTasks(project.id);
 
-    return (
-        <div className="p-24">
-            <ClientContainer project={project} tasks={tasks} user={user} />
-        </div>
-    );
+    return <ClientContainer project={project} tasks={tasks} user={user} />;
 };
 
 export default Page;
