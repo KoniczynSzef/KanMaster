@@ -1,4 +1,31 @@
-# Podzial funkcjonalnosci
+# KanMaster
+
+> Manage projects the easy way using Kanban.
+
+KanMaster is a powerful solution you need to maximize benefits and improve work process.
+
+## Features
+
+KanMaster focuses specifically on Kanban methodology, so we provide many features of Kanban such as:
+
+- Visualizing workflow using **Kanban Board**
+- Adding badges to projects and tasks
+- Assigning team members for specific task
+- Sorting by priority, by date and much more...
+
+## Technologies
+
+- Next.js with React
+- Prisma
+- TypeScript
+- TailwindCSS
+- Shadcn/UI
+- Auth.js
+- Vercel (deployment)
+
+I'm using Next.js version 14 and because of that, I can use stable **server actions** and **React Server Components**.
+
+### Podzial funkcjonalnosci
 
 **Najważniejsze, kluczowe:**
 
