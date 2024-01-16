@@ -36,12 +36,6 @@ const TaskSection: FC<Props> = (props) => {
             }`}
             onDragOver={props.handleDragOver}
         >
-            {props.array.length === 0 ? (
-                <div
-                    onDrop={(e) => props.handleOnDrop(e, props.category, 0)}
-                    className="h-full"
-                />
-            ) : null}
             {props.array.map((task, idx) => (
                 <div
                     key={task.id}
@@ -57,9 +51,13 @@ const TaskSection: FC<Props> = (props) => {
             ))}
             <div
                 onDrop={(e) =>
-                    props.handleOnDrop(e, props.category, props.array.length)
+                    props.handleOnDrop(
+                        e,
+                        props.category,
+                        props.array.length - 1
+                    )
                 }
-                className="h-full py-2"
+                className="h-full py-4"
             />
         </div>
     );

@@ -27,7 +27,7 @@ const Delete: FC<Props> = ({ project, user, fetchTasks }) => {
     const router = useRouter();
     const { setProjects, projects } = useProjectStore();
 
-    const { mutate } = useMutation({
+    useMutation({
         mutationFn: async () => {
             await deleteCompletedTasks(project.id);
         },
@@ -56,18 +56,18 @@ const Delete: FC<Props> = ({ project, user, fetchTasks }) => {
         }
     };
 
-    // const handleDeleteCompleted = async () => {
-    //     try {
-    //         toast.info('Deleting completed tasks...');
-    //         await deleteCompletedTasks(project.id);
+    const handleDeleteCompleted = async () => {
+        try {
+            toast.info('Deleting completed tasks...');
+            await deleteCompletedTasks(project.id);
 
-    //         setTasks(tasks);
+            await fetchTasks();
 
-    //         toast.success('Completed tasks deleted!');
-    //     } catch (error) {
-    //         toast.error('Something went wrong while deleting the project!');
-    //     }
-    // };
+            toast.success('Completed tasks deleted!');
+        } catch (error) {
+            toast.error('Something went wrong while deleting the project!');
+        }
+    };
 
     return (
         <div className="flex justify-between items-center">
@@ -80,7 +80,7 @@ const Delete: FC<Props> = ({ project, user, fetchTasks }) => {
             </Button>
             <Button
                 variant={'destructive'}
-                onClick={() => mutate()}
+                onClick={handleDeleteCompleted}
                 className="mt-36"
             >
                 Delete completed

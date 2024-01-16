@@ -81,10 +81,18 @@ export async function deleteTask(id: string) {
         },
     });
 
+    revalidatePath(`/dashboard/projects/${task.projectId}`);
+
     return task;
 }
 
 export async function completeTask(id: string) {
+    const tasksByCategory = await db.task.findMany({
+        where: {
+            category: 'done',
+        },
+    });
+
     const task = await db.task.update({
         where: {
             id,
@@ -92,6 +100,7 @@ export async function completeTask(id: string) {
         data: {
             isCompleted: true,
             category: 'done',
+            indexPosition: tasksByCategory.length - 1,
         },
     });
 
@@ -113,20 +122,28 @@ export async function deleteCompletedTasks(projectId: string) {
     return tasks;
 }
 
-export async function changeTaskIndexPosition(
-    taskId: string,
-    indexPosition: number
-) {
+export async function changeTaskIndexPosition(taskId: string, idx: number) {
     const task = await db.task.update({
         where: {
             id: taskId,
         },
         data: {
-            indexPosition,
+            indexPosition: idx,
         },
     });
 
-    revalidatePath(`/dashboard`);
+    revalidatePath(`/dashboard/projects/${task.projectId}`);
+
+    const tasks = await db.task.findMany({
+        where: {
+            projectId: task.projectId,
+        },
+        orderBy: {
+            indexPosition: 'asc',
+        },
+    });
+
+    console.log(tasks);
 
     return task;
 }

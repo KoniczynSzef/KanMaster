@@ -28,15 +28,7 @@ interface Props {
 }
 
 const KanbanBoard: FC<Props> = ({ project, user, refetch }) => {
-    const {
-        changeTaskCategory,
-        getTasks,
-        setTasks,
-        tasks,
-        getSingleTask,
-        getTasksByCategory,
-        moveTask,
-    } = useTaskStore();
+    const { tasks, getSingleTask, moveTask } = useTaskStore();
 
     const handleDragStart = (
         e: React.DragEvent<HTMLDivElement>,
@@ -70,7 +62,6 @@ const KanbanBoard: FC<Props> = ({ project, user, refetch }) => {
                 moveTask(taskId, newIdx, category);
                 await changeTaskIndexPosition(taskId, newIdx);
 
-                await changeTaskCategoryAsync(taskId, category);
                 await refetch();
 
                 return toast.success('Task moved successfully');
@@ -80,18 +71,10 @@ const KanbanBoard: FC<Props> = ({ project, user, refetch }) => {
                 project.teamLeaderId === user.id ||
                 task?.assignedPeopleEmails.includes(user.email)
             ) {
-                changeTaskCategory(taskId, category);
+                moveTask(taskId, newIdx, category);
 
                 await changeTaskCategoryAsync(taskId, category);
-
-                setTasks(getTasks());
-
-                const index = getTasksByCategory(category).findIndex(
-                    (t) => t.id === taskId
-                );
-
-                await changeTaskIndexPosition(taskId, index);
-
+                await changeTaskIndexPosition(taskId, newIdx);
                 await refetch();
 
                 return toast.success('Task moved successfully');
@@ -99,7 +82,9 @@ const KanbanBoard: FC<Props> = ({ project, user, refetch }) => {
 
             toast.error('You are not allowed to move this task');
         } catch (error) {
-            toast.error('Something went wrong');
+            console.error(error);
+
+            toast.error(JSON.stringify(error));
         }
     };
 

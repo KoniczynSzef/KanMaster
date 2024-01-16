@@ -10,6 +10,7 @@ import React, { FC } from 'react';
 import { useQuery } from 'react-query';
 // import Delete from './Delete';
 import { getTasks } from '@/controllers/task-actions';
+import Delete from './Delete';
 // import { Button } from '@/components/ui/button';
 // import { ArrowDown, ArrowUp } from 'lucide-react';
 
@@ -64,12 +65,20 @@ const ClientContainer: FC<Props> = (props) => {
     // };
 
     return (
-        <KanbanBoard
-            project={storedProject}
-            tasks={tasks}
-            user={props.user}
-            refetch={fetchTasks}
-        />
+        <div className="flex flex-col w-full">
+            <KanbanBoard
+                project={storedProject}
+                tasks={tasks}
+                user={props.user}
+                refetch={fetchTasks}
+            />
+
+            <Delete
+                user={props.user}
+                fetchTasks={fetchTasks}
+                project={props.project}
+            />
+        </div>
     );
 };
 

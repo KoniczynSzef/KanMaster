@@ -1,5 +1,6 @@
 import { Task, TaskCategories } from '@prisma/client';
 import { create } from 'zustand';
+import { mountStoreDevtool } from 'simple-zustand-devtools';
 
 export type TaskStore = {
     tasks: Task[];
@@ -78,45 +79,30 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
     },
 
     moveTask(id, index, category) {
-        const tasks = this.getTasksByCategory(category);
-        const task = tasks.find((task) => task.id === id);
+        const task = get().tasks.find((task) => task.id === id);
+        const tasks = get().getTasksByCategory(category);
+
         if (!task) return;
 
-        const taskIndex = tasks.indexOf(task);
+        const tasksFromPreviousCategory = get()
+            .getTasksByCategory(task.category)
+            .filter((task) => task.id !== id);
 
-        if (taskIndex === index) return;
-
-        const filteredTasks = tasks.filter((task) => task.id !== id);
-
-        if (index === 0) {
-            task.indexPosition = 0;
-            filteredTasks.unshift(task);
-            set({ tasks: filteredTasks });
-
-            console.log(filteredTasks);
-
-            return;
-        }
-
-        if (index === filteredTasks.length) {
-            task.indexPosition = index;
-            filteredTasks.push(task);
-            set({ tasks: filteredTasks });
-
-            return;
-        }
-
-        const tasksAfter = filteredTasks.slice(index);
-        tasksAfter.forEach((task) => {
-            task.indexPosition++;
-        });
-
-        const newTasks = [
-            ...filteredTasks.slice(0, index),
+        assignCorrectIndexPosition(
+            tasksFromPreviousCategory,
+            index,
             task,
-            ...tasksAfter,
-        ];
-        set({ tasks: newTasks });
+            false
+        );
+
+        let tasksToStore: Task[] = [];
+
+        if (task.category === category) {
+            tasksToStore = tasks.filter((task) => task.id !== id);
+        }
+
+        assignCorrectIndexPosition(tasksToStore, index, task, true);
+        set({ tasks: tasksToStore });
     },
 
     getTaskCount: () => get().tasks.length,
@@ -130,3 +116,25 @@ export const searchTasks = (tasks: Task[], query: string) => {
         task.title.toLowerCase().startsWith(query.toLowerCase())
     );
 };
+
+function assignCorrectIndexPosition(
+    tasks: Task[],
+    idx: number,
+    task: Task,
+    shouldIncrement = false
+) {
+    const newTasks = tasks.map((task) => {
+        if (task.indexPosition > idx) {
+            shouldIncrement ? task.indexPosition++ : task.indexPosition--;
+        }
+
+        return task;
+    });
+
+    newTasks[idx] = { ...task, indexPosition: idx };
+    return newTasks;
+}
+
+if (process.env.NODE_ENV === 'development') {
+    mountStoreDevtool('TaskStore', useTaskStore);
+}
