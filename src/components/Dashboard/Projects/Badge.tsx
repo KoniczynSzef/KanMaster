@@ -9,6 +9,7 @@ import React, { FC } from 'react';
 
 type Props = {
     withoutAnimation?: boolean;
+    className?: string;
 } & (
     | {
           withId: true;
@@ -20,7 +21,7 @@ type Props = {
       }
 );
 
-const Badge: FC<Props> = ({ badge, withoutAnimation, withId }) => {
+const Badge: FC<Props> = ({ badge, withoutAnimation, withId, className }) => {
     return (
         badge && (
             <Button
@@ -31,7 +32,7 @@ const Badge: FC<Props> = ({ badge, withoutAnimation, withId }) => {
                     withId
                         ? 'absolute -top-4 -left-4 pointer-events-none'
                         : 'pointer-events-none'
-                } ${withoutAnimation && 'transition-none'}`}
+                } ${withoutAnimation && 'transition-none'} ${className}`}
             >
                 {getBadgeIconComponent(badge.icon)}
             </Button>

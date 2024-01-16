@@ -11,6 +11,10 @@ import {
     EditProjectFormSchema,
     EditProjectFormSchemaType,
 } from '@/types/edit-project';
+import { updateProject } from '@/controllers/project-functions';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
+import { Loader2 } from 'lucide-react';
 
 interface Props extends React.HTMLAttributes<HTMLFormElement> {
     project: Project;
@@ -18,7 +22,9 @@ interface Props extends React.HTMLAttributes<HTMLFormElement> {
 }
 
 const EditProjectForm: FC<Props> = ({ project, className }) => {
+    const router = useRouter();
     const [deadline, setDeadline] = React.useState<Date>();
+    const { deadline: d, name, description } = project;
 
     const form = useForm<EditProjectFormSchemaType>({
         mode: 'all',
@@ -26,11 +32,27 @@ const EditProjectForm: FC<Props> = ({ project, className }) => {
         defaultValues: {
             name: project.name,
             description: project.description ?? '',
+            deadline: project.deadline,
         },
     });
 
     const onSubmit = async (data: EditProjectFormSchemaType) => {
-        console.log(data);
+        if (
+            d === deadline &&
+            name === data.name &&
+            description === data.description
+        ) {
+            return toast.error('No changes were made.');
+        }
+
+        try {
+            await updateProject(project.id, data);
+
+            toast.success('Project updated successfully!');
+            return router.push(`/dashboard/projects/${project.id}`);
+        } catch (error) {
+            toast.error('Something went wrong. Please try again.');
+        }
     };
 
     return (
@@ -64,8 +86,16 @@ const EditProjectForm: FC<Props> = ({ project, className }) => {
                     setDate={setDeadline}
                 />
 
-                <Button type="submit" className="self-end mt-8">
-                    Save changes
+                <Button
+                    type="submit"
+                    className="self-end mt-8"
+                    disabled={form.formState.isSubmitting}
+                >
+                    {form.formState.isSubmitting ? (
+                        <Loader2 className="animate-spin" />
+                    ) : (
+                        'Save changes'
+                    )}
                 </Button>
             </form>
         </Form>

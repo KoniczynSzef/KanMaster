@@ -6,7 +6,7 @@ import {
     User,
     type Project as ProjectType,
 } from '@prisma/client';
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import SearchPanel from '../SearchPanel/SearchPanel';
 import { useUserStore } from '@/context/user-store';
 import Skeletons from './Skeletons';
@@ -14,6 +14,8 @@ import NoProjectFound from './NoProjectFound';
 import Project from './Project/Project';
 
 import { useAutoAnimate } from '@formkit/auto-animate/react';
+import { useQuery } from 'react-query';
+import { getProjects } from '@/controllers/project-functions';
 
 interface Props {
     projects: ProjectType[];
@@ -25,25 +27,19 @@ interface Props {
 const Projects: FC<Props> = ({ projects, badges, user }) => {
     const [projectList] = useAutoAnimate();
     const { setUser } = useUserStore();
-    const {
-        setProjects,
-        projects: state,
-        hasLoaded,
-        setHasLoaded,
-        setBadges,
-    } = useProjectStore();
+    const { setProjects, projects: state, setBadges } = useProjectStore();
 
-    useEffect(() => {
-        if (!hasLoaded) {
+    const { isLoading } = useQuery({
+        queryKey: ['projects'],
+        queryFn: async () => {
+            const p = await getProjects(user.email, 1);
+            setProjects(p);
+
             setUser(user);
-            setProjects(projects);
             setBadges(badges);
-
-            setHasLoaded(true);
-        } else {
-            setProjects(state);
-        }
-    }, []);
+            return p;
+        },
+    });
 
     return (
         <section>
@@ -54,9 +50,9 @@ const Projects: FC<Props> = ({ projects, badges, user }) => {
                     <NoProjectFound customLabel="Currently you don't have any projects." />
                 )}
 
-                {!hasLoaded && <Skeletons projects={projects} />}
-
-                {hasLoaded && (
+                {isLoading ? (
+                    <Skeletons projects={projects} />
+                ) : (
                     <>
                         {projects.length > 0 && state.length === 0 && (
                             <NoProjectFound />

@@ -126,7 +126,7 @@ export async function changeTaskIndexPosition(
         },
     });
 
-    revalidatePath(`/dashboard/projects/${task.projectId}`);
+    revalidatePath(`/dashboard`);
 
     return task;
 }

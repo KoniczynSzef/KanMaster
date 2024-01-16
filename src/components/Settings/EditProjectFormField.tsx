@@ -9,8 +9,8 @@ import {
 } from '../ui/form';
 import { UseFormReturn } from 'react-hook-form';
 import { Input } from '../ui/input';
-import TaskDatePicker from '../Board/create-dialog/second-step-components/TaskDatePicker';
 import { EditProjectFormSchemaType } from '@/types/edit-project';
+import EditDatePicker from './EditDatePicker';
 
 type Props = {
     form: UseFormReturn<EditProjectFormSchemaType>;
@@ -34,7 +34,7 @@ const EditProjectFormField: FC<Props> = (props) => {
     if (props.name === 'deadline' && props.inputType === 'text') return 'Error';
 
     if (props.name === 'deadline') {
-        return <TaskDatePicker date={props.date} setDate={props.setDate} />;
+        return <EditDatePicker form={props.form} />;
     }
 
     return (
