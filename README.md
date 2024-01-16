@@ -1,30 +1,47 @@
 # KanMaster
 
-> Manage projects the easy way using Kanban.
+> Supercharge your teamwork and projects with the simplicity of Kanban.
 
-KanMaster is a powerful solution you need to maximize benefits and improve work process.
+KanMaster is your go-to solution for hassle-free project management, designed with the ease of Kanban methodology in mind.
 
 ## Features
 
-KanMaster focuses specifically on Kanban methodology, so we provide many features of Kanban such as:
+Revolutionize your project management with KanMaster's cool features:
 
-- Visualizing workflow using **Kanban Board**
-- Adding badges to projects and tasks
-- Assigning team members for specific task
-- Sorting by priority, by date and much more...
+- 📋 **Kanban Board**: Visualize your tasks effortlessly.
+- 🏆 **Badges and Assignments**: Add badges to projects and assign tasks to team members.
+- 🚀 **Smart Sorting**: Prioritize tasks like a pro by date, priority, and more.
 
 ## Technologies
 
-- Next.js with React
-- Prisma
-- TypeScript
-- TailwindCSS
-- Zustand
-- Shadcn/UI
-- Auth.js
-- Vercel (deployment)
+Built with awesome tech:
 
-I'm using Next.js version 14 and because of that, I can use stable **server actions** and **React Server Components**.
+- [Next.js](https://nextjs.org/)
+- [Prisma](https://www.prisma.io/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [TailwindCSS](https://tailwindcss.com/)
+- [Zustand](https://github.com/pmndrs/zustand)
+- [Shadcn/UI](https://github.com/shadcn-ui/ui)
+- [Auth.js](https://next-auth.js.org/)
+- [Vercel](https://vercel.com/) (for deployment)
+
+We use the latest Next.js version (v14) and stable server actions + React Server Components for ensuring a robust and responsive application.
+
+## Getting Started
+
+1. Clone this repository.
+2. Install dependencies: `pnpm install`.
+3. Run the development server: `pnpm dev`.
+4. Open [http://localhost:3000](http://localhost:3000) to experience the magic of KanMaster in your browser.
+
+Feel the power of streamlined project management with KanMaster!
+
+> :warning: Make sure to configure your environment variables in `.env.local` before running the development server.
+
+## Authors
+
+🍀 [KoniczynSzef](https://github.com/KoniczynSzef)
+
 
 ### Podzial funkcjonalnosci
 
