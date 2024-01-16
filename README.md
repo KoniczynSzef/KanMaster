@@ -19,6 +19,7 @@ KanMaster focuses specifically on Kanban methodology, so we provide many feature
 - Prisma
 - TypeScript
 - TailwindCSS
+- Zustand
 - Shadcn/UI
 - Auth.js
 - Vercel (deployment)
