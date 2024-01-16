@@ -17,13 +17,7 @@ import {
     changeTaskIndexPosition,
 } from '@/controllers/task-actions';
 import { ScrollArea, ScrollBar } from '../ui/scroll-area';
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-} from '../ui/dialog';
+import AccesibilityDialog from './tasks/task/AccesibilityDialog';
 
 interface Props {
     project: Project;
@@ -144,30 +138,7 @@ const KanbanBoard: FC<Props> = ({ project, user, refetch }) => {
                 {/android|iphone|kindle|silk|webos|blackberry|opera mini|opera mobi/i.test(
                     navigator.userAgent.toLowerCase()
                 ) && !window.localStorage.getItem('mobileDialog') ? (
-                    <Dialog
-                        defaultOpen
-                        onOpenChange={() => {
-                            setTimeout(() => {
-                                setOpen(false);
-                                window.localStorage.setItem(
-                                    'mobileDialog',
-                                    'true'
-                                );
-                            }, 10000);
-                        }}
-                        open={open}
-                    >
-                        <DialogContent>
-                            <DialogHeader>
-                                <DialogTitle>Mobile Devices</DialogTitle>
-                            </DialogHeader>
-                            <DialogDescription>
-                                {
-                                    "Currently this application doesn't allow you to drag and drop tasks on mobile devices. Please use a desktop device to use this feature."
-                                }
-                            </DialogDescription>
-                        </DialogContent>
-                    </Dialog>
+                    <AccesibilityDialog setOpen={setOpen} open={open} />
                 ) : null}
             </section>
         </ScrollArea>
